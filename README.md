@@ -1,6 +1,6 @@
 # Sportmetryx Football
 ### Live Demo
-[**Explore Sportmatryx Football**](https://sportmatryx.vercel.app/)
+[**Explore Sportmatryx Football**](https://sportmatryx-v2.vercel.app/)
 
 
 **Human Performance Intelligence for Football** — *Breathe Smarter. Train Harder.*
