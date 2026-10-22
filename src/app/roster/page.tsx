@@ -31,7 +31,7 @@ export default async function RosterPage({
     if (e instanceof UnauthorizedError) redirect("/login");
     const mapped = errorToResponse(e);
     return (
-      <AppShell crumb="/roster" title="Roster">
+      <AppShell crumb="/roster" title="Athletes">
   <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
@@ -48,10 +48,33 @@ export default async function RosterPage({
   });
 
   return (
-    <AppShell crumb="/roster" title="Roster Mission Control">
-      <p className="mb-4 text-sm text-muted">
-        Sorted by exception severity, then lowest index. Click a row for Player 360.
+    <AppShell crumb="/roster" title="Athletes">
+      {/* Professional intro */}
+      <p className="mb-2 max-w-3xl text-sm leading-relaxed text-muted">
+        The live readiness picture for every athlete on the roster — one row per athlete, built
+        from their latest valid athlete-day record. Use it to decide who trains full, who needs
+        closer monitoring and who sits out, before the session starts.
       </p>
+      <p className="mb-3 max-w-3xl text-xs text-muted">
+        Rows are sorted by exception severity first, then by lowest readiness — the athletes who
+        need attention surface at the top. Click any athlete to open Player 360 for the full
+        profile, baselines and score history.
+      </p>
+      <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-muted">
+        <span className="text-[11px] font-semibold uppercase tracking-wider">How to read the bands</span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-ready" /> READY — full availability
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-monitor" /> MONITOR — watch closely
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-compromised" /> COMPROMISED — restrict or rest
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-withheld" /> WITHHELD — data did not pass validity, not scored
+        </span>
+      </div>
 
       {/* Filter bar */}
       <Card className="mb-4" ariaLabel="Roster filters">
@@ -95,7 +118,7 @@ export default async function RosterPage({
                 <th className="pb-2 pr-3">Athlete</th>
                 <th className="pb-2 pr-3">ID</th>
                 <th className="pb-2 pr-3">Position</th>
-                <th className="pb-2 pr-3">Index</th>
+                <th className="pb-2 pr-3">Readiness</th>
                 <th className="pb-2 pr-3">Band</th>
                 <th className="pb-2 pr-3">Confidence</th>
                 <th className="pb-2 pr-3">14-day trend</th>
