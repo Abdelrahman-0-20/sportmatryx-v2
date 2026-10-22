@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  CardLabel, Tag, LinkButton } from "@/components/ui/primitives";
 import { ForbiddenError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
@@ -30,6 +31,7 @@ export default async function TeamCommandPage() {
     if (e instanceof ForbiddenError) {
       return (
         <AppShell crumb="/team-command" title="Team Command">
+  <SectionTabs />
           <EmptyState message={`Access denied — your role does not include roster access. (${mapped.body.code})`} />
         </AppShell>
       );

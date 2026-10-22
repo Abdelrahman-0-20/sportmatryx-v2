@@ -13,15 +13,9 @@ const NAV: { section: string; items: { href: string; label: string }[] }[] = [
     ],
   },
   {
-    section: "Performance",
+    section: "Athletes",
     items: [
-      { href: "/team-command", label: "Team Command" },
-      { href: "/interventions", label: "Intervention Queue" },
-      { href: "/position-room", label: "Position Room" },
-      { href: "/practice-command", label: "Practice Command" },
-      { href: "/game-readiness", label: "Game Readiness" },
-      { href: "/recovery-command", label: "Recovery Command" },
-      { href: "/environment-travel", label: "Environment & Travel" },
+      { href: "/roster", label: "Athletes" },
     ],
   },
   {

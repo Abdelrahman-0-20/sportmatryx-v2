@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  Tag } from "@/components/ui/primitives";
 import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
@@ -31,6 +32,7 @@ export default async function PracticeCommandPage() {
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/practice-command" title="Practice Command">
+  <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );

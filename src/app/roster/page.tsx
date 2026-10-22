@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  Tag, Sparkline, ConfidenceRing, WithheldStamp } from "@/components/ui/primitives";
 import {Avatar,  AvatarFallback } from "@/components/ui/avatar";
 import { initialsOf } from "@/lib/utils";
@@ -31,6 +32,7 @@ export default async function RosterPage({
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/roster" title="Roster">
+  <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );

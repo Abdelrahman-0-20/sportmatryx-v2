@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  CardLabel, Tag, WithheldStamp, ConfidenceRing } from "@/components/ui/primitives";
 import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
@@ -36,6 +37,7 @@ export default async function GameReadinessPage() {
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/game-readiness" title="Game Readiness">
+  <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  CardLabel } from "@/components/ui/primitives";
 import {Badge,  statusVariant } from "@/components/ui/badge";
 import { InterventionActions } from "@/components/app/intervention-actions";
@@ -53,6 +54,7 @@ export default async function InterventionsPage({
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/interventions" title="Intervention Queue">
+  <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );
