@@ -9,7 +9,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const TABS = [
-  { href: "/roster", label: "Athletes" },
   { href: "/team-command", label: "Team overview" },
   { href: "/interventions", label: "Interventions" },
   { href: "/position-room", label: "Positions" },
