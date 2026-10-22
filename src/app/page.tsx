@@ -202,8 +202,6 @@ export default function HomePage() {
           {([
             ["/marketplace", "Marketplace", "Browse and license datasets - demo checkout, no payments."],
             ["/roster", "Athletes", "50 synthetic athletes across 3 teams with full profiles."],
-            ["/team-command", "Team Command", "Readiness distribution and operational roster overview."],
-            ["/admin", "Administration & Audit", "Tamper-evident audit chain and administration."],
           ] as const).map(([href, name, desc]) => (
             <li key={href} className="card-lift rounded-[10px] border border-edge bg-panel p-4">
               <Link href={href} className="display-heading text-lg hover:text-accent">{name}</Link>
