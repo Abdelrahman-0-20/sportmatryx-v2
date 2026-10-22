@@ -47,6 +47,8 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
   const [cartOpen, setCartOpen] = useState(false);
   const [items, setItems] = useState<CartItem[]>([]);
   const [view, setView] = useState<"buy" | "sell">("buy");
+  // Marketplace tabs: Data = platform data products; Goods = community-listed items.
+  const [section, setSection] = useState<"data" | "goods">("data");
   const featured = products.find((p) => p.featured) ?? null;
   // Cart ↔ cookie sync: the full cart page (/marketplace/cart) and the header
   // count read the smx_marketplace_cart cookie via /api/marketplace/cart-state.
@@ -89,7 +91,10 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
       body: JSON.stringify({ items }),
     }).catch(() => {});
   }, [items]);
-  const filtered = filteredProducts(products, filters);
+  const base = filteredProducts(products, filters);
+  const filtered = section === "goods"
+    ? base.filter((p) => p.tag === "COMMUNITY")
+    : base.filter((p) => p.tag !== "COMMUNITY");
 
   function addToCart(product: MarketProduct) {
     setItems((prev) => {
@@ -140,6 +145,23 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         >
           Sell / list
         </button>
+
+        <div className="ml-auto flex items-center gap-2" role="tablist" aria-label="Marketplace section">
+          {([["data", "Data"], ["goods", "Market goods"]] as const).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={section === value}
+              onClick={() => setSection(value)}
+              className={section === value
+                ? "rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent"
+                : "rounded-md border border-edge bg-panel-2 px-3 py-1.5 text-xs font-semibold text-muted hover:text-ink"}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {view === "sell" ? (

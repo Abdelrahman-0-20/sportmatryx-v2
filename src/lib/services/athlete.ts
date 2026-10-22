@@ -25,6 +25,8 @@ export interface AthleteDetail {
     isActive: boolean;
     teamName: string;
     teamId: string;
+    /** Additive (profile page): ISO birth date, null when unknown. Optional so SAMPLE_ATHLETE stays valid. */
+    dateOfBirth?: string | null;
   };
   consent: { status: string; reason: string | null; grantedAt: string } | null;
   latestScore: (AthleteScoreRow & {
@@ -33,6 +35,10 @@ export interface AthleteDetail {
     checks: { name: string; status: string; reason: string | null }[];
   }) | null;
   trend: (number | null)[];
+  /** Additive (profile page): the 14 trend rows with date + band, oldest first. Optional so SAMPLE_ATHLETE stays valid. */
+  trendRows?: { date: string; score: number | null; band: string | null }[];
+  /** Additive (profile page): latest observation per scoring metric, used as driver-card fallback when ScoreComponent rows are missing. Optional so SAMPLE_ATHLETE stays valid. */
+  latestObservations?: { type: string; value: number; unit: string | null; timestamp: string; isValid: boolean }[];
   baseline: {
     id: string;
     status: string;
@@ -120,6 +126,22 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
     .reverse()
     .map((s) => (s.validityStatus === "VALID" || s.validityStatus === "LIMITED" ? s.score : null));
 
+  const trendRows = scores
+    .slice(0, 14)
+    .reverse()
+    .map((s) => ({
+      date: s.timestamp.toISOString(),
+      score: s.validityStatus === "VALID" || s.validityStatus === "LIMITED" ? s.score : null,
+      band: s.scoreBand,
+    }));
+
+  const latestObservations = await prisma.observation.findMany({
+    where: { athleteId },
+    orderBy: { timestamp: "desc" },
+    distinct: ["type"],
+    take: 20,
+  });
+
   return {
     athlete: {
       id: athlete.id,
@@ -130,6 +152,7 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
       isActive: athlete.isActive,
       teamName: athlete.team.name,
       teamId: athlete.teamId,
+      dateOfBirth: athlete.dateOfBirth ? athlete.dateOfBirth.toISOString() : null,
     },
     consent: athlete.consentRecords[0]
       ? {
@@ -168,6 +191,14 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
         }
       : null,
     trend,
+    trendRows,
+    latestObservations: latestObservations.map((o) => ({
+      type: o.type,
+      value: o.value,
+      unit: o.unit,
+      timestamp: o.timestamp.toISOString(),
+      isValid: o.isValid,
+    })),
     baseline: baseline
       ? {
           id: baseline.id,
@@ -214,4 +245,21 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
       calibratedAt: d.calibrationRecords[0]?.calibrationDate.toISOString() ?? "",
     })),
   };
+}
+
+/**
+ * Additive (profile page): fetches the athlete detail along with an `isSample`
+ * flag, so the UI can display the "Synthetic sample view" honesty label when
+ * the data came from the offline/guest fallback instead of the database.
+ */
+export interface AthleteProfile {
+  detail: AthleteDetail | null;
+  isSample: boolean;
+}
+
+export async function getAthleteProfile(athleteId: string): Promise<AthleteProfile> {
+  return withFallback<AthleteProfile>(
+    async () => ({ detail: await queryAthleteDetail(athleteId), isSample: false }),
+    () => ({ detail: SAMPLE_ATHLETE(athleteId), isSample: true }),
+  );
 }

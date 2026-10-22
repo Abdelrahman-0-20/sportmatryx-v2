@@ -143,6 +143,15 @@ export default async function MarketplaceProductPage({
                 : `Demo price: ${(product.priceCents / 100).toFixed(2)} ${product.currency}.`}
             </p>
             <div className="mt-3 flex flex-col gap-2">
+              {product.sourceRef === "dataset-combined" ? (
+                <a
+                  href="/datasets/Sportmetryx_Combined_Wide_Athlete_Day.csv"
+                  download
+                  className="w-full rounded-md bg-accent px-3 py-2 text-center text-sm font-bold text-canvas hover:bg-cyan-300"
+                >
+                  Download full CSV (1,362 rows)
+                </a>
+              ) : null}
               <AddToCartButton
                 productId={product.id}
                 name={product.name}

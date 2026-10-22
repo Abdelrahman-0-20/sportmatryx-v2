@@ -1,16 +1,26 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
-import { Card, CardLabel, Tag, Sparkline, ConfidenceRing, WithheldStamp } from "@/components/ui/primitives";
-import { AnimatedNumber } from "@/components/ui/animated";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { requireAthleteAccess, errorToResponse, UnauthorizedError } from "@/lib/auth/rbac";
-import { isGuest } from "@/lib/offline";
-import { getAthleteDetail } from "@/lib/services/athlete";
+import { Card, CardLabel, Tag, LinkButton } from "@/components/ui/primitives";
+import { requireReadForGuest } from "@/lib/offline";
+import { getAthleteProfile } from "@/lib/services/athlete";
 
 export const dynamic = "force-dynamic";
 
-const COMPONENT_LABELS: Record<string, string> = {
+/**
+ * Athlete profile page (Player 360).
+ * Shows header/readiness/7 drivers/trend/sessions/validity checks.
+ * Server-rendered; simple CSS bars for charts (no chart libraries).
+ */
+
+// --- Helpers ---------------------------------------------------------------
+
+const BAND_STYLES: Record<string, string> = {
+  READY: "text-ready",
+  MONITOR: "text-monitor",
+  COMPROMISED: "text-compromised",
+  WITHHELD: "text-withheld",
+};
+
+const DRIVER_LABELS: Record<string, string> = {
   RESPIRATORY_EFFICIENCY: "Respiratory Efficiency",
   OXYGEN_FUNCTION: "Oxygen Function",
   RECOVERY_AUTONOMIC: "Recovery & Autonomic",
@@ -20,249 +30,289 @@ const COMPONENT_LABELS: Record<string, string> = {
   BASELINE_DEVIATION: "Baseline Deviation",
 };
 
-export default async function Player360Page({ params }: { params: Promise<{ id: string }> }) {
+/** Format a date string to a compact human-readable format. */
+function fmtDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+/** CSS bar for a normalized 0-1 ratio. */
+function NormBar({ value, className = "" }: { value: number; className?: string }) {
+  const pct = Math.max(0, Math.min(1, value)) * 100;
+  return (
+    <div className={`h-1.5 w-full overflow-hidden rounded-full bg-edge ${className}`}>
+      <div className="h-full rounded-full bg-accent transition-all" style={{ width: `${pct}%` }} />
+    </div>
+  );
+}
+
+/**
+ * CSS bar strip of the last 14 scores.
+ * Each column height is normalized to the max score in the window.
+ */
+function TrendStrip({ rows }: { rows: { date: string; score: number | null; band: string | null }[] }) {
+  if (rows.length === 0) {
+    return <p className="text-sm text-muted">No trend data yet.</p>;
+  }
+  const max = Math.max(...rows.map((r) => r.score ?? 0), 1);
+  return (
+    <div className="flex h-24 items-end gap-1" aria-label="Readiness trend">
+      {rows.map((r) => {
+        const height = r.score === null ? 4 : Math.max(8, (r.score / max) * 100);
+        const color =
+          r.band === "READY"
+            ? "bg-ready"
+            : r.band === "MONITOR"
+              ? "bg-monitor"
+              : r.band === "COMPROMISED"
+                ? "bg-compromised"
+                : "bg-panel-2";
+        return (
+          <div
+            key={r.date}
+            className="group relative flex w-full flex-col items-center justify-end"
+            title={`${fmtDate(r.date)} — ${r.score === null ? "withheld" : r.score.toFixed(1)} (${r.band ?? "—"})`}
+          >
+            <div className={`w-full rounded-t ${color}`} style={{ height: `${height}%` }} />
+            <span className="tabular mt-1 text-[9px] text-muted">{r.score === null ? "—" : r.score.toFixed(0)}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// --- Page -------------------------------------------------------------------
+
+export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  let detail;
+
+  let detail: Awaited<ReturnType<typeof getAthleteProfile>>["detail"];
+  let isSample = false;
   try {
-    if (!(await isGuest())) await requireAthleteAccess(id);
-    detail = await getAthleteDetail(id);
+    await requireReadForGuest("athlete.read");
+    const profile = await getAthleteProfile(id);
+    detail = profile.detail;
+    isSample = profile.isSample;
   } catch (e) {
-    if (e instanceof UnauthorizedError) redirect("/login");
+    const { errorToResponse, UnauthorizedError } = await import("@/lib/auth/rbac");
+    if (e instanceof UnauthorizedError) {
+      const { redirect } = await import("next/navigation");
+      redirect("/login");
+    }
     const mapped = errorToResponse(e);
     return (
-      <AppShell crumb="/player" title="Player 360">
+      <AppShell crumb="/player" title="Athlete profile">
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );
   }
+
   if (!detail) {
     return (
-      <AppShell crumb="/player" title="Player 360">
+      <AppShell crumb="/player" title="Athlete profile">
         <p className="text-sm text-muted">Athlete not found.</p>
+        <div className="mt-4">
+          <LinkButton href="/roster" variant="ghost">
+            ← Back to roster
+          </LinkButton>
+        </div>
       </AppShell>
     );
   }
 
-  const s = detail.latestScore;
+  const { athlete, consent, latestScore, trendRows, latestObservations, sessions } = detail;
+  const s = latestScore;
   const withheld = s ? s.band === "WITHHELD" : true;
 
+  // --- Driver cards (7) ---
+  // Primary: latest score's ScoreComponent rows (name, contribution).
+  // Fallback: latest Observation rows when components/drivers are unavailable.
+  const componentDrivers =
+    s && s.components.length > 0
+      ? s.components.map((c) => ({
+          key: c.name,
+          name: DRIVER_LABELS[c.name] ?? c.name.replace(/_/g, " "),
+          contribution: c.contribution,
+          norm: c.score,
+          original: null as number | null,
+          reason: c.reason,
+        }))
+      : (latestObservations ?? []).slice(0, 7).map((o) => ({
+          key: o.type,
+          name: o.type.replace(/_/g, " "),
+          contribution: null as number | null,
+          norm: null as number | null,
+          original: o.value,
+          reason: o.isValid ? null : "Invalid observation",
+        }));
+
+  // Normalize contribution bars relative to the largest absolute contribution.
+  const maxAbsContribution = Math.max(
+    ...componentDrivers.map((d) => (d.contribution === null ? 0 : Math.abs(d.contribution))),
+    1,
+  );
+
   return (
-    <AppShell crumb={`/player/${detail.athlete.externalId ?? detail.athlete.id}`} title={`${detail.athlete.externalId ?? ""} · Player 360`.trim()}>
-      <p className="mb-4 text-sm text-muted">
-        {detail.athlete.displayName} · {detail.athlete.position} · {detail.athlete.teamName} ·{" "}
-        {detail.athlete.rosterRole} · consent:{" "}
-        <Tag label={detail.consent?.status ?? "UNKNOWN"} />
-      </p>
+    <AppShell crumb={`/player/${athlete.externalId ?? athlete.id}`} title={`${athlete.displayName} · Athlete Profile`}>
+      {isSample ? (
+        <div className="mb-4 flex items-center gap-2">
+          <Tag label="Synthetic sample view" />
+          <span className="text-xs text-muted">Data served from the offline demo fallback — not live measurements.</span>
+        </div>
+      ) : null}
 
-      {/* Hero row */}
-      <div className="mb-4 grid gap-4 lg:grid-cols-3">
-        <Card ariaLabel="Latest index">
-          <CardLabel>Latest SMX Performance Index</CardLabel>
-          {withheld ? (
-            <div className="flex flex-col items-start gap-2">
-              <WithheldStamp code={s?.withheldCode} />
-              <span className="text-sm text-muted">No composite released — validity gate failed.</span>
+      {/* 1. Header */}
+      <Card className="mb-4" ariaLabel="Athlete header">
+        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h1 className="text-2xl font-bold text-ink">{athlete.displayName}</h1>
+          <Tag label={athlete.position} />
+          {athlete.isActive ? <Tag label="Active" /> : <Tag label="Inactive" />}
+          {isSample ? <Tag label="Synthetic sample view" /> : null}
+        </div>
+        <p className="mt-2 text-sm text-muted">
+          {athlete.teamName} · Role: {athlete.rosterRole ?? "—"} · Born:{" "}
+          {athlete.dateOfBirth ? new Date(athlete.dateOfBirth).getFullYear() : "—"} · Consent:{" "}
+          <Tag label={consent?.status ?? "UNKNOWN"} />
+          {consent?.reason ? ` (${consent.reason})` : ""}
+        </p>
+      </Card>
+
+      {/* 2. Current readiness */}
+      <Card className="mb-4" ariaLabel="Current readiness">
+        <CardLabel>Current Readiness</CardLabel>
+        {!s ? (
+          <p className="text-sm text-muted">No readiness score computed yet.</p>
+        ) : (
+          <div className="flex flex-wrap items-center gap-4">
+            <span className={`hero-number text-5xl ${BAND_STYLES[s.band ?? ""] ?? "text-ink"}`}>
+              {s.score === null ? "—" : s.score.toFixed(1)}
+            </span>
+            <Tag label={s.band ?? "UNKNOWN"} glow />
+            <div className="text-sm text-muted">
+              Confidence: <span className="tabular text-ink">{s.confidence === null ? "—" : `${s.confidence}%`}</span>
+              {" · "}Validity: <Tag label={s.validity} />
             </div>
-          ) : s ? (
-            <>
-              <div className="flex items-baseline gap-3">
-                <AnimatedNumber value={s.score ?? 0} className="hero-number text-6xl" />
-                <Tag label={s.band ?? ""} glow />
-              </div>
-              <div className="mt-2 flex items-center gap-3 text-xs text-muted">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="inline-flex items-center gap-1">Confidence <ConfidenceRing value={s.confidence ?? 0} /></span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      Confidence {s.confidence}% — an evidence-quality indicator, not a probability.
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-                ·{" "}
-                {new Date(s.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-              </div>
-              <p className="mt-2 text-xs text-muted">{s.explanation}</p>
-            </>
-          ) : (
-            <p className="text-sm text-muted">No scores yet.</p>
-          )}
-        </Card>
-
-        <Card ariaLabel="Drivers">
-          <CardLabel>Why — top drivers</CardLabel>
-          {s && s.drivers.length > 0 ? (
-            <ul className="flex flex-col gap-1.5 text-sm">
-              {s.drivers.map((d) => (
-                <li key={d.text} className={d.type === "POSITIVE" ? "text-positive" : "text-monitor"}>
-                  {d.type === "POSITIVE" ? "+" : "−"} {d.text}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted">{withheld ? "Drivers unavailable while withheld." : "No drivers recorded."}</p>
-          )}
-        </Card>
-
-        <Card ariaLabel="Exceptions and devices">
-          <CardLabel>Exceptions & devices</CardLabel>
-          {detail.interventions.length === 0 ? (
-            <p className="text-sm text-muted">No interventions.</p>
-          ) : (
-            <ul className="mb-3 flex flex-col gap-1.5 text-sm">
-              {detail.interventions.slice(0, 3).map((i) => (
-                <li key={i.id} className="flex items-center justify-between gap-2">
-                  <span>{i.exceptionKey}</span>
-                  <Tag label={i.priority} />
-                </li>
-              ))}
-            </ul>
-          )}
-          <ul className="flex flex-col gap-1 text-xs text-muted">
-            {detail.devices.map((d) => (
-              <li key={d.serialNumber}>
-                {d.serialNumber} · {d.model} · calibration <span className={d.calibrationStatus === "OK" ? "text-ready" : "text-monitor"}>{d.calibrationStatus}</span>
-              </li>
-            ))}
-            {detail.devices.length === 0 ? <li>No device-linked observations.</li> : null}
-          </ul>
-        </Card>
-      </div>
-
-      {/* Components + checks */}
-      {s && !withheld ? (
-        <Card className="mb-4" ariaLabel="Component breakdown">
-          <CardLabel>Component breakdown ({s.validity})</CardLabel>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-                <th className="pb-2">Component</th>
-                <th className="pb-2">Score</th>
-                <th className="pb-2">Weight</th>
-                <th className="pb-2">Contribution</th>
-              </tr>
-            </thead>
-            <tbody>
-              {s.components.map((c) => (
-                <tr key={c.name} className="border-b border-edge/50">
-                  <td className="py-2">{COMPONENT_LABELS[c.name] ?? c.name}</td>
-                  <td className="py-2">
-                    <div className="flex items-center gap-2">
-                      <div className="h-1.5 w-32 overflow-hidden rounded-full bg-edge">
-                        <div className="h-full rounded-full bg-accent" style={{ width: `${(c.score ?? 0) * 100}%` }} />
-                      </div>
-                      <span className="tabular text-xs text-muted">{c.score !== null ? (c.score * 100).toFixed(0) : "—"}</span>
-                    </div>
-                  </td>
-                  <td className="tabular py-2 text-muted">{(c.weight * 100).toFixed(0)}%</td>
-                  <td className="tabular py-2">{c.contribution !== null ? c.contribution.toFixed(1) : "—"}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      ) : null}
-
-      {/* Validity checks */}
-      {s ? (
-        <Card className="mb-4" ariaLabel="Validity checks">
-          <CardLabel>Validity checks ({s.validity})</CardLabel>
-          <ul className="flex flex-col gap-1.5 text-sm">
-            {s.checks.map((c) => (
-              <li key={c.name} className="flex items-center gap-2">
-                <span className={c.status === "PASSED" ? "text-ready" : c.status === "FAILED" ? "text-critical" : c.status === "WARNING" ? "text-monitor" : "text-muted"}>
-                  {c.status === "PASSED" ? "✓" : c.status === "FAILED" ? "✕" : "!"}
-                </span>
-                <span className="font-medium">{c.name.replace(/_/g, " ")}</span>
-                <span className="text-muted">{c.reason}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      ) : null}
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        {/* 14-day trend */}
-        <Card ariaLabel="14-day trend">
-          <CardLabel>14-day trend (gaps = withheld days)</CardLabel>
-          <Sparkline points={detail.trend} width={400} height={60} />
-          <div className="mt-2 tabular text-xs text-muted">
-            {detail.trend.map((p) => (p === null ? "—" : p.toFixed(0))).join(" · ")}
           </div>
-        </Card>
+        )}
+        {s?.explanation ? <p className="mt-2 text-xs text-muted">{s.explanation}</p> : null}
+        {withheld && s?.withheldCode ? (
+          <p className="mt-2 text-xs text-compromised">Withheld reason: {s.withheldCode.replace(/_/g, " ")}</p>
+        ) : null}
+      </Card>
 
-        {/* Baseline comparison */}
-        <Card ariaLabel="Individual baseline">
-          <CardLabel>
-            Individual baseline {detail.baseline ? `v${detail.baseline.version} (${detail.baseline.status.replace(/_/g, " ")})` : ""}
-          </CardLabel>
-          {detail.baseline && detail.baseline.observations.length > 0 ? (
+      {/* 3. Driver cards (7) */}
+      <Card className="mb-4" ariaLabel="Driver breakdown">
+        <CardLabel>
+          {s && s.components.length > 0
+            ? "Readiness Drivers (7 components)"
+            : (latestObservations ?? []).length > 0
+              ? "Readiness Drivers (raw observations fallback)"
+              : "Readiness Drivers"}
+        </CardLabel>
+        {componentDrivers.length === 0 ? (
+          <p className="text-sm text-muted">No component or observation data available for this athlete.</p>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {componentDrivers.map((d) => (
+              <Card key={d.key} variant="elevated" className="flex flex-col gap-1.5">
+                <span className="text-xs font-semibold uppercase tracking-wide text-muted">{d.name}</span>
+                {d.contribution !== null ? (
+                  <>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="hero-number text-xl">{d.contribution.toFixed(1)}</span>
+                      <span className="text-[10px] text-muted">pts</span>
+                    </div>
+                    <NormBar value={Math.abs(d.contribution) / maxAbsContribution} />
+                  </>
+                ) : d.original !== null ? (
+                  <>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="hero-number text-xl tabular">{d.original.toFixed(1)}</span>
+                      <span className="text-[10px] text-muted">raw</span>
+                    </div>
+                    <div className="h-1.5 w-full rounded-full bg-panel-2" title="Raw value (no normalized bar)" />
+                  </>
+                ) : null}
+                {d.reason ? <span className="text-[10px] text-muted">{d.reason}</span> : null}
+              </Card>
+            ))}
+          </div>
+        )}
+      </Card>
+
+      {/* 4. Readiness trend + 5. Recent sessions */}
+      <div className="mb-4 grid gap-4 lg:grid-cols-2">
+        <Card ariaLabel="Readiness trend">
+          <CardLabel>Readiness Trend (last 14 scores)</CardLabel>
+          <TrendStrip rows={trendRows ?? []} />
+        </Card>
+        <Card ariaLabel="Recent sessions">
+          <CardLabel>Recent Sessions (last 10)</CardLabel>
+          {sessions.length === 0 ? (
+            <p className="text-sm text-muted">No sessions recorded.</p>
+          ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-                  <th className="pb-1">Metric</th>
-                  <th className="pb-1">p10</th>
-                  <th className="pb-1">p50</th>
-                  <th className="pb-1">p90</th>
-                  <th className="pb-1">n</th>
+                  <th className="pb-1">Date</th>
+                  <th className="pb-1">Type</th>
+                  <th className="pb-1">Duration</th>
+                  <th className="pb-1">Intensity</th>
+                  <th className="pb-1">Venue</th>
                 </tr>
               </thead>
               <tbody>
-                {detail.baseline.observations.map((o) => (
-                  <tr key={o.metric} className="border-b border-edge/50">
-                    <td className="py-1.5">{o.metric}</td>
-                    <td className="tabular py-1.5 text-muted">{o.p10.toFixed(1)}</td>
-                    <td className="tabular py-1.5">{o.p50.toFixed(1)}</td>
-                    <td className="tabular py-1.5 text-muted">{o.p90.toFixed(1)}</td>
-                    <td className="tabular py-1.5 text-muted">{o.n}</td>
+                {sessions.map((sess) => (
+                  <tr key={sess.id} className="border-b border-edge/50">
+                    <td className="tabular py-1.5 text-muted">{fmtDate(sess.date)}</td>
+                    <td className="py-1.5">{sess.type.replace(/_/g, " ")}</td>
+                    <td className="tabular py-1.5 text-muted">{sess.durationMinutes ?? "—"} min</td>
+                    <td className="py-1.5 text-muted">{sess.intensity ?? "—"}</td>
+                    <td className="py-1.5 text-muted">{sess.venue ?? "—"}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p className="text-sm text-muted">No established baseline — insufficient observations.</p>
           )}
         </Card>
       </div>
 
-      {/* Sessions */}
-      <Card className="mt-4" ariaLabel="Recent sessions">
-        <CardLabel>Recent sessions</CardLabel>
-        {detail.sessions.length === 0 ? (
-          <p className="text-sm text-muted">No sessions.</p>
+      {/* 6. Validity checks */}
+      <Card className="mb-4" ariaLabel="Validity checks">
+        <CardLabel>Validity Checks</CardLabel>
+        {!s || s.checks.length === 0 ? (
+          <p className="text-sm text-muted">No validity checks recorded for the latest score.</p>
         ) : (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-                <th className="pb-1">Date</th>
-                <th className="pb-1">Type</th>
-                <th className="pb-1">Duration</th>
-                <th className="pb-1">Context</th>
-              </tr>
-            </thead>
-            <tbody>
-              {detail.sessions.map((sess) => (
-                <tr key={sess.id} className="border-b border-edge/50">
-                  <td className="tabular py-1.5 text-muted">{new Date(sess.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</td>
-                  <td className="py-1.5"><Tag label={sess.type} /></td>
-                  <td className="tabular py-1.5 text-muted">{sess.durationMinutes ?? "—"} min</td>
-                  <td className="py-1.5 text-muted">
-                    {sess.opponent ? `vs ${sess.opponent}` : sess.venue ?? "—"}
-                    {sess.temperature !== null ? ` · ${sess.temperature}°C` : ""}
-                    {sess.airQualityIndex !== null ? ` · AQI ${sess.airQualityIndex}` : ""}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ul className="flex flex-col gap-1.5 text-sm">
+            {s.checks.map((c) => (
+              <li key={c.name} className="flex items-center gap-2">
+                <span
+                  className={
+                    c.status === "PASSED"
+                      ? "text-ready"
+                      : c.status === "FAILED"
+                        ? "text-critical"
+                        : c.status === "WARNING"
+                          ? "text-monitor"
+                          : "text-muted"
+                  }
+                >
+                  {c.status === "PASSED" ? "✓" : c.status === "FAILED" ? "✕" : "!"}
+                </span>
+                <span className="font-medium text-ink">{c.name.replace(/_/g, " ")}</span>
+                <span className="text-xs text-muted">{c.reason}</span>
+                <Tag label={c.status} />
+              </li>
+            ))}
+          </ul>
         )}
       </Card>
 
-      <div className="mt-4 flex gap-4">
-        <Link href="/roster" className="text-sm text-accent hover:underline">← Back to roster</Link>
-        <Link href={`/player/${detail.athlete.id}/twin`} className="text-sm text-accent hover:underline">Digital Athlete Twin (PROTOTYPE)</Link>
-        <Link href={`/athlete/${detail.athlete.id}/consent`} className="text-sm text-accent hover:underline">Governance & Consent</Link>
+      {/* 7. Back to roster */}
+      <div className="flex">
+        <LinkButton href="/roster" variant="ghost">
+          ← Back to roster
+        </LinkButton>
       </div>
     </AppShell>
   );

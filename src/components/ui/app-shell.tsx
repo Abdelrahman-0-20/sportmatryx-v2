@@ -6,16 +6,17 @@ import { SignOutButton } from "@/components/ui/sign-out";
 
 const NAV: { section: string; items: { href: string; label: string }[] }[] = [
   {
-    section: "Command",
+    section: "Start",
     items: [
-      { href: "/team-command", label: "Team Command" },
-      { href: "/interventions", label: "Intervention Queue" },
-      { href: "/roster", label: "Roster" },
+      { href: "/", label: "Home" },
+      { href: "/roster", label: "Athletes" },
     ],
   },
   {
-    section: "Intelligence",
+    section: "Performance",
     items: [
+      { href: "/team-command", label: "Team Command" },
+      { href: "/interventions", label: "Intervention Queue" },
       { href: "/position-room", label: "Position Room" },
       { href: "/practice-command", label: "Practice Command" },
       { href: "/game-readiness", label: "Game Readiness" },

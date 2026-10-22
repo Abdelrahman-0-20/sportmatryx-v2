@@ -222,6 +222,23 @@ export function sampleProducts(): MarketProduct[] {
       tag: "SAMPLE",
       available: true,
     },
+    {
+      id: "dataset-combined",
+      name: "Combined athlete-day dataset (50 athletes · 1,362 rows)",
+      description: "The team-generated synthetic dataset featured on the home page: day-level sensor means (HRV, SpO2, resp rate, workload, environment), consent state, baselines, driver contributions and readiness scores for 50 athletes across 3 teams over 28 days. Clearly labeled synthetic data — not real athletes.",
+      sourceLabel: "Team dataset",
+      sourceRef: "dataset-combined",
+      priceCents: demoPriceCents("dataset-combined"),
+      currency: "USD",
+      rowsEstimate: 1362,
+      includes: [
+        "1,362 athlete-day rows (CSV)",
+        "15 sensor measurement means with sample counts",
+        "7 driver contributions + 6 validity checks per day",
+      ],
+      tag: "ESTABLISHED",
+      available: true,
+    },
   ];
 }
 
