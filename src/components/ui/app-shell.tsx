@@ -13,18 +13,6 @@ const NAV: { section: string; items: { href: string; label: string }[] }[] = [
     ],
   },
   {
-    section: "Athletes",
-    items: [
-      { href: "/roster", label: "Athletes" },
-    ],
-  },
-  {
-    section: "Governance",
-    items: [
-      { href: "/admin", label: "Administration & Audit" },
-    ],
-  },
-  {
     section: "Commerce",
     items: [
       { href: "/marketplace", label: "Marketplace" },
