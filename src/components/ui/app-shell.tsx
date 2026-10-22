@@ -27,8 +27,6 @@ const NAV: { section: string; items: { href: string; label: string }[] }[] = [
   {
     section: "Governance",
     items: [
-      { href: "/data-quality", label: "Data Quality & Validity" },
-      { href: "/research", label: "Research & Exports" },
       { href: "/admin", label: "Administration & Audit" },
     ],
   },
