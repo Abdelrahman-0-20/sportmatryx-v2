@@ -4,10 +4,11 @@ import path from "node:path";
 import { Tag } from "@/components/ui/primitives";
 
 /**
- * Home — the data hub.
- * Features the team-generated Combined Wide Athlete-Day dataset (SYNTHETIC,
- * honesty-labeled): stats computed from the file, a preview table, a full-CSV
- * download, and primary navigation (marketplace, athletes, reports).
+ * Home — product landing + data hub.
+ * Explains what Sportmetryx Football is, who it serves and what it is used
+ * for, then hands visitors the demo dataset (stats computed from the CSV,
+ * preview table, full download) and primary navigation (marketplace,
+ * athletes).
  */
 
 const CSV_PUBLIC = "/datasets/Sportmetryx_Combined_Wide_Athlete_Day.csv";
@@ -66,6 +67,35 @@ const BAND_COLORS: Record<string, string> = {
   READY: "bg-ready", MONITOR: "bg-monitor", COMPROMISED: "bg-compromised", WITHHELD: "bg-withheld",
 };
 
+const USE_CASES: Array<[title: string, body: string]> = [
+  ["Daily readiness calls", "See who is READY, MONITOR or COMPROMISED before the session starts — with the drivers behind every band, not a black-box number."],
+  ["Workload & environment", "Track day-level load, travel and heat exposure against each athlete's own baseline, so context is never lost."],
+  ["Squad & rotation planning", "Compare readiness across the whole roster to plan minutes, rotations and recovery days with confidence."],
+  ["Data products & research", "Package and license derived datasets in the marketplace — demo checkout only, no real payments."],
+];
+
+const AUDIENCE: Array<[role: string, line: string]> = [
+  ["Performance staff", "Set the daily training picture from one screen."],
+  ["Medical & rehab", "Spot COMPROMISED signals early and validate return-to-play."],
+  ["Coaches", "Pick the squad with readiness context, not gut feeling alone."],
+  ["Analysts & researchers", "Work with validity-gated, consent-governed datasets."],
+];
+
+const STEPS: Array<[step: string, title: string, body: string]> = [
+  ["01", "Import", "The team-generated combined athlete-day CSV lands in one place — sensor means, workload, wellness, environment and consent flags."],
+  ["02", "Validate & score", "Every row passes validity gates first. Scores are computed against personal baselines, with the contributing drivers kept visible."],
+  ["03", "Decide", "Staff open the dashboard, read the bands and their drivers, and make training, rotation and selection calls backed by data."],
+];
+
+const QUICK_FACTS: Array<[label: string, value: string]> = [
+  ["Domain", "Football (soccer) performance"],
+  ["Built by", "Healthmetryx"],
+  ["Scores", "Validity-gated, explainable"],
+  ["Baselines", "Personal, per athlete"],
+  ["Data", "Synthetic demo — not real athletes"],
+  ["Status", "Prototype · research & demonstration"],
+];
+
 export default function HomePage() {
   return (
     <main className="min-h-dvh">
@@ -77,26 +107,28 @@ export default function HomePage() {
         <div className="flex items-center gap-3 text-sm">
           <Link href="/marketplace" className="hidden text-muted hover:text-ink md:block">Marketplace</Link>
           <Link href="/roster" className="hidden text-muted hover:text-ink md:block">Athletes</Link>
-          <Link href="/research" className="hidden text-muted hover:text-ink md:block">Reports</Link>
           <Link href="/login" className="rounded-md border border-edge px-3 py-1.5 font-semibold text-ink hover:bg-panel">
             Sign in
           </Link>
         </div>
       </header>
 
-      <section className="mx-auto max-w-7xl px-6 pt-6 md:px-10">
+      {/* Hero */}
+      <section className="mx-auto max-w-7xl px-6 pt-8 md:px-10">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">
           Decision support for football performance staff
         </p>
         <h1 className="display-heading mt-2 text-4xl leading-tight md:text-6xl">
-          <span className="text-ink">One dataset.</span>{" "}
-          <span className="text-accent">Every decision.</span>
+          <span className="text-ink">Turn daily athlete data into</span>{" "}
+          <span className="text-accent">decisions you can defend.</span>
         </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted">
-          Validity-gated, explainable athlete readiness built on personal baselines — fueled by the
-          team-generated combined athlete-day dataset. Demo marketplace included; no real payments.
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
+          <strong className="text-ink">Sportmetryx Football</strong> is a readiness platform for
+          football (soccer) clubs. It converts the data your staff already collects — GPS and
+          session load, wellness, environment — into one daily readiness score per athlete:
+          validity-checked first, computed against personal baselines, and always explainable.
         </p>
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap gap-3">
           <Link href="/marketplace" className="rounded-md bg-accent px-5 py-2.5 text-sm font-bold text-canvas hover:bg-cyan-300">
             Open the marketplace
           </Link>
@@ -109,12 +141,93 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="Combined athlete-day dataset">
+      {/* What is Sportmetryx */}
+      <section className="mx-auto max-w-7xl px-6 py-12 md:px-10" aria-label="What is Sportmetryx">
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          <div>
+            <h2 className="display-heading text-2xl">What is Sportmetryx?</h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Sportmetryx is a readiness intelligence layer that sits on top of the data a football
+              organization already produces. Instead of scattering sensor exports, wellness forms
+              and load reports across spreadsheets, it unifies them into a single
+              <span className="text-ink"> combined athlete-day record</span> — one row per athlete
+              per day — and derives a readiness score from it.
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Every score is <span className="text-ink">validity-gated</span> (bad or missing inputs
+              are flagged, never silently scored), <span className="text-ink">explainable</span>{" "}
+              (you can always see which drivers moved the number) and{" "}
+              <span className="text-ink">consent-governed</span> (athlete data is only visible under
+              the access controls each athlete consents to).
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              The result is not another dashboard to stare at — it is a shared, auditable picture
+              the whole staff can act on before every session.
+            </p>
+          </div>
+          <div className="rounded-[10px] border border-edge bg-panel p-5">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted">At a glance</div>
+            <dl className="mt-3 space-y-2.5 text-sm">
+              {QUICK_FACTS.map(([label, value]) => (
+                <div key={label} className="flex items-baseline justify-between gap-4 border-b border-edge/40 pb-2 last:border-0 last:pb-0">
+                  <dt className="shrink-0 text-xs uppercase tracking-wider text-muted">{label}</dt>
+                  <dd className="text-right text-ink">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      {/* Who it is for */}
+      <section className="mx-auto max-w-7xl px-6 pb-4 md:px-10" aria-label="Who uses Sportmetryx">
+        <h2 className="display-heading text-2xl">Who it is for</h2>
+        <p className="mt-1 text-sm text-muted">One platform, four seats at the table.</p>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {AUDIENCE.map(([role, line]) => (
+            <li key={role} className="rounded-[10px] border border-edge bg-panel p-4">
+              <div className="display-heading text-base text-accent">{role}</div>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted">{line}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* What it is used for */}
+      <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="What Sportmetryx is used for">
+        <h2 className="display-heading text-2xl">What it is used for</h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {USE_CASES.map(([title, body]) => (
+            <div key={title} className="card-lift rounded-[10px] border border-edge bg-panel p-5">
+              <div className="display-heading text-lg">{title}</div>
+              <p className="mt-2 text-xs leading-relaxed text-muted">{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="mx-auto max-w-7xl px-6 pb-10 md:px-10" aria-label="How Sportmetryx works">
+        <h2 className="display-heading text-2xl">How it works</h2>
+        <ol className="mt-4 grid gap-3 md:grid-cols-3">
+          {STEPS.map(([step, title, body]) => (
+            <li key={step} className="rounded-[10px] border border-edge bg-panel p-5">
+              <div className="display-heading text-3xl text-accent">{step}</div>
+              <div className="display-heading mt-1 text-lg">{title}</div>
+              <p className="mt-2 text-xs leading-relaxed text-muted">{body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* Explore the demo dataset */}
+      <section className="mx-auto max-w-7xl px-6 pb-12 md:px-10" aria-label="Combined athlete-day dataset">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="display-heading text-2xl">Combined athlete-day dataset</h2>
+            <h2 className="display-heading text-2xl">Explore the demo dataset</h2>
             <p className="mt-1 text-sm text-muted">
-              50 synthetic athletes · day-level sensor means, workload, environment, consent, baselines and scores.
+              The exact data this demo runs on: 50 synthetic athletes, day-level sensor means,
+              workload, environment, consent, baselines and scores.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -194,21 +307,6 @@ export default function HomePage() {
         ) : (
           <p className="mt-4 text-sm text-compromised">Dataset file not found on the server.</p>
         )}
-      </section>
-
-      <section className="mx-auto max-w-7xl px-6 pb-12 md:px-10">
-        <h2 className="display-heading mb-3 text-xl">Go to</h2>
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {([
-            ["/marketplace", "Marketplace", "Browse and license datasets - demo checkout, no payments."],
-            ["/roster", "Athletes", "50 synthetic athletes across 3 teams with full profiles."],
-          ] as const).map(([href, name, desc]) => (
-            <li key={href} className="card-lift rounded-[10px] border border-edge bg-panel p-4">
-              <Link href={href} className="display-heading text-lg hover:text-accent">{name}</Link>
-              <p className="mt-1 text-xs text-muted">{desc}</p>
-            </li>
-          ))}
-        </ul>
       </section>
 
       <footer className="border-t border-edge px-6 py-4 text-center text-xs text-muted md:px-10">
