@@ -302,10 +302,11 @@ export default function HomePage() {
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Product tour video">
         <Reveal>
           <p className="eyebrow">Watch</p>
-          <h2 className="h-sec mt-3">The 90-second tour</h2>
+          <h2 className="h-sec mt-3">Watch the product tour</h2>
           <p className="lede mt-3 max-w-2xl">
-            Five chapters, one loop: overview → athletes board → Player 360 → marketplace →
-            governance. Play it, or jump to any chapter.
+            A title card and five chapters — overview, athletes board, Player 360, marketplace,
+            governance. Press play, or jump to any chapter. Drop a real screen recording into
+            <span className="text-ink"> public/demo.mp4</span> and this player switches to it.
           </p>
           <div className="mt-8 max-w-4xl">
             <DemoVideo />

@@ -677,6 +677,47 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
 .video-progress-fill {
   transition: width 0.1s linear;
 }
+/* Slow camera push on each chapter (the "video" feel). */
+@keyframes smx-kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+.ken-burns {
+  animation: smx-kenburns 6.5s ease-out both;
+  transform-origin: center;
+}
+/* Dip-to-black between chapters. */
+@keyframes smx-cut {
+  0% { opacity: 0; }
+  25% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+.cut-flash {
+  animation: smx-cut 0.5s ease-out both;
+}
+/* Broadcast lower-third chapter label. */
+@keyframes smx-ll {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: none; }
+}
+.lower-third {
+  animation: smx-ll 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+/* Title-card accent line. */
+@keyframes smx-title-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.title-line {
+  transform-origin: left center;
+  animation: smx-title-line 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+.seg-fill {
+  transition: width 0.1s linear;
+}
+.seg:hover .seg-fill {
+  filter: brightness(1.5);
+}
 
 /* ==========================================================================
    TACTICS — CSS-3D pitch, tokens, passing arrows
