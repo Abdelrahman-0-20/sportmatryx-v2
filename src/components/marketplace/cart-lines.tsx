@@ -78,7 +78,7 @@ export function CartLines({ items }: { items: CartItem[] }) {
                   type="button"
                   disabled={busy || i.quantity <= 1}
                   onClick={() => setQuantity(i.productId, i.quantity - 1)}
-                  className="rounded-md border border-edge bg-panel px-2 py-1 text-xs font-semibold hover:bg-panel-2 disabled:opacity-50"
+                  className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2 disabled:opacity-50"
                   aria-label={`Decrease quantity of ${i.name}`}
                 >
                   −
@@ -88,7 +88,7 @@ export function CartLines({ items }: { items: CartItem[] }) {
                   type="button"
                   disabled={busy}
                   onClick={() => setQuantity(i.productId, i.quantity + 1)}
-                  className="rounded-md border border-edge bg-panel px-2 py-1 text-xs font-semibold hover:bg-panel-2 disabled:opacity-50"
+                  className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2 disabled:opacity-50"
                   aria-label={`Increase quantity of ${i.name}`}
                 >
                   +

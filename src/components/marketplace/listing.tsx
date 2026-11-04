@@ -129,8 +129,8 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
           type="button"
           onClick={() => setView("buy")}
           className={view === "buy"
-            ? "rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent"
-            : "rounded-md border border-edge bg-panel-2 px-3 py-1.5 text-xs font-semibold text-muted hover:text-ink"}
+            ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+            : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
           aria-pressed={view === "buy"}
         >
           Buy data
@@ -139,8 +139,8 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
           type="button"
           onClick={() => setView("sell")}
           className={view === "sell"
-            ? "rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent"
-            : "rounded-md border border-edge bg-panel-2 px-3 py-1.5 text-xs font-semibold text-muted hover:text-ink"}
+            ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+            : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
           aria-pressed={view === "sell"}
         >
           Sell / list
@@ -155,8 +155,8 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
               aria-selected={section === value}
               onClick={() => setSection(value)}
               className={section === value
-                ? "rounded-md border border-accent/50 bg-accent/10 px-3 py-1.5 text-xs font-semibold text-accent"
-                : "rounded-md border border-edge bg-panel-2 px-3 py-1.5 text-xs font-semibold text-muted hover:text-ink"}
+                ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+                : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
             >
               {label}
             </button>
@@ -168,14 +168,14 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         <SellListing />
       ) : (
         <>
-      <div className="mb-4 flex flex-wrap items-center gap-3">
+      <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-edge/70 bg-panel/60 px-4 py-3">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <input
             type="search"
             value={filters.query}
             onChange={(e) => setFilters({ ...filters, query: e.target.value })}
             placeholder="Search products, datasets, source…"
-            className="w-full rounded-md border border-edge bg-panel-2 px-3 py-2 pl-9 text-sm placeholder:text-muted focus:border-accent"
+            className="w-full rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 pl-9 text-sm placeholder:text-muted focus:border-accent"
             aria-label="Search marketplace products"
           />
           <svg
@@ -193,7 +193,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         <select
           value={filters.tag ?? ""}
           onChange={(e) => setFilters({ ...filters, tag: e.target.value || null })}
-          className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm focus:border-accent"
+          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
           aria-label="Filter by tag"
         >
           {TAG_OPTIONS.map((o) => (
@@ -210,7 +210,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
               available: v === "true" ? true : v === "false" ? false : null,
             });
           }}
-          className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm focus:border-accent"
+          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
           aria-label="Filter by availability"
         >
           {AVAILABLE_OPTIONS.map((o) => (
@@ -221,7 +221,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         <select
           value={filters.sort}
           onChange={(e) => setFilters({ ...filters, sort: e.target.value as MarketplaceFilters["sort"] })}
-          className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm focus:border-accent"
+          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
           aria-label="Sort products"
         >
           {SORT_OPTIONS.map((o) => (
@@ -247,7 +247,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         <button
           type="button"
           onClick={() => setCartOpen((v) => !v)}
-          className="rounded-md border border-accent/40 bg-accent/10 px-3 py-2 text-xs font-semibold text-accent hover:bg-accent/20"
+          className="rounded-lg bg-gradient-to-br from-accent to-[#4dd7f5] px-4 py-2 text-xs font-bold text-canvas shadow-[0_8px_22px_-10px_rgba(95,208,240,0.55)] hover:brightness-105"
         >
           {cartOpen ? "Close cart" : "Open cart"}
         </button>
@@ -264,7 +264,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
       ) : null}
 
       {filtered.length === 0 ? (
-        <div className="rounded-[10px] border border-edge bg-panel p-6 text-center">
+        <div className="surface rounded-2xl p-8 text-center">
           <p className="text-sm text-muted">No products match your filters.</p>
           <button
             type="button"
@@ -275,7 +275,7 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
           </button>
         </div>
       ) : (
-        <div className="stagger mb-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="stagger mb-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} onAddToCart={() => addToCart(p)} />
           ))}

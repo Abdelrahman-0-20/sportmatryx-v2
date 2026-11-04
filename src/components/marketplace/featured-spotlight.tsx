@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Tag, Button, LinkButton } from "@/components/ui/primitives";
+import { Tag, Button, LinkButton } from "@/components/ui/primitives";
 import type { MarketProduct } from "@/lib/services/marketplace";
 
 /**
@@ -15,7 +15,10 @@ export function FeaturedSpotlight({
   onAddToCart: (product: MarketProduct) => void;
 }) {
   return (
-    <Card className="card-lift mb-4 border border-accent/40" ariaLabel={`Featured: ${product.name}`}>
+    <section
+      aria-label={`Featured: ${product.name}`}
+      className="mb-6 rounded-2xl border border-accent/40 bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(157,120,245,0.10))] p-6 shadow-[0_30px_80px_-50px_rgba(95,208,240,0.6)]"
+    >
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -28,7 +31,7 @@ export function FeaturedSpotlight({
             <span className="text-xs text-muted">{product.sourceLabel}</span>
           </div>
 
-          <h2 className="display-heading mt-1.5 text-xl">{product.name}</h2>
+          <h2 className="h-sec mt-2">{product.name}</h2>
 
           {product.featuredNote ? (
             <p className="mt-1 text-xs font-semibold text-accent">{product.featuredNote}</p>
@@ -51,7 +54,7 @@ export function FeaturedSpotlight({
 
         <div className="flex shrink-0 flex-col items-start gap-2 md:items-end">
           <div className="text-right">
-            <div className="tabular text-2xl font-bold text-accent">
+            <div className="hero-number tabular text-4xl text-accent md:text-5xl">
               ${(product.priceCents / 100).toFixed(2)}
               <span className="ml-1 text-xs font-semibold text-muted">USD · demo price</span>
             </div>
@@ -73,6 +76,6 @@ export function FeaturedSpotlight({
           </div>
         </div>
       </div>
-    </Card>
+    </section>
   );
 }

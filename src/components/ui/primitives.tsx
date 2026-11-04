@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-/** Panel container (Panel #101B2E, border #1E2D45). Optional soft elevation. */
+/** Panel container — premium static surface: layered gradient, hairline
+ *  border, deep elevation. Optional soft elevation variant. */
 export function Card({
   children,
   className = "",
@@ -16,8 +17,8 @@ export function Card({
   return (
     <section
       aria-label={ariaLabel}
-      className={`rounded-[10px] border border-edge bg-panel p-4 ${
-        variant === "elevated" ? "shadow-[var(--shadow-card)]" : ""
+      className={`rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/70 p-4 shadow-[0_24px_60px_-45px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(232,240,249,0.04)] ${
+        variant === "elevated" ? "shadow-[var(--shadow-float)]" : ""
       } ${className}`}
     >
       {children}
@@ -34,8 +35,10 @@ export function CardLabel({ children }: { children: ReactNode }) {
 }
 
 const BUTTON_VARIANTS = {
-  primary: "bg-accent text-canvas hover:bg-cyan-300",
-  ghost: "border border-edge text-ink hover:bg-panel-2",
+  primary:
+    "bg-gradient-to-br from-accent to-[#4dd7f5] text-canvas shadow-[0_10px_28px_-10px_rgba(95,208,240,0.55)] hover:brightness-105 hover:-translate-y-px",
+  ghost:
+    "border border-edge/80 bg-panel-2/50 text-ink hover:border-accent/45 hover:bg-panel-2",
   danger: "border border-compromised text-compromised hover:bg-compromised/10",
 } as const;
 
@@ -62,7 +65,7 @@ export function Button({
       disabled={disabled}
       onClick={onClick}
       aria-label={ariaLabel}
-      className={`inline-flex min-h-[36px] items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${BUTTON_VARIANTS[variant]} ${className}`}
+      className={`inline-flex min-h-[36px] items-center justify-center rounded-lg px-3.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${BUTTON_VARIANTS[variant]} ${className}`}
     >
       {children}
     </button>
@@ -83,7 +86,7 @@ export function LinkButton({
   return (
     <Link
       href={href}
-      className={`inline-flex min-h-[36px] items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors ${BUTTON_VARIANTS[variant]} ${className}`}
+      className={`inline-flex min-h-[36px] items-center justify-center rounded-lg px-3.5 text-sm font-semibold transition-colors ${BUTTON_VARIANTS[variant]} ${className}`}
     >
       {children}
     </Link>

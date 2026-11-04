@@ -21,7 +21,7 @@ export function ProductCard({ product, onAddToCart }: { product: MarketProduct; 
         <img
           src={`/api/marketplace/images/${product.imageId}`}
           alt={`${product.name} cover`}
-          className="mb-2 h-36 w-full rounded-md border border-edge object-cover"
+          className="mb-3 h-40 w-full rounded-xl border border-edge/60 object-cover"
           loading="lazy"
         />
       ) : null}
@@ -55,12 +55,12 @@ export function ProductCard({ product, onAddToCart }: { product: MarketProduct; 
         </div>
         <div className="text-right">
           {product.priceCents === 0 ? (
-            <div className="flex items-center gap-1 text-sm font-semibold text-ready">
+            <div className="flex items-center gap-1 text-lg font-bold text-ready">
               Demo
               <span className="tabular">$0.00</span>
             </div>
           ) : (
-            <div className="flex items-center gap-1 text-sm font-semibold text-accent">
+            <div className="flex items-center gap-1 text-lg font-bold text-accent">
               <span className="tabular">${(product.priceCents / 100).toFixed(2)}</span>
               <span className="text-muted">USD</span>
             </div>
@@ -102,15 +102,12 @@ export function ProductCard({ product, onAddToCart }: { product: MarketProduct; 
             View details
           </LinkButton>
           <Button
-            variant="ghost"
+            variant="primary"
             onClick={() => {
               onAddToCart?.(product);
               markAdded();
             }}
-            className={cn(
-              "w-fit text-xs transition-colors",
-              pulse ? "border-accent bg-accent/10 text-accent" : "border-edge hover:bg-panel-2",
-            )}
+            className={cn("w-fit text-xs font-bold", pulse && "ring-2 ring-accent brightness-110")}
             aria-label={`Add ${product.name} to cart`}
           >
             {pulse ? "Added" : "Add to cart"}

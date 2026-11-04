@@ -85,7 +85,7 @@ export function MarketplaceCart({
           aria-label="Cart"
           onClick={() => setOpen(false)}
         >
-          <div className="w-full max-w-lg rounded-[10px] border border-edge bg-panel p-4 shadow-[var(--shadow-float)]" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-lg rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/80 p-5 shadow-[var(--shadow-float)]" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-edge pb-3">
               <div className="flex items-center gap-2">
                 <h2 className="display-heading text-lg">Cart</h2>
@@ -123,9 +123,9 @@ export function MarketplaceCart({
                         {i.priceCents === 0 ? "Demo — no charge" : `$${(i.priceCents / 100).toFixed(2)} each`}
                       </p>
                       <div className="mt-1.5 flex items-center gap-2">
-                        <button type="button" disabled={i.quantity <= 1} onClick={() => setQuantity(i.productId, i.quantity - 1)} className="rounded-md border border-edge bg-panel px-2 py-1 text-xs font-semibold hover:bg-panel-2 disabled:opacity-50" aria-label={`Decrease quantity of ${i.name}`}>−</button>
+                        <button type="button" disabled={i.quantity <= 1} onClick={() => setQuantity(i.productId, i.quantity - 1)} className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2 disabled:opacity-50" aria-label={`Decrease quantity of ${i.name}`}>−</button>
                         <span className="tabular text-sm font-semibold w-5 text-center">{i.quantity}</span>
-                        <button type="button" onClick={() => setQuantity(i.productId, i.quantity + 1)} className="rounded-md border border-edge bg-panel px-2 py-1 text-xs font-semibold hover:bg-panel-2" aria-label={`Increase quantity of ${i.name}`}>+</button>
+                        <button type="button" onClick={() => setQuantity(i.productId, i.quantity + 1)} className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2" aria-label={`Increase quantity of ${i.name}`}>+</button>
                         <button type="button" onClick={() => remove(i.productId)} className="ml-auto text-xs text-compromised hover:underline" aria-label={`Remove ${i.name}`}>Remove</button>
                       </div>
                     </div>

@@ -30,9 +30,12 @@ export default async function MarketplacePage() {
 
   return (
     <AppShell crumb="/marketplace" title="Marketplace">
-      <p className="mb-4 text-sm text-muted">
-        Browse purchasable data-product packages derived from existing import jobs and demo datasets.
-        Demo checkout only — no payment processing.
+      <p className="lede mb-2 max-w-3xl">
+        Browse purchasable data-product packages derived from existing import jobs and demo
+        datasets — the revenue layer of the platform.
+      </p>
+      <p className="mb-6 text-xs font-semibold text-accent">
+        Demo checkout · no real payments · consent-governed, clearly labeled synthetic data
       </p>
 
       <MarketplaceListing products={products} />
