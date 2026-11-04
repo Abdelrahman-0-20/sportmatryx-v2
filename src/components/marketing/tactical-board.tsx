@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { Dict } from "@/lib/i18n/dictionaries";
 
 /**
  * TacticalStudio — the CSS-3D tactical board: formation switcher, phase
@@ -138,7 +139,7 @@ const PHASE_KEYS = Object.keys(PHASES);
 const VX = (x: number) => x * 4.6;
 const VY = (y: number) => y * 6.6;
 
-export function TacticalStudio() {
+export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
   const [formation, setFormation] = useState("4-3-3");
   const [phase, setPhase] = useState("build");
   const [playing, setPlaying] = useState(false);
@@ -146,6 +147,7 @@ export function TacticalStudio() {
 
   const positions = FORMATIONS[formation]!;
   const currentPhase = PHASES[phase]!;
+  const curText = labels.phases[PHASE_KEYS.indexOf(phase)]!;
 
   /* Coaching drill loop. */
   useEffect(() => {
@@ -180,9 +182,9 @@ export function TacticalStudio() {
         <div ref={boardRef} className="glass scroll-mt-24 rounded-2xl p-4 sm:p-6">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-              {formation} · {currentPhase.label}
+              {formation} · {curText.label}
             </span>
-            <span className="text-[10px] text-muted">Interactive tactical board</span>
+            <span className="text-[10px] text-muted">{labels.boardTag}</span>
           </div>
 
           <div className="pitch-wrap py-2">
@@ -271,12 +273,12 @@ export function TacticalStudio() {
             </div>
           </div>
 
-          <p className="mt-4 text-center text-xs leading-relaxed text-muted">{currentPhase.desc}</p>
+          <p className="mt-4 text-center text-xs leading-relaxed text-muted">{curText.desc}</p>
         </div>
 
         {/* ---------- Controls ---------- */}
         <div className="glass rounded-2xl p-5">
-          <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Formation</div>
+          <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{labels.formation}</div>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
             {FORMATION_KEYS.map((k) => (
               <button key={k} type="button" onClick={() => setFormation(k)} className={pill(k === formation)}>
@@ -285,7 +287,7 @@ export function TacticalStudio() {
             ))}
           </div>
 
-          <div className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Phase</div>
+          <div className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{labels.phase}</div>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
             {PHASE_KEYS.map((k) => (
               <button
@@ -297,7 +299,7 @@ export function TacticalStudio() {
                 }}
                 className={pill(k === phase)}
               >
-                {PHASES[k]!.label}
+                {labels.phases[PHASE_KEYS.indexOf(k)]!.label}
               </button>
             ))}
           </div>
@@ -313,19 +315,19 @@ export function TacticalStudio() {
                   <rect x="3" y="2" width="4" height="14" rx="1" />
                   <rect x="11" y="2" width="4" height="14" rx="1" />
                 </svg>
-                Pause drill
+                {labels.pauseDrill}
               </>
             ) : (
               <>
                 <svg width="12" height="12" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
                   <path d="M5 3.5v11l9-5.5z" />
                 </svg>
-                Play drill
+                {labels.playDrill}
               </>
             )}
           </button>
           <p className="mt-3 text-[11px] leading-relaxed text-muted">
-            The drill cycles through all four phases with arrows drawing the passes and runs.
+            {labels.cycleHint}
           </p>
         </div>
       </div>
@@ -333,22 +335,22 @@ export function TacticalStudio() {
       {/* ---------- Game systems library ---------- */}
       <div className="mt-8">
         <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-          Game systems · click to load on the board
+          {labels.gameSystems}
         </div>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {SYSTEMS.map((s) => (
+          {SYSTEMS.map((s, i) => (
             <button
-              key={s.name}
+              key={i}
               type="button"
               onClick={() => applySystem(s)}
               className="surface rounded-2xl p-5 text-left"
             >
               <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
-                {s.tag}
+                {labels.systems[i]!.tag}
               </span>
-              <span className="mt-2 block text-base font-semibold text-ink">{s.name}</span>
-              <span className="mt-1.5 block text-sm leading-relaxed text-muted">{s.body}</span>
-              <span className="mt-3 block text-xs font-bold text-accent">Show on board →</span>
+              <span className="mt-2 block text-base font-semibold text-ink">{labels.systems[i]!.name}</span>
+              <span className="mt-1.5 block text-sm leading-relaxed text-muted">{labels.systems[i]!.body}</span>
+              <span className="mt-3 block text-xs font-bold text-accent">{labels.showOnBoard}</span>
             </button>
           ))}
         </div>

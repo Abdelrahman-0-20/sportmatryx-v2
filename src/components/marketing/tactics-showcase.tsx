@@ -1,9 +1,14 @@
+import { getDict } from "@/lib/i18n/server";
+import { Rich } from "@/lib/i18n/rich";
+import type { Dict } from "@/lib/i18n/dictionaries";
+
 /**
  * TacticsShowcase — Hudl-style dashboard collage: radar, heatmap scouting
  * table, team-average sparklines, range sliders, leaderboard, analyst note
- * and a formation map. Static markup; all motion is CSS (scroll-revealed by
- * the parent Reveal, row staggers via .tour-row, radar/knob/dot keyframes).
+ * and a formation map. Server component — reads the locale dictionary.
  */
+
+type Labels = Dict["tacticsShowcase"];
 
 function Panel({
   title,
@@ -27,7 +32,7 @@ function Panel({
 
 /* ---------- radar ---------- */
 
-function RadarPanel() {
+function RadarPanel({ t }: { t: Labels }) {
   const labels: Array<[x: number, y: number, text: string]> = [
     [120, 16, "xG"],
     [196, 56, "NP xG/Shot"],
@@ -52,7 +57,7 @@ function RadarPanel() {
       .join(" ");
 
   return (
-    <Panel title="Radar — attacking output">
+    <Panel title={t.radar}>
       <svg viewBox="0 0 240 200" className="w-full" aria-hidden="true">
         {[23.3, 46.6, 70].map((r) => (
           <polygon key={r} points={ring(r)} fill="none" stroke="rgba(37,55,85,0.9)" strokeWidth="1" />
@@ -95,10 +100,10 @@ function RadarPanel() {
       </svg>
       <div className="mt-1 flex justify-center gap-4 text-[10px] text-muted">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full bg-accent" /> This week
+          <span className="inline-block h-2 w-2 rounded-full bg-accent" /> {t.legendThis}
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2 w-2 rounded-full bg-prototype" /> Season avg
+          <span className="inline-block h-2 w-2 rounded-full bg-prototype" /> {t.legendSeason}
         </span>
       </div>
     </Panel>
@@ -120,10 +125,10 @@ const TABLE_ROWS: Array<{
 
 const TIER_CLS = ["", "bg-ready/15 text-ready", "bg-accent/15 text-accent", "bg-monitor/15 text-monitor"];
 
-function ScoutingTable() {
+function ScoutingTable({ t }: { t: Labels }) {
   const headers = ["Player", "Minutes", "xG", "xG/Shot", "Speed", "Presses"];
   return (
-    <Panel title="Explore — player impact" className="md:col-span-2">
+    <Panel title={t.scouting} className="md:col-span-2">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
@@ -156,27 +161,27 @@ function ScoutingTable() {
           </tbody>
         </table>
       </div>
-      <div className="mt-2 text-right text-[10px] text-muted">Showing 5 of 50</div>
+      <div className="mt-2 text-right text-[10px] text-muted">{t.showing}</div>
     </Panel>
   );
 }
 
 /* ---------- team-average sparkline cards ---------- */
 
-const TEAM_STATS: Array<[label: string, value: string, delta: string, up: boolean, path: string]> = [
-  ["Distance (m)", "5,385", "89.3%", false, "M0,26 L16,20 L32,22 L48,12 L64,16 L80,9 L100,13"],
-  ["m/min", "113.29", "101.5%", true, "M0,24 L16,25 L32,18 L48,20 L64,12 L80,14 L100,7"],
-  ["Abs HSR (m)", "327.4", "86.2%", false, "M0,10 L16,14 L32,12 L48,18 L64,16 L80,23 L100,25"],
-  ["Abs Sprint (m)", "1.8", "23.1%", false, "M0,8 L16,12 L32,11 L48,17 L64,21 L80,20 L100,27"],
+const TEAM_STATS: Array<[value: string, delta: string, up: boolean, path: string]> = [
+  ["5,385", "89.3%", false, "M0,26 L16,20 L32,22 L48,12 L64,16 L80,9 L100,13"],
+  ["113.29", "101.5%", true, "M0,24 L16,25 L32,18 L48,20 L64,12 L80,14 L100,7"],
+  ["327.4", "86.2%", false, "M0,10 L16,14 L32,12 L48,18 L64,16 L80,23 L100,25"],
+  ["1.8", "23.1%", false, "M0,8 L16,12 L32,11 L48,17 L64,21 L80,20 L100,27"],
 ];
 
-function TeamAverages() {
+function TeamAverages({ t }: { t: Labels }) {
   return (
-    <Panel title="Team average — % vs last 5 matches" className="md:col-span-2">
+    <Panel title={t.teamAvg} className="md:col-span-2">
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {TEAM_STATS.map(([label, value, delta, up, path], i) => (
-          <div key={label} className="tour-row rounded-xl border border-edge/60 bg-panel-2/70 p-3" style={{ animationDelay: `${i * 90}ms` }}>
-            <div className="text-[10px] uppercase tracking-wider text-muted">{label}</div>
+        {TEAM_STATS.map(([value, delta, up, path], i) => (
+          <div key={t.statLabels[i]} className="tour-row rounded-xl border border-edge/60 bg-panel-2/70 p-3" style={{ animationDelay: `${i * 90}ms` }}>
+            <div className="text-[10px] uppercase tracking-wider text-muted">{t.statLabels[i]}</div>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="hero-number text-xl text-ink">{value}</span>
               <span className={`text-[11px] font-bold ${up ? "text-ready" : "text-monitor"}`}>
@@ -204,19 +209,15 @@ function TeamAverages() {
 
 /* ---------- range sliders ---------- */
 
-function SlidersPanel() {
-  const sliders: Array<[label: string, range: string]> = [
-    ["Open play xG assisted", "0.061 – 0.177"],
-    ["Presses", "6 – 20"],
-  ];
+function SlidersPanel({ t }: { t: Labels }) {
   return (
-    <Panel title="Filters">
+    <Panel title={t.filters}>
       <div className="space-y-6 pt-1">
-        {sliders.map(([label, range], i) => (
-          <div key={label} className="tour-row" style={{ animationDelay: `${i * 140}ms` }}>
-            <div className="flex items-baseline justify-between">
-              <span className="text-xs font-semibold text-ink">{label}</span>
-              <span className="tabular text-xs text-accent">{range}</span>
+        {t.sliders.map((slider, i) => (
+          <div key={slider.label} className="tour-row" style={{ animationDelay: `${i * 140}ms` }}>
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-xs font-semibold text-ink">{slider.label}</span>
+              <span className="tabular shrink-0 text-xs text-accent">{slider.range}</span>
             </div>
             <div className="slider-track mt-4">
               <span className="slider-knob" style={{ animationDelay: i === 0 ? "0s" : "-2.2s" }} />
@@ -241,9 +242,9 @@ const SPEED_BOARD: Array<[rank: number, name: string, value: string]> = [
   [3, "Cinder_01", "31.8"],
 ];
 
-function Leaderboard() {
+function Leaderboard({ t }: { t: Labels }) {
   return (
-    <Panel title="Top speed this week (km/h)">
+    <Panel title={t.leaderboard}>
       <ul className="space-y-2">
         {SPEED_BOARD.map(([rank, name, value], i) => (
           <li
@@ -266,17 +267,19 @@ function Leaderboard() {
 
 /* ---------- analyst note (chat-style) ---------- */
 
-function AnalystNote() {
+function AnalystNote({ t }: { t: Labels }) {
   return (
-    <Panel title="Analyst">
+    <Panel title={t.analyst}>
       <div className="tour-row flex justify-end">
         <p className="max-w-[85%] rounded-2xl rounded-br-md border border-edge/60 bg-panel-2 px-3 py-2 text-[11px] text-muted">
-          What does our high-speed running look like by position?
+          {t.question}
         </p>
       </div>
-      <div className="tour-row mt-3 rounded-2xl rounded-bl-md border border-accent/30 bg-accent/5 px-3 py-2.5 text-[11px] leading-relaxed text-ink" style={{ animationDelay: "220ms" }}>
-        <strong>Full backs</strong> lead total HSR volume due to wide coverage.{" "}
-        <strong>MD-4</strong> is a universal low point — a planned team taper.
+      <div
+        className="tour-row mt-3 rounded-2xl rounded-bl-md border border-accent/30 bg-accent/5 px-3 py-2.5 text-[11px] leading-relaxed text-ink"
+        style={{ animationDelay: "220ms" }}
+      >
+        <Rich text={t.answer} />
         <svg viewBox="0 0 160 44" className="mt-2 h-10 w-full" aria-hidden="true">
           <path d="M0,30 L32,24 L64,27 L96,14 L128,18 L160,8" fill="none" stroke="var(--color-ready)" strokeWidth="2" />
           <path d="M0,36 L32,33 L64,35 L96,28 L128,31 L160,24" fill="none" stroke="var(--color-monitor)" strokeWidth="2" />
@@ -296,9 +299,9 @@ const MAP_DOTS: Array<[x: number, y: number, label: string, active?: boolean]> =
   [62, 28, "ST"], [38, 28, "ST"],
 ];
 
-function FormationMap() {
+function FormationMap({ t }: { t: Labels }) {
   return (
-    <Panel title="Formation map — 4-4-2">
+    <Panel title={t.formation}>
       <svg viewBox="0 0 100 104" className="w-full" aria-hidden="true">
         <rect x="3" y="3" width="94" height="98" rx="4" fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
         <line x1="3" y1="52" x2="97" y2="52" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
@@ -333,16 +336,18 @@ function FormationMap() {
   );
 }
 
-export function TacticsShowcase() {
+export async function TacticsShowcase() {
+  const t = (await getDict()).tacticsShowcase;
+
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      <RadarPanel />
-      <ScoutingTable />
-      <TeamAverages />
-      <SlidersPanel />
-      <Leaderboard />
-      <AnalystNote />
-      <FormationMap />
+      <RadarPanel t={t} />
+      <ScoutingTable t={t} />
+      <TeamAverages t={t} />
+      <SlidersPanel t={t} />
+      <Leaderboard t={t} />
+      <AnalystNote t={t} />
+      <FormationMap t={t} />
     </div>
   );
 }

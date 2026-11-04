@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { Reveal } from "@/components/ui/motion";
+import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Privacy — Sportmetryx Football",
@@ -8,62 +10,27 @@ export const metadata: Metadata = {
     "How Sportmetryx handles data: consent-governed athlete records, cookies, orders and your rights.",
 };
 
-const SECTIONS: Array<[title: string, body: string]> = [
-  [
-    "The short version",
-    "The website stores only what is needed to keep you signed in and to process orders. No payment details are ever stored.",
-  ],
-  [
-    "What we collect",
-    "Account sessions (a session cookie when you sign in), guest-mode preference (a single cookie), and the details you type into the checkout form (email and name) — which are stored to show your order history.",
-  ],
-  [
-    "Athlete data & consent",
-    "The platform is built around consent: athlete records are visible only to roles the athlete has consented to, every access is written to a tamper-evident audit log, and consent can be withdrawn. Consent records are part of the schema, not an afterthought.",
-  ],
-  [
-    "Cookies",
-    "Strictly functional: session, guest mode and cart contents. No advertising or cross-site tracking cookies are used in this demo.",
-  ],
-  [
-    "Where data lives",
-    "The site runs on Vercel's edge network; the database runs on Neon (PostgreSQL). Both are infrastructure providers under their own privacy policies.",
-  ],
-  [
-    "Your rights",
-    "You can request access to, correction of, or deletion of anything you submitted (for example a demo order email) by using the contact details on the Book a demo page. Demo data can be purged on request without argument.",
-  ],
-  [
-    "Health information",
-    "We do not collect health or medical information through this website — performance records stay governed by athlete consent.",
-  ],
-  [
-    "Status of this notice",
-    "Before production rollout with real clubs, this notice will be reviewed by counsel and updated with the legal entity, region-specific rights (GDPR/CCPA) and retention periods.",
-  ],
-];
+export default async function PrivacyPage() {
+  const t = (await getDict()).privacy;
 
-export default function PrivacyPage() {
   return (
     <main className="min-h-dvh">
       <MarketingHeader />
 
       <section className="mx-auto max-w-4xl px-6 pt-12 md:px-10">
-        <p className="eyebrow">Legal</p>
-        <h1 className="hero-title mt-3">Privacy</h1>
-        <p className="lede mt-4">
-          Plain language, because a consent-governed product should be able to explain itself.
-        </p>
-        <p className="mt-2 text-xs text-muted">Last updated: November 2026</p>
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h1 className="hero-title mt-3">{t.h1}</h1>
+        <p className="lede mt-4">{t.lede}</p>
+        <p className="mt-2 text-xs text-muted">{t.updated}</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-10 md:px-10">
         <Reveal>
           <div className="space-y-7">
-            {SECTIONS.map(([title, body]) => (
-              <div key={title}>
-                <h2 className="text-lg font-semibold text-ink">{title}</h2>
-                <p className="body-md mt-2">{body}</p>
+            {t.sections.map((section) => (
+              <div key={section.title}>
+                <h2 className="text-lg font-semibold text-ink">{section.title}</h2>
+                <p className="body-md mt-2">{section.body}</p>
               </div>
             ))}
           </div>
@@ -72,10 +39,10 @@ export default function PrivacyPage() {
 
       <section className="mx-auto max-w-4xl px-6 pb-16 md:px-10">
         <div className="cta-band rounded-3xl px-8 py-10 text-center">
-          <p className="lede">Questions about your data?</p>
-          <a href="/demo" className="btn-primary mt-5 inline-flex">
-            Contact us
-          </a>
+          <p className="lede">{t.ctaQ}</p>
+          <Link href="/demo" className="btn-primary mt-5 inline-flex">
+            {t.ctaBtn}
+          </Link>
         </div>
       </section>
 
