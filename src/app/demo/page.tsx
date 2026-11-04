@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { DemoForm } from "@/components/marketing/demo-form";
+import { GreetingVideo } from "@/components/marketing/greeting-video";
 import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
@@ -25,6 +26,10 @@ export default async function DemoPage() {
           {t.h1a} <span className="text-accent">{t.h1b}</span>
         </h1>
         <p className="lede mt-5 max-w-2xl">{t.lede}</p>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pt-8 md:px-10" aria-label="Founder greeting">
+        <GreetingVideo title={t.greetingTitle} note={t.greetingNote} />
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 md:px-10">

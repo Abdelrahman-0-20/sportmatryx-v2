@@ -240,6 +240,8 @@ export const pt: Dict = {
     notReadyMid: ", ou entre na",
     notReadyPilot: "lista de piloto",
     notReadyTail: "e entramos em contato quando abrir uma vaga.",
+    greetingTitle: "Uma palavra do fundador",
+    greetingNote: "Assistir — 10 segundos",
     formCardTitle: "Solicitar uma vaga",
     formCardNote: "Preencha — seu app de e-mail abre com tudo preenchido.",
     form: {

@@ -240,6 +240,8 @@ export const es: Dict = {
     notReadyMid: ", o únete a la",
     notReadyPilot: "lista de pilotos",
     notReadyTail: "y te contactaremos cuando haya un hueco.",
+    greetingTitle: "Una palabra del fundador",
+    greetingNote: "Reproducir — 10 segundos",
     formCardTitle: "Solicitar un hueco",
     formCardNote: "Completa esto — se abrirá tu app de correo con todo rellenado.",
     form: {

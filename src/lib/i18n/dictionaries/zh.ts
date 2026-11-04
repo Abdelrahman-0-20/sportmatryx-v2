@@ -240,6 +240,8 @@ export const zh: Dict = {
     notReadyMid: "，或加入",
     notReadyPilot: "试点候补名单",
     notReadyTail: "有名额时我们会联系你。",
+    greetingTitle: "创始人的话",
+    greetingNote: "播放 — 10 秒",
     formCardTitle: "申请名额",
     formCardNote: "填写后会打开你的邮件应用，内容已自动填好。",
     form: {

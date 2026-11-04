@@ -238,6 +238,8 @@ export const en = {
     notReadyMid: ", or join the",
     notReadyPilot: "pilot waitlist",
     notReadyTail: "and we\u2019ll reach out when a slot opens.",
+    greetingTitle: "A word from the founder",
+    greetingNote: "Play — 10 seconds",
     formCardTitle: "Request a slot",
     formCardNote: "Fill this in — it opens your mail app with everything prefilled.",
     form: {
