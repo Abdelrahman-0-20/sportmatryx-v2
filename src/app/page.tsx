@@ -12,11 +12,14 @@ import { ProductTour } from "@/components/ui/product-tour";
 import { SportsMarquee } from "@/components/ui/sports-marquee";
 import { TelemetryTicker } from "@/components/ui/telemetry-ticker";
 import { TiltCard } from "@/components/ui/tilt-card";
+import { getDict } from "@/lib/i18n/server";
+import { Rich } from "@/lib/i18n/rich";
 
 /**
- * Home — Kitman-style marketing flow with the premium dark treatment:
- * hero + product mockup → proof strip → solutions → what it is → audience →
- * use cases → product tour → marquee → dataset → demo CTA.
+ * Home — Kitman-style marketing flow with the premium dark treatment and
+ * full i18n (EN/ES/PT/ZH): hero + product mockup → proof strip → solutions →
+ * what it is → audience → use cases → product tour → marquee → dataset →
+ * demo CTA.
  */
 
 const CSV_PUBLIC = "/datasets/Sportmetryx_Combined_Wide_Athlete_Day.csv";
@@ -75,48 +78,14 @@ const BAND_COLORS: Record<string, string> = {
   READY: "bg-ready", MONITOR: "bg-monitor", COMPROMISED: "bg-compromised", WITHHELD: "bg-withheld",
 };
 
-const SPORTS = ["Soccer", "American football", "Basketball", "Baseball", "Cycling", "Rugby", "Track & field", "Volleyball"];
-
-const PROOF_STRIP: Array<[value: number, suffix: string, label: string]> = [
-  [8, "", "sports in the pipeline"],
-  [158747, "", "device observations processed"],
-  [1431, "", "sessions modeled end-to-end"],
-  [2, "", "live deployments"],
-];
-
-const SOLUTIONS: Array<[id: string, title: string, body: string]> = [
-  ["readiness", "Readiness & Performance", "Know who can train — and at what intensity — before the session starts, on one board the whole staff trusts."],
-  ["medical", "Medical & Rehab", "Spot COMPROMISED signals early, keep WITHHELD data out of the picture, and document return-to-play with an audit trail."],
-  ["coaching", "Coaching & Development", "Select, rotate and rest with context — squad comparisons and 14-day trends instead of gut feeling alone."],
-  ["data", "Data Products & Research", "Package and license consent-governed datasets through the built-in marketplace — a revenue channel on data you already produce."],
-];
-
-const AUDIENCE: Array<[role: string, line: string]> = [
-  ["Performance staff", "Set the daily training picture from one screen."],
-  ["Medical & rehab", "Spot COMPROMISED signals early and validate return-to-play."],
-  ["Coaches", "Pick the squad with readiness context, not gut feeling alone."],
-  ["Analysts & researchers", "Work with validity-gated, consent-governed datasets."],
-];
-
-const USE_CASES: Array<[title: string, body: string]> = [
-  ["Daily readiness calls", "See who is READY, MONITOR or COMPROMISED before the session starts — with the drivers behind every band, not a black-box number."],
-  ["Workload & environment", "Track day-level load, travel and heat exposure against each athlete's own baseline, so context is never lost."],
-  ["Squad & rotation planning", "Compare readiness across the whole roster to plan minutes, rotations and recovery days with confidence."],
-  ["Data products & research", "Package and license derived datasets in the marketplace — demo checkout only, no real payments."],
-];
-
-const QUICK_FACTS: Array<[label: string, value: string]> = [
-  ["Domain", "Football (soccer) performance"],
-  ["Built by", "Healthmetryx"],
-  ["Scores", "Validity-gated, explainable"],
-  ["Baselines", "Personal, per athlete"],
-  ["Data", "Synthetic demo — not real athletes"],
-  ["Status", "Prototype · research & demonstration"],
-];
-
+const PROOF_VALUES = [8, 158747, 1431, 2];
+const SOL_IDS = ["readiness", "medical", "coaching", "data"];
 const GLOBE_RINGS = [0, 30, 60, 90, 120, 150];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const dict = await getDict();
+  const t = dict.home;
+
   return (
     <main className="min-h-dvh">
       <BootScreen />
@@ -141,30 +110,26 @@ export default function HomePage() {
 
         <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_1fr]">
           <div>
-            <p className="eyebrow hero-in">Decision support for football performance staff</p>
+            <p className="eyebrow hero-in">{t.hero.eyebrow}</p>
             <h1 className="hero-title hero-in hero-in-2 mt-4 text-ink">
-              Turn daily athlete data into decisions you can defend.
+              <span>{t.hero.h1a}</span>{" "}
+              <span className="text-accent">{t.hero.h1b}</span>
             </h1>
             <p className="lede hero-in hero-in-3 mt-5 max-w-xl">
-              <strong className="text-ink">Sportmetryx Football</strong> converts the data your staff
-              already collects — GPS, session load, wellness, environment — into one daily readiness
-              score per athlete: validity-checked first, built on personal baselines, always
-              explainable.
+              <strong className="text-ink">{t.hero.ledeStrong}</strong> {t.hero.ledeRest}
             </p>
             <div className="hero-in hero-in-3 mt-8 flex flex-wrap gap-3">
               <Link href="/demo" className="btn-primary">
-                Book a demo
+                {t.hero.btnDemo}
               </Link>
               <Link href="/guest" className="btn-ghost">
-                Continue as guest
+                {t.hero.btnGuest}
               </Link>
               <Link href="/platform" className="btn-ghost">
-                See the platform
+                {t.hero.btnPlatform}
               </Link>
             </div>
-            <p className="hero-in hero-in-3 mt-5 text-xs text-muted">
-              Guest mode shows every screen with labeled synthetic data — no account needed.
-            </p>
+            <p className="hero-in hero-in-3 mt-5 text-xs text-muted">{t.hero.guestNote}</p>
           </div>
 
           <div className="hidden lg:block">
@@ -184,11 +149,10 @@ export default function HomePage() {
       {/* Proof strip — hairline stats, no boxes */}
       <section className="border-y border-edge/70 bg-panel-2/50" aria-label="Engineering proof">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-0 px-6 sm:grid-cols-2 md:grid-cols-4 md:px-10">
-          {PROOF_STRIP.map(([value, suffix, label], i) => (
+          {t.proofLabels.map((label, i) => (
             <div key={label} className={`stat-cell py-7 ${i > 0 ? "md:pl-8" : ""} ${i > 0 ? "sm:pl-6" : ""}`}>
               <div className="stat-num">
-                <CountUp value={value} />
-                {suffix}
+                <CountUp value={PROOF_VALUES[i]!} />
               </div>
               <div className="stat-label">{label}</div>
             </div>
@@ -199,22 +163,22 @@ export default function HomePage() {
       {/* Solutions pillars */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Solutions">
         <Reveal>
-          <p className="eyebrow">Solutions</p>
-          <h2 className="h-sec mt-3">Four seats at the table. One data model.</h2>
+          <p className="eyebrow">{t.solutions.eyebrow}</p>
+          <h2 className="h-sec mt-3">{t.solutions.h2}</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {SOLUTIONS.map(([id, title, body], i) => (
+            {t.solutions.cards.map((card, i) => (
               <Link
-                key={id}
-                href={`/solutions#${id}`}
+                key={card.title}
+                href={`/solutions#${SOL_IDS[i]}`}
                 className="surface group flex flex-col rounded-2xl p-6"
               >
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="mt-3 text-lg font-semibold leading-snug text-ink">{title}</span>
-                <span className="mt-2 flex-1 text-sm leading-relaxed text-muted">{body}</span>
+                <span className="mt-3 text-lg font-semibold leading-snug text-ink">{card.title}</span>
+                <span className="mt-2 flex-1 text-sm leading-relaxed text-muted">{card.body}</span>
                 <span className="mt-4 text-xs font-bold text-accent transition-transform group-hover:translate-x-1">
-                  Explore solution →
+                  {t.solutions.explore}
                 </span>
               </Link>
             ))}
@@ -228,37 +192,27 @@ export default function HomePage() {
           <Reveal>
             <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr]">
               <div>
-                <p className="eyebrow">What it is</p>
-                <h2 className="h-sec mt-3">A readiness intelligence layer — not another dashboard.</h2>
+                <p className="eyebrow">{t.what.eyebrow}</p>
+                <h2 className="h-sec mt-3">{t.what.h2}</h2>
                 <div className="lede mt-6 space-y-5">
                   <p>
-                    Sportmetryx unifies the scattered exports a football organization already
-                    produces — sensor files, wellness forms, load reports — into a single
-                    <span className="text-ink"> combined athlete-day record</span>: one row per
-                    athlete per day, and a readiness score derived from it.
+                    <Rich text={t.what.p1} />
                   </p>
                   <p>
-                    Every score is <span className="text-ink">validity-gated</span> (bad or missing
-                    inputs are flagged, never silently scored),{" "}
-                    <span className="text-ink">explainable</span> (you can always see which drivers
-                    moved the number) and <span className="text-ink">consent-governed</span> (athlete
-                    data is visible only under the access controls each athlete consents to).
+                    <Rich text={t.what.p2} />
                   </p>
-                  <p>
-                    The result is a shared, auditable picture the whole staff can act on before
-                    every session.
-                  </p>
+                  <p>{t.what.p3}</p>
                 </div>
               </div>
               <div className="rounded-2xl border border-edge/70 bg-panel/70 p-6">
                 <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-                  At a glance
+                  {t.what.glanceTitle}
                 </div>
                 <dl className="mt-5 divide-y divide-edge/60">
-                  {QUICK_FACTS.map(([label, value]) => (
-                    <div key={label} className="flex items-baseline justify-between gap-4 py-3">
-                      <dt className="text-xs uppercase tracking-wider text-muted">{label}</dt>
-                      <dd className="text-right text-sm font-medium text-ink">{value}</dd>
+                  {t.what.glance.map((fact) => (
+                    <div key={fact.label} className="flex items-baseline justify-between gap-4 py-3">
+                      <dt className="text-xs uppercase tracking-wider text-muted">{fact.label}</dt>
+                      <dd className="text-right text-sm font-medium text-ink">{fact.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -271,13 +225,13 @@ export default function HomePage() {
       {/* Who it is for */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Who uses Sportmetryx">
         <Reveal>
-          <p className="eyebrow">Who it is for</p>
-          <h2 className="h-sec mt-3">One platform, every role in the loop.</h2>
+          <p className="eyebrow">{t.who.eyebrow}</p>
+          <h2 className="h-sec mt-3">{t.who.h2}</h2>
           <ul className="stagger mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {AUDIENCE.map(([role, line]) => (
-              <li key={role} className="surface rounded-2xl p-6">
-                <div className="text-base font-semibold text-ink">{role}</div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{line}</p>
+            {t.who.cards.map((card) => (
+              <li key={card.title} className="surface rounded-2xl p-6">
+                <div className="text-base font-semibold text-ink">{card.title}</div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{card.line}</p>
               </li>
             ))}
           </ul>
@@ -288,13 +242,13 @@ export default function HomePage() {
       <section className="section-y border-t border-edge/50 bg-panel-2/30" aria-label="What Sportmetryx is used for">
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <Reveal>
-            <p className="eyebrow">Use cases</p>
-            <h2 className="h-sec mt-3">What it is used for</h2>
+            <p className="eyebrow">{t.usecases.eyebrow}</p>
+            <h2 className="h-sec mt-3">{t.usecases.h2}</h2>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {USE_CASES.map(([title, body]) => (
-                <TiltCard key={title} className="surface rounded-2xl p-6">
-                  <div className="text-lg font-semibold text-ink">{title}</div>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
+              {t.usecases.cards.map((card) => (
+                <TiltCard key={card.title} className="surface rounded-2xl p-6">
+                  <div className="text-lg font-semibold text-ink">{card.title}</div>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{card.body}</p>
                 </TiltCard>
               ))}
             </div>
@@ -302,15 +256,13 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Demo video — the 90-second tour */}
+      {/* Demo video */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Product tour video">
         <Reveal>
-          <p className="eyebrow">Watch</p>
-          <h2 className="h-sec mt-3">Watch the product tour</h2>
+          <p className="eyebrow">{t.watch.eyebrow}</p>
+          <h2 className="h-sec mt-3">{t.watch.h2}</h2>
           <p className="lede mt-3 max-w-2xl">
-            A title card and five chapters — overview, athletes board, Player 360, marketplace,
-            governance. Press play, or jump to any chapter. Drop a real screen recording into
-            <span className="text-ink"> public/demo.mp4</span> and this player switches to it.
+            <Rich text={t.watch.lede} />
           </p>
           <div className="mt-8 max-w-4xl">
             <DemoVideo />
@@ -321,9 +273,9 @@ export default function HomePage() {
       {/* How it works — interactive product tour */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="How Sportmetryx works">
         <Reveal>
-          <p className="eyebrow">How it works</p>
-          <h2 className="h-sec mt-3">Import. Validate. Decide.</h2>
-          <p className="lede mt-3 max-w-2xl">Click through the flow — or let it play.</p>
+          <p className="eyebrow">{t.tour.eyebrow}</p>
+          <h2 className="h-sec mt-3">{t.tour.h2}</h2>
+          <p className="lede mt-3 max-w-2xl">{t.tour.sub}</p>
           <div className="mt-8">
             <ProductTour />
           </div>
@@ -332,24 +284,21 @@ export default function HomePage() {
 
       {/* Multisport pipeline marquee */}
       <div className="border-y border-edge/70 bg-panel-2/50 py-4">
-        <SportsMarquee items={SPORTS} />
+        <SportsMarquee items={t.sports} />
       </div>
 
       {/* Explore the demo dataset */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Combined athlete-day dataset">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="eyebrow">The data</p>
-            <h2 className="h-sec mt-3">Explore the demo dataset</h2>
-            <p className="lede mt-3 max-w-2xl">
-              The exact data this demo runs on — 50 synthetic athletes, day-level sensor means,
-              workload, environment, consent, baselines and scores.
-            </p>
+            <p className="eyebrow">{t.data.eyebrow}</p>
+            <h2 className="h-sec mt-3">{t.data.h2}</h2>
+            <p className="lede mt-3 max-w-2xl">{t.data.lede}</p>
           </div>
           <div className="flex items-center gap-3">
             <Tag label="SYNTHETIC" />
             <a href={CSV_PUBLIC} download className="btn-primary">
-              Download full CSV
+              {t.data.download}
             </a>
           </div>
         </div>
@@ -358,24 +307,22 @@ export default function HomePage() {
           <Reveal delay={80}>
             <>
               <div className="mt-10 grid grid-cols-2 gap-0 border-y border-edge/70 md:grid-cols-4">
-                {([
-                  ["Athlete-day rows", stats.rows],
-                  ["Athletes", stats.athletes],
-                  ["Teams", stats.teams.length],
-                  ["Days covered", 28],
-                ] as const).map(([label, value], i) => (
-                  <div key={label} className={`stat-cell py-7 ${i > 0 ? "sm:pl-6 md:pl-8" : ""}`}>
-                    <div className="stat-num">
-                      <CountUp value={value} />
+                {t.data.stats.map((label, i) => {
+                  const value = [stats.rows, stats.athletes, stats.teams.length, 28][i]!;
+                  return (
+                    <div key={label} className={`stat-cell py-7 ${i > 0 ? "sm:pl-6 md:pl-8" : ""}`}>
+                      <div className="stat-num">
+                        <CountUp value={value} />
+                      </div>
+                      <div className="stat-label">{label}</div>
                     </div>
-                    <div className="stat-label">{label}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="mt-8 rounded-2xl border border-edge/70 bg-panel/70 p-6">
                 <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                  Readiness distribution (scored days)
+                  {t.data.distTitle}
                 </div>
                 <div className="mt-4 h-3.5 w-full overflow-hidden rounded-full border border-edge/70 bg-panel-2">
                   <div className="bar-grow flex h-full w-full">
@@ -391,8 +338,12 @@ export default function HomePage() {
                       <span className={`inline-block h-2 w-2 rounded-full ${BAND_COLORS[band] ?? "bg-edge"}`} /> {band}: {n}
                     </span>
                   ))}
-                  <span>Range: {stats.range[0]} → {stats.range[1]}</span>
-                  <span>Teams: {stats.teams.join(", ")}</span>
+                  <span>
+                    {t.data.range}: {stats.range[0]} → {stats.range[1]}
+                  </span>
+                  <span>
+                    {t.data.teams}: {stats.teams.join(", ")}
+                  </span>
                 </div>
               </div>
 
@@ -400,7 +351,7 @@ export default function HomePage() {
                 <table className="w-full text-left text-sm">
                   <thead>
                     <tr className="border-b border-edge/70 text-[11px] uppercase tracking-wider text-muted">
-                      {["Athlete", "Date", "Team", "Position", "Score", "Band"].map((h) => (
+                      {t.data.headers.map((h) => (
                         <th key={h} className="px-4 py-3 font-semibold">{h}</th>
                       ))}
                     </tr>
@@ -419,10 +370,7 @@ export default function HomePage() {
                   </tbody>
                 </table>
               </div>
-              <p className="mt-3 text-xs text-muted">
-                Preview of the first 6 rows. The full file contains all sensor means, driver
-                contributions and validity checks — clearly labeled synthetic data, not real athletes.
-              </p>
+              <p className="mt-3 text-xs text-muted">{t.data.note}</p>
             </>
           </Reveal>
         ) : (
@@ -438,15 +386,12 @@ export default function HomePage() {
             className="cta-band group flex flex-col items-start gap-6 rounded-3xl px-8 py-12 md:flex-row md:items-center md:justify-between md:px-12"
           >
             <div>
-              <span className="eyebrow">New · tactical intelligence</span>
-              <span className="h-sec mt-3 block">Formations, phases and game systems on a 3D board.</span>
-              <span className="lede mt-3 block max-w-xl">
-                Readiness answers who can play — tactics answers how we play. Switch formations,
-                watch the passes draw themselves, run the coaching drill.
-              </span>
+              <span className="eyebrow">{t.tactics.eyebrow}</span>
+              <span className="h-sec mt-3 block">{t.tactics.h2}</span>
+              <span className="lede mt-3 block max-w-xl">{t.tactics.lede}</span>
             </div>
             <span className="btn-primary shrink-0 transition-transform group-hover:translate-x-1">
-              Explore tactics →
+              {t.tactics.btn}
             </span>
           </Link>
         </Reveal>
@@ -456,17 +401,14 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-6 pb-20 md:px-10">
         <Reveal>
           <div className="cta-band rounded-3xl px-8 py-14 text-center md:px-14">
-            <h2 className="h-sec">See it run on your questions.</h2>
-            <p className="lede mx-auto mt-4 max-w-xl">
-              Thirty minutes, live product, no slides — the five screens, your data questions, and
-              what a pilot season looks like.
-            </p>
+            <h2 className="h-sec">{t.cta.h2}</h2>
+            <p className="lede mx-auto mt-4 max-w-xl">{t.cta.lede}</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               <Link href="/demo" className="btn-primary">
-                Book a demo
+                {t.hero.btnDemo}
               </Link>
               <Link href="/proof" className="btn-ghost">
-                See the proof
+                {t.cta.btnProof}
               </Link>
             </div>
           </div>

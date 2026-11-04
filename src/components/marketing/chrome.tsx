@@ -1,21 +1,26 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/motion";
 import { BackToTop } from "@/components/marketing/back-to-top";
+import { LanguageSwitcher } from "@/components/marketing/language-switcher";
+import { getDict, getLocale } from "@/lib/i18n/server";
 
 /**
- * Shared marketing chrome — sticky glass header with Book-a-demo CTA and the
- * animated, logically grouped footer: what it is → what to do → trust & legal.
+ * Shared marketing chrome — sticky glass header (with language switcher) and
+ * the animated, logically grouped footer: what it is → what to do →
+ * trust & legal. Localized via the i18n dictionaries.
  */
 
-const NAV = [
-  { href: "/platform", label: "Platform" },
-  { href: "/solutions", label: "Solutions" },
-  { href: "/tactics", label: "Tactics" },
-  { href: "/proof", label: "Proof" },
-  { href: "/marketplace", label: "Marketplace" },
-];
+export async function MarketingHeader() {
+  const [dict, locale] = await Promise.all([getDict(), getLocale()]);
 
-export function MarketingHeader() {
+  const nav = [
+    { href: "/platform", label: dict.nav.platform },
+    { href: "/solutions", label: dict.nav.solutions },
+    { href: "/tactics", label: dict.nav.tactics },
+    { href: "/proof", label: dict.nav.proof },
+    { href: "/marketplace", label: dict.nav.marketplace },
+  ];
+
   return (
     <header className="sticky top-0 z-50 border-b border-edge/70 bg-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5 md:px-10">
@@ -23,7 +28,7 @@ export function MarketingHeader() {
           <span className="text-accent">Sportmetryx</span> Football
         </Link>
         <nav className="hidden items-center gap-7 text-sm md:flex" aria-label="Primary">
-          {NAV.map((item) => (
+          {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -33,53 +38,28 @@ export function MarketingHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-4 text-sm">
-          <Link href="/roster" className="hidden font-medium text-muted transition-colors hover:text-ink lg:block">
-            Athletes
+        <div className="flex items-center gap-3 text-sm">
+          <LanguageSwitcher locale={locale} label={dict.lang.label} />
+          <Link
+            href="/roster"
+            className="hidden font-medium text-muted transition-colors hover:text-ink lg:block"
+          >
+            {dict.header.athletes}
           </Link>
-          <Link href="/login" className="hidden font-medium text-muted transition-colors hover:text-ink sm:block">
-            Sign in
+          <Link
+            href="/login"
+            className="hidden font-medium text-muted transition-colors hover:text-ink sm:block"
+          >
+            {dict.header.signIn}
           </Link>
           <Link href="/demo" className="btn-primary">
-            Book a demo
+            {dict.header.bookDemo}
           </Link>
         </div>
       </div>
     </header>
   );
 }
-
-/* Logical grouping: the product → ways in → trust + legal. */
-const FOOTER_COLS: Array<{ title: string; links: Array<[href: string, label: string]> }> = [
-  {
-    title: "Product",
-    links: [
-      ["/platform", "Platform"],
-      ["/solutions", "Solutions"],
-      ["/tactics", "Tactics"],
-      ["/marketplace", "Marketplace"],
-      ["/roster", "Athletes"],
-    ],
-  },
-  {
-    title: "Get started",
-    links: [
-      ["/demo", "Book a demo"],
-      ["/pilot", "Pilot program"],
-      ["/guest", "Continue as guest"],
-      ["/login", "Sign in"],
-    ],
-  },
-  {
-    title: "Trust & legal",
-    links: [
-      ["/proof", "Proof"],
-      ["/changelog", "Changelog"],
-      ["/privacy", "Privacy"],
-      ["/terms", "Terms"],
-    ],
-  },
-];
 
 function FooterMark() {
   return (
@@ -108,7 +88,42 @@ function FooterMark() {
   );
 }
 
-export function MarketingFooter() {
+export async function MarketingFooter() {
+  const dict = await getDict();
+  const f = dict.footer;
+
+  /* Logical grouping: the product → ways in → trust + legal. */
+  const columns: Array<{ title: string; links: Array<[href: string, label: string]> }> = [
+    {
+      title: f.product,
+      links: [
+        ["/platform", dict.nav.platform],
+        ["/solutions", dict.nav.solutions],
+        ["/tactics", dict.nav.tactics],
+        ["/marketplace", dict.nav.marketplace],
+        ["/roster", dict.header.athletes],
+      ],
+    },
+    {
+      title: f.getStarted,
+      links: [
+        ["/demo", f.demo],
+        ["/pilot", f.pilot],
+        ["/guest", f.guest],
+        ["/login", dict.header.signIn],
+      ],
+    },
+    {
+      title: f.trust,
+      links: [
+        ["/proof", dict.nav.proof],
+        ["/changelog", f.changelog],
+        ["/privacy", f.privacy],
+        ["/terms", f.terms],
+      ],
+    },
+  ];
+
   return (
     <footer>
       {/* Animated light along the top edge */}
@@ -124,18 +139,15 @@ export function MarketingFooter() {
                   <div className="display-heading text-xl">
                     <span className="text-accent">Sportmetryx</span> Football
                   </div>
-                  <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
-                    Validity-gated readiness intelligence for football — one daily score per
-                    athlete, always explainable, consent-governed. Built by Healthmetryx.
-                  </p>
+                  <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{f.tagline}</p>
                 </div>
               </div>
               <div className="flex shrink-0 flex-wrap gap-3">
                 <Link href="/demo" className="btn-primary btn-sheen">
-                  Book a demo
+                  {f.demo}
                 </Link>
                 <Link href="/pilot" className="btn-ghost">
-                  Join the pilot
+                  {f.pilotCta}
                 </Link>
               </div>
             </div>
@@ -144,7 +156,7 @@ export function MarketingFooter() {
 
         {/* Link columns — staggered scroll-in: product → actions → trust */}
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-11 sm:grid-cols-3 md:px-10">
-          {FOOTER_COLS.map((col, i) => (
+          {columns.map((col, i) => (
             <Reveal key={col.title} delay={i * 90}>
               <div>
                 <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
@@ -169,12 +181,12 @@ export function MarketingFooter() {
           <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-6 py-5 text-center text-xs text-muted md:flex-row md:justify-between md:px-10 md:text-left">
             <div className="flex flex-wrap items-center justify-center gap-2.5">
               <span className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
-                Synthetic demo
+                {f.chip}
               </span>
-              <span>Decision support only · not a medical device</span>
+              <span>{f.disclaimer}</span>
             </div>
             <div className="flex items-center gap-4">
-              <span>&copy; 2026 Healthmetryx &middot; Sportmetryx Football</span>
+              <span>{f.copyright}</span>
               <BackToTop />
             </div>
           </div>
