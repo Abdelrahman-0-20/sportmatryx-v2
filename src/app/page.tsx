@@ -4,6 +4,7 @@ import path from "node:path";
 import { Tag } from "@/components/ui/primitives";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { DemoVideo } from "@/components/marketing/demo-video";
+import { HeroBackground } from "@/components/marketing/hero-background";
 import { HeroMock } from "@/components/marketing/hero-mock";
 import { BootScreen } from "@/components/ui/boot-screen";
 import { CountUp, Reveal } from "@/components/ui/motion";
@@ -121,12 +122,14 @@ export default function HomePage() {
       <BootScreen />
       <MarketingHeader />
 
-      {/* Hero — oversized statement + floating product mockup */}
-      <section className="relative isolate mx-auto max-w-7xl px-6 pb-16 pt-14 md:px-10 md:pt-20">
+      {/* Hero — full-bleed cinematic background + oversized statement */}
+      <section className="relative isolate overflow-hidden pb-16 pt-14 md:pt-20">
         <div className="aurora" aria-hidden="true">
           <span className="aurora-a" />
           <span className="aurora-b" />
         </div>
+        <HeroBackground />
+        <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="globe-wrap absolute right-0 top-6 hidden opacity-40 xl:block" aria-hidden="true">
           <div className="globe">
             {GLOBE_RINGS.map((deg) => (
@@ -174,6 +177,7 @@ export default function HomePage() {
         </div>
         <div className="mt-6 lg:hidden">
           <HeroMock />
+        </div>
         </div>
       </section>
 

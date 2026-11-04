@@ -720,6 +720,46 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
 }
 
 /* ==========================================================================
+   HERO BACKGROUND VIDEO — full-bleed, crossfading 60s clip sequence
+   ========================================================================== */
+.hero-video-shell {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+.hero-video-shell.ready {
+  opacity: 1;
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease;
+  will-change: opacity;
+}
+.hero-video.on {
+  opacity: 1;
+}
+/* Readability scrim — keeps text crisp over any frame. */
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(11, 21, 41, 0.72) 0%, rgba(11, 21, 41, 0.5) 40%, rgba(11, 21, 41, 0.64) 72%, rgba(11, 21, 41, 0.93) 100%),
+    radial-gradient(90% 60% at 25% 45%, rgba(11, 21, 41, 0.45), transparent 70%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-shell {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    TACTICS — CSS-3D pitch, tokens, passing arrows
    ========================================================================== */
 .pitch-wrap {
