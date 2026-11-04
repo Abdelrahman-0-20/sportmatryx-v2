@@ -799,6 +799,56 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
 }
 
 /* ==========================================================================
+   FOOTER — animated rule, slide-in link arrows, brand mark
+   ========================================================================== */
+/* Flowing light along the footer's top edge (pauses as static line under
+   reduced motion via the global animation guard). */
+@keyframes smx-border-flow {
+  0% {
+    background-position: 130% 50%;
+  }
+  100% {
+    background-position: -130% 50%;
+  }
+}
+.footer-rule {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(95, 208, 240, 0.75) 35%,
+    rgba(157, 120, 245, 0.65) 65%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: smx-border-flow 7s linear infinite;
+}
+/* Footer links: color + nudge, accent arrow slides in from the left. */
+.f-link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.f-link::after {
+  content: "→";
+  position: absolute;
+  right: -1.15rem;
+  top: 50%;
+  transform: translateY(-50%) translateX(-7px);
+  opacity: 0;
+  color: var(--color-accent);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.f-link:hover {
+  color: var(--color-ink);
+  transform: translateX(3px);
+}
+.f-link:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* ==========================================================================
    TACTICS — CSS-3D pitch, tokens, passing arrows
    ========================================================================== */
 .pitch-wrap {
