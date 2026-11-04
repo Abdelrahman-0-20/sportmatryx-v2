@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Tag } from "@/components/ui/primitives";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
+import { DemoVideo } from "@/components/marketing/demo-video";
 import { HeroMock } from "@/components/marketing/hero-mock";
 import { BootScreen } from "@/components/ui/boot-screen";
 import { CountUp, Reveal } from "@/components/ui/motion";
@@ -297,6 +298,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Demo video — the 90-second tour */}
+      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Product tour video">
+        <Reveal>
+          <p className="eyebrow">Watch</p>
+          <h2 className="h-sec mt-3">The 90-second tour</h2>
+          <p className="lede mt-3 max-w-2xl">
+            Five chapters, one loop: overview → athletes board → Player 360 → marketplace →
+            governance. Play it, or jump to any chapter.
+          </p>
+          <div className="mt-8 max-w-4xl">
+            <DemoVideo />
+          </div>
+        </Reveal>
+      </section>
+
       {/* How it works — interactive product tour */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="How Sportmetryx works">
         <Reveal>
@@ -407,6 +423,28 @@ export default function HomePage() {
         ) : (
           <p className="mt-6 text-sm text-compromised">Dataset file not found on the server.</p>
         )}
+      </section>
+
+      {/* Tactics teaser */}
+      <section className="mx-auto max-w-7xl px-6 pb-6 md:px-10">
+        <Reveal>
+          <Link
+            href="/tactics"
+            className="cta-band group flex flex-col items-start gap-6 rounded-3xl px-8 py-12 md:flex-row md:items-center md:justify-between md:px-12"
+          >
+            <div>
+              <span className="eyebrow">New · tactical intelligence</span>
+              <span className="h-sec mt-3 block">Formations, phases and game systems on a 3D board.</span>
+              <span className="lede mt-3 block max-w-xl">
+                Readiness answers who can play — tactics answers how we play. Switch formations,
+                watch the passes draw themselves, run the coaching drill.
+              </span>
+            </div>
+            <span className="btn-primary shrink-0 transition-transform group-hover:translate-x-1">
+              Explore tactics →
+            </span>
+          </Link>
+        </Reveal>
       </section>
 
       {/* Demo CTA */}

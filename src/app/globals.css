@@ -662,3 +662,98 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
   border: 1px solid rgba(95, 208, 240, 0.35);
   box-shadow: 0 30px 80px -50px rgba(95, 208, 240, 0.5);
 }
+
+/* ==========================================================================
+   DEMO VIDEO PLAYER (animated chapter player; switches to <video> when
+   public/demo.mp4 exists)
+   ========================================================================== */
+@keyframes smx-chapter-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+.chapter-screen {
+  animation: smx-chapter-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.video-progress-fill {
+  transition: width 0.1s linear;
+}
+
+/* ==========================================================================
+   TACTICS — CSS-3D pitch, tokens, passing arrows
+   ========================================================================== */
+.pitch-wrap {
+  perspective: 1100px;
+  perspective-origin: 50% 18%;
+}
+.pitch3d {
+  position: relative;
+  width: min(100%, 440px);
+  margin-inline: auto;
+  aspect-ratio: 46 / 66;
+  transform-style: preserve-3d;
+  transform: rotateX(50deg);
+}
+.pitch-surface {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0e1c38 0%, #0a1426 100%);
+  border: 1px solid rgba(95, 208, 240, 0.28);
+  box-shadow: inset 0 0 70px rgba(34, 211, 238, 0.07);
+}
+.pitch-stripes {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.028) 0 8.33%,
+    transparent 8.33% 16.66%
+  );
+}
+.token-pos {
+  position: absolute;
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1), top 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: left, top;
+}
+.token {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #5fd0f0, #2f9dc4);
+  color: #071018;
+  font-weight: 700;
+  font-size: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.7), 0 0 14px rgba(95, 208, 240, 0.35);
+}
+.token-shadow {
+  position: absolute;
+  width: 26px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  filter: blur(3px);
+  transform: translate(-50%, -35%);
+}
+.ball {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #c7d2e2);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.55);
+  transform: translate(-50%, -50%) translateZ(9px);
+  transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1), top 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes smx-draw-arrow {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+.play-arrow {
+  stroke-dasharray: 1;
+  animation: smx-draw-arrow 0.75s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
