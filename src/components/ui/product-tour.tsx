@@ -175,7 +175,7 @@ export function ProductTour() {
       <div className="min-h-[260px] rounded-[10px] border border-edge bg-panel p-4">
         <div className="flex items-center justify-between pb-3">
           <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent">Product tour</span>
-          <span className="text-[10px] text-muted">Illustrative screens · synthetic data</span>
+          <span className="text-[10px] text-muted">Product screens</span>
         </div>
         <div key={active}>{MOCKS[active]}</div>
       </div>

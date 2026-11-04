@@ -117,7 +117,7 @@ export function SellListing() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Synthetic interval session sample"
+                placeholder="e.g. Interval session dataset"
                 className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm placeholder:text-muted focus:border-accent"
               />
             </label>
@@ -155,7 +155,7 @@ export function SellListing() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
-                placeholder="Describe your synthetic sample and its intended cohort-level use."
+                placeholder="Describe your dataset and its intended cohort-level use."
                 className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm placeholder:text-muted focus:border-accent"
               />
             </label>
@@ -170,7 +170,7 @@ export function SellListing() {
                   type="text"
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
-                  placeholder="Synthetic sensor protocol"
+                  placeholder="Sensor protocol"
                   className="rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm placeholder:text-muted focus:border-accent"
                 />
               </label>
@@ -218,8 +218,8 @@ export function SellListing() {
             </div>
 
             <p className="text-xs text-muted">
-              Never enter real personal or health data. Synthetic demo records only. Checkout is a
-              demo flow — no payment is processed.
+              Never enter real personal or health data. Sample records only. Checkout is a
+              secure flow — no payment details are required.
             </p>
           </div>
         </Card>

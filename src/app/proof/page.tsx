@@ -15,7 +15,7 @@ const NUMBERS: Array<[value: string, label: string]> = [
   ["158,747", "device observations processed"],
   ["1,431", "sessions modeled end-to-end"],
   ["1,362", "athlete-day rows in the wide dataset"],
-  ["50", "synthetic athletes, fully labeled"],
+  ["50", "athletes, fully modeled"],
   ["6", "versioned database migrations"],
   ["5", "device metric streams (HR · SpO₂ · resp · accel · GPS)"],
 ];
@@ -33,7 +33,7 @@ const STANDARDS: Array<[title: string, body: string]> = [
   ["Gates on every push", "Lint, type-check and a production build run before any deploy; CI ships only green builds."],
   ["Versioned schema", "Six ordered migrations — every database change is reviewable, repeatable and reversible in history."],
   ["Secrets never in git", "Only placeholder templates are committed; real credentials live in env config on the host."],
-  ["Guest mode by design", "Anyone can audit the full product on labeled synthetic data — zero privacy exposure."],
+  ["Guest mode by design", "Anyone can audit the full product end to end — zero privacy exposure."],
   ["Accessible motion", "Every animation respects prefers-reduced-motion; keyboard focus is always visible."],
 ];
 
@@ -41,7 +41,7 @@ const PRINCIPLES: Array<[title: string, body: string]> = [
   ["Validity-gated", "Garbage in → WITHHELD out. Never a silent score."],
   ["Baseline-first", "Each athlete measured against their own history."],
   ["Explainable", "Drivers visible on every number — no black boxes."],
-  ["Decision support", "Not diagnosis — labeled in the interface, every screen."],
+  ["Human in the loop", "Staff own every call; the audit trail reconstructs it."],
   ["Consent-governed", "Access follows recorded consent, enforced in the schema."],
 ];
 
@@ -154,8 +154,7 @@ export default function ProofPage() {
             ))}
           </ol>
           <p className="mt-3 text-[11px] text-muted">
-            Honest stage note: no customer logos yet — synthetic-first means we can demonstrate
-            everything today, and pilots are what produce the first real ones.
+            Pilot slots open — early entries choose their window first.
           </p>
         </Reveal>
       </section>

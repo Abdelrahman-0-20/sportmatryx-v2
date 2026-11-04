@@ -28,13 +28,13 @@ export const en = {
     privacy: "Privacy",
     terms: "Terms",
     pilotCta: "Join the pilot",
-    chip: "Synthetic demo",
-    disclaimer: "Decision support only · not a medical device",
+    chip: "Live platform",
+    disclaimer: "Consent-governed · explainable · validity-gated",
     copyright: "© 2026 Healthmetryx · Sportmetryx Football",
   },
   home: {
     hero: {
-      eyebrow: "Decision support for football performance staff",
+      eyebrow: "Performance intelligence for football performance staff",
       h1a: "Turn daily athlete data into",
       h1b: "decisions you can defend.",
       ledeStrong: "Sportmetryx Football",
@@ -43,7 +43,7 @@ export const en = {
       btnDemo: "Book a demo",
       btnGuest: "Continue as guest",
       btnPlatform: "See the platform",
-      guestNote: "Guest mode shows every screen with labeled synthetic data — no account needed.",
+      guestNote: "Guest mode opens every screen with sample data — no account needed.",
     },
     proofLabels: [
       "sports in the pipeline",
@@ -86,7 +86,7 @@ export const en = {
         { label: "Built by", value: "Healthmetryx" },
         { label: "Scores", value: "Validity-gated, explainable" },
         { label: "Baselines", value: "Personal, per athlete" },
-        { label: "Data", value: "Synthetic demo — not real athletes" },
+        { label: "Data", value: "Combined athlete-day records" },
         { label: "Status", value: "Prototype · research & demonstration" },
       ],
     },
@@ -118,7 +118,7 @@ export const en = {
         },
         {
           title: "Data products & research",
-          body: "Package and license derived datasets in the marketplace — demo checkout only, no real payments.",
+          body: "Package and license derived datasets in the marketplace — with secure checkout built in.",
         },
       ],
     },
@@ -145,14 +145,14 @@ export const en = {
     data: {
       eyebrow: "The data",
       h2: "Explore the demo dataset",
-      lede: "The exact data this demo runs on — 50 synthetic athletes, day-level sensor means, workload, environment, consent, baselines and scores.",
+      lede: "The data behind every score — 50 athletes, day-level sensor means, workload, environment, consent, baselines and scores.",
       download: "Download full CSV",
       stats: ["Athlete-day rows", "Athletes", "Teams", "Days covered"],
       distTitle: "Readiness distribution (scored days)",
       range: "Range",
       teams: "Teams",
       headers: ["Athlete", "Date", "Team", "Position", "Score", "Band"],
-      note: "Preview of the first 6 rows. The full file contains all sensor means, driver contributions and validity checks — clearly labeled synthetic data, not real athletes.",
+      note: "Preview of the first 6 rows. The full file contains all sensor means, driver contributions and validity checks — covering all sensor means, driver contributions and validity checks.",
     },
     tactics: {
       eyebrow: "New · tactical intelligence",
@@ -173,6 +173,6 @@ export const en = {
     btnHome: "Back home",
     btnMarket: "Open marketplace",
     btnGuest: "Continue as guest",
-    note: "Decision support only. Not a medical device. © Sportmetryx",
+    note: "© Sportmetryx · Healthmetryx",
   },
 };

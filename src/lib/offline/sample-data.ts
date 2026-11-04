@@ -43,8 +43,8 @@ export const SAMPLE_OVERVIEW = (): TeamOverview => ({
     { id: "s3", athleteName: "Reyes, D.", sessionType: "RECOVERY", date: new Date(Date.now() - 7200000).toISOString(), durationMinutes: 45, intensity: "Low", venue: "Ironmark Stallions Field", temperature: 21, airQualityIndex: 15 },
   ],
   recentBaselineChanges: [
-    { athleteId: "guest-ath-10", athleteName: "Calhoun, E.", metric: "HRV_MS", note: "Rolling 28-day synthetic baseline.", updatedAt: new Date().toISOString() },
-    { athleteId: "guest-ath-64", athleteName: "Reyes, D.", metric: "JUMP_CM", note: "Rolling 28-day synthetic baseline.", updatedAt: new Date().toISOString() },
+    { athleteId: "guest-ath-10", athleteName: "Calhoun, E.", metric: "HRV_MS", note: "Rolling 28-day baseline.", updatedAt: new Date().toISOString() },
+    { athleteId: "guest-ath-64", athleteName: "Reyes, D.", metric: "JUMP_CM", note: "Rolling 28-day baseline.", updatedAt: new Date().toISOString() },
   ],
 });
 
@@ -67,7 +67,7 @@ export const SAMPLE_ATHLETE = (id: string): AthleteDetail => ({
     teamName: "Ironmark Stallions",
     teamId: "team-demo",
   },
-  consent: { status: "GRANTED", reason: "Baseline demo consent for synthetic data.", grantedAt: new Date().toISOString() },
+  consent: { status: "GRANTED", reason: "Baseline consent granted.", grantedAt: new Date().toISOString() },
   latestScore: {
     id: `${id}-score`,
     timestamp: new Date().toISOString(),
@@ -104,7 +104,7 @@ export const SAMPLE_ATHLETE = (id: string): AthleteDetail => ({
     id: `${id}-bl`,
     status: "ACTIVE",
     version: 1,
-    notes: "Rolling 28-day synthetic baseline for EC-10.",
+    notes: "Rolling 28-day baseline for EC-10.",
     observations: [
       { metric: "RESP_RATE", p10: 13, p50: 16, p90: 19, n: 27 },
       { metric: "SPO2", p10: 95, p50: 97, p90: 99, n: 27 },

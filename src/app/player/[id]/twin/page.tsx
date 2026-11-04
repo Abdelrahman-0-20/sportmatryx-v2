@@ -45,7 +45,7 @@ export default async function TwinPage({ params }: { params: Promise<{ id: strin
   return (
     <AppShell crumb={`/player/${detail.athlete.externalId ?? detail.athlete.id}/twin`} title={`${detail.athlete.externalId ?? ""} · Digital Athlete Twin`.trim()}>
       <div className="mb-3 flex items-center gap-3">
-        <Tag label="PROTOTYPE" />
+        <Tag label="BETA" />
         <Link href={`/player/${detail.athlete.id}`} className="text-sm text-accent hover:underline">← Player 360</Link>
       </div>
       <p className="mb-4 text-sm text-muted">

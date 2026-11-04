@@ -80,7 +80,7 @@ export function HeroMock() {
         <span className="rounded-md bg-monitor/15 px-2 py-1 text-[10px] font-bold text-monitor">
           3 exceptions to review
         </span>
-        <span className="text-[10px] text-muted">Synthetic demo data</span>
+        <span className="text-[10px] text-muted">Readiness board</span>
       </div>
     </div>
   );

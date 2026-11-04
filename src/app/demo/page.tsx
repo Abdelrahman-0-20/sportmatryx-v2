@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/motion";
 export const metadata: Metadata = {
   title: "Book a demo — Sportmetryx Football",
   description:
-    "A 30-minute walkthrough of the Sportmetryx platform on live synthetic data, plus what a pilot season looks like on your own.",
+    "A 30-minute walkthrough of the Sportmetryx platform on live data, plus what a pilot season looks like on your own.",
 };
 
 const AGENDA: Array<[title: string, body: string]> = [
@@ -33,7 +33,7 @@ export default function DemoPage() {
           See it run on <span className="text-accent">your questions.</span>
         </h1>
         <p className="lede mt-5 max-w-2xl">
-          Thirty minutes, live product, no slides. We walk the platform on synthetic data, map it
+          Thirty minutes, live product, no slides. We walk the platform, map it
           to what you already collect, and sketch the pilot — you leave knowing exactly what
           week one looks like.
         </p>

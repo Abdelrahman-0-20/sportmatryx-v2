@@ -113,7 +113,7 @@ export default async function CartPage({
         <div className="lg:col-span-1">
           {checkoutEnabled ? (
             <Card>
-              <CardLabel>Demo checkout</CardLabel>
+              <CardLabel>Checkout</CardLabel>
               <CheckoutIsland items={valid} totalCents={totalCents} />
               <LinkButton href="/marketplace" variant="ghost" className="mt-3 w-full">
                 Continue browsing
@@ -121,7 +121,7 @@ export default async function CartPage({
             </Card>
           ) : (
             <Card>
-              <CardLabel>Demo checkout</CardLabel>
+              <CardLabel>Checkout</CardLabel>
               <p className="text-sm text-muted">
                 Sign in with a role that includes export capability to complete a demo purchase.
               </p>

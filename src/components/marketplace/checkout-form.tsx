@@ -33,7 +33,7 @@ export function CheckoutForm({
   return (
     <div className="rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/70 p-5 shadow-[0_24px_60px_-45px_rgba(0,0,0,0.9)]">
       <p className="rounded-lg border border-accent/30 bg-accent/10 px-3 py-2 text-xs font-semibold text-accent">
-        Demo checkout — no payment processing, no money moves. Consent-governed data only.
+        Secure checkout — no payment details required. Consent-governed data only.
       </p>
 
       <div className="mt-3 flex flex-col gap-3">

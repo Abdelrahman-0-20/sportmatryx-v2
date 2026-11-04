@@ -194,7 +194,7 @@ export function ListingImages({ value, onChange, error }: {
       ) : null}
 
       <p className="text-[11px] text-muted">
-        The first photo is the cover shown on the listing card. Use only fictional/synthetic product images.
+        The first photo is the cover shown on the listing card. Use only images you have the rights to.
       </p>
 
       {value.length === 0 ? null : (

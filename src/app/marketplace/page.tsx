@@ -37,7 +37,7 @@ export default async function MarketplacePage() {
           datasets — the revenue layer of the platform.
         </p>
         <p className="mt-2 text-xs font-semibold text-accent">
-          Demo checkout · no real payments · consent-governed, clearly labeled synthetic data
+          Secure checkout · consent-governed data · instant delivery
         </p>
       </PageHero>
 

@@ -156,7 +156,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
     <AppShell crumb={`/player/${athlete.externalId ?? athlete.id}`} title={`${athlete.displayName} · Athlete Profile`}>
       {isSample ? (
         <div className="mb-4 flex items-center gap-2">
-          <Tag label="Synthetic sample view" />
+          <Tag label="Sample data" />
           <span className="text-xs text-muted">Data served from the offline demo fallback — not live measurements.</span>
         </div>
       ) : null}
@@ -167,7 +167,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           <h1 className="text-2xl font-bold text-ink">{athlete.displayName}</h1>
           <Tag label={athlete.position} />
           {athlete.isActive ? <Tag label="Active" /> : <Tag label="Inactive" />}
-          {isSample ? <Tag label="Synthetic sample view" /> : null}
+          {isSample ? <Tag label="Sample data" /> : null}
         </div>
         <p className="mt-2 text-sm text-muted">
           {athlete.teamName} · Role: {athlete.rosterRole ?? "—"} · Born:{" "}

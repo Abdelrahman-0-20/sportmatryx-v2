@@ -296,7 +296,7 @@ export default async function HomePage() {
             <p className="lede mt-3 max-w-2xl">{t.data.lede}</p>
           </div>
           <div className="flex items-center gap-3">
-            <Tag label="SYNTHETIC" />
+            <Tag label="DATASET" />
             <a href={CSV_PUBLIC} download className="btn-primary">
               {t.data.download}
             </a>

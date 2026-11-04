@@ -56,10 +56,10 @@ export function FeaturedSpotlight({
           <div className="text-right">
             <div className="hero-number tabular text-4xl text-accent md:text-5xl">
               ${(product.priceCents / 100).toFixed(2)}
-              <span className="ml-1 text-xs font-semibold text-muted">USD · demo price</span>
+              <span className="ml-1 text-xs font-semibold text-muted">USD</span>
             </div>
             <div className="mt-0.5 text-[11px] text-muted">
-              {product.rowsEstimate !== null ? `${product.rowsEstimate} rows (synthetic)` : "Rows n/a"}
+              {product.rowsEstimate !== null ? `${product.rowsEstimate} rows` : "Rows n/a"}
             </div>
           </div>
           <div className="flex gap-2">

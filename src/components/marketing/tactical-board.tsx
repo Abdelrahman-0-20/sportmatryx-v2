@@ -182,7 +182,7 @@ export function TacticalStudio() {
             <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
               {formation} · {currentPhase.label}
             </span>
-            <span className="text-[10px] text-muted">Illustrative board · synthetic demo</span>
+            <span className="text-[10px] text-muted">Interactive tactical board</span>
           </div>
 
           <div className="pitch-wrap py-2">

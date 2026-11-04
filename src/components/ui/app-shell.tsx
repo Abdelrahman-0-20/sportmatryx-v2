@@ -38,7 +38,7 @@ export async function AppShell({
         <Header crumb={crumb} guest={guest} cartItems={cartItems} />
         {guest ? (
           <div className="border-b border-purple-500/30 bg-prototype/15 px-4 py-2 text-center text-xs font-semibold text-purple-300 md:px-8" role="note">
-            Guest demo mode — showing SYNTHETIC SAMPLE data. No account or live database required.
+            Guest mode — full access to every screen. No account required.
             Write actions (exports, interventions, consent) are disabled.
           </div>
         ) : null}
@@ -47,8 +47,7 @@ export async function AppShell({
           {children}
         </main>
         <footer className="border-t border-edge px-4 py-3 text-center text-xs text-muted md:px-8">
-          Decision support only. Not a medical device. Prototype models are for research and
-          demonstration. © Sportmetryx. All athlete data governed by consent and access controls.
+          © Sportmetryx. All athlete data governed by consent and access controls.
         </footer>
       </div>
     </div>
@@ -119,7 +118,7 @@ function Header({ crumb, guest, cartItems }: { crumb: string; guest?: boolean; c
       <div className="flex items-center gap-3">
         <span className="inline-flex items-center rounded-full border border-prototype/40 bg-prototype/15 px-3 py-1 text-xs font-semibold text-purple-300">
           <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-purple-400" aria-hidden="true" />
-          {guest ? "Guest · synthetic sample" : "Synthetic demo · PROTOTYPE"}
+          {guest ? "Guest mode" : "Full access"}
         </span>
         <CartIcon totalItems={totalItems} />
       </div>

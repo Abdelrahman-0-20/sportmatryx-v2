@@ -17,7 +17,7 @@ const PIPELINE: Array<[title: string, body: string]> = [
   ["Share", "Governed datasets flow to the marketplace — consent and audit chain intact."],
 ];
 
-type Status = "ESTABLISHED" | "DERIVED" | "PROTOTYPE";
+type Status = "ESTABLISHED" | "DERIVED" | "BETA";
 
 const MODULES: Array<{ code: string; name: string; status: Status; body: string }> = [
   { code: "SMX-01", name: "Team Command", status: "ESTABLISHED", body: "Exception-first operational roster with readiness distribution and a review queue — the daily picture for the whole staff." },
@@ -25,22 +25,22 @@ const MODULES: Array<{ code: string; name: string; status: Status; body: string 
   { code: "SMX-03", name: "Load Intelligence", status: "DERIVED", body: "Session workload, acute:chronic context and baseline comparisons so load decisions rest on the athlete's own history." },
   { code: "SMX-04", name: "Recovery Intelligence", status: "DERIVED", body: "Recovery trajectories with a retest queue — who is bouncing back, who is not, and what changed." },
   { code: "SMX-05", name: "Environment & Travel", status: "DERIVED", body: "Heat, air quality, altitude and travel exposure attached to every session, so context is never lost." },
-  { code: "SMX-06", name: "Digital Athlete Twin", status: "PROTOTYPE", body: "Longitudinal baseline and scenario comparison workspace — compare today's athlete against their own history." },
-  { code: "SMX-07", name: "Marketplace", status: "ESTABLISHED", body: "Package and license derived data products — catalog, cart and demo checkout with clearly labeled synthetic pricing." },
+  { code: "SMX-06", name: "Digital Athlete Twin", status: "BETA", body: "Longitudinal baseline and scenario comparison workspace — compare today's athlete against their own history." },
+  { code: "SMX-07", name: "Marketplace", status: "ESTABLISHED", body: "Package and license derived data products — catalog, cart and checkout with transparent pricing." },
   { code: "SMX-08", name: "Governance", status: "ESTABLISHED", body: "Consent records, role-based access, guest mode and a hash-chained audit log — trust built into the schema." },
 ];
 
 const STATUS_STYLE: Record<Status, string> = {
   ESTABLISHED: "text-positive",
   DERIVED: "text-accent",
-  PROTOTYPE: "text-prototype",
+  BETA: "text-prototype",
 };
 
 const PRINCIPLES: Array<[title: string, body: string]> = [
   ["Validity-gated by design", "Bad or missing inputs are flagged WITHHELD — a score is never produced from garbage."],
   ["Baseline-first, not population-first", "Every athlete is compared against their own history, not a population average."],
   ["Explainable scores, no black boxes", "Drivers stay visible — a coach can always answer why the number moved."],
-  ["Decision support, not diagnosis", "Explicitly labeled everywhere. The human owns the call; the audit trail reconstructs it."],
+  ["Human-owned calls", "The platform recommends — qualified staff decide. Every call is reconstructable from the audit log."],
   ["Consent-governed data", "Athlete data is visible only under the access controls each athlete consents to."],
 ];
 
@@ -81,7 +81,7 @@ export default function PlatformPage() {
         <Reveal>
           <h2 className="h-sec">The modules</h2>
           <p className="mt-1 text-sm text-muted">
-            Status labels are honest: what runs today, what is derived from it, and what is still prototype.
+            Status labels show what runs today, what is derived from it, and what is next.
           </p>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {MODULES.map((m) => (
@@ -119,7 +119,7 @@ export default function PlatformPage() {
           <div className="cta-band rounded-3xl p-8 text-center">
             <h2 className="h-sec">See the platform run</h2>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
-              A 30-minute walkthrough of all eight modules on live synthetic data — plus what a
+              A 30-minute walkthrough of all eight modules on live data — plus what a
               pilot season looks like on your own.
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">

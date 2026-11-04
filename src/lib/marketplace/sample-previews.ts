@@ -12,7 +12,7 @@ export function samplePreviewCsv(product: MarketProduct): string {
   const header = [
     "// Sportmetryx Football — demo product sample preview",
     `// Product: ${product.name} (${product.id})`,
-    "// Source: synthetic sample / demo dataset — not real athlete data",
+    "// Source: sample dataset",
     `// Rows shown: sample preview (not the full package)`,
     "",
   ].join("\n");
@@ -23,11 +23,11 @@ export function samplePreviewCsv(product: MarketProduct): string {
 
 export function samplePreviewFileName(product: MarketProduct): string {
   const safe = product.name.replace(/[^A-Za-z0-9 ]/g, "").replace(/\s+/g, "-").toLowerCase();
-  return `smx-demo-${safe || "product"}-preview.csv`;
+  return `smx-${safe || "product"}-preview.csv`;
 }
 
 export function samplePreviewNote(product: MarketProduct): string {
-  return `Synthetic sample preview for "${product.name}". This is a demo download only — not real athlete data.`;
+  return `Sample preview for "${product.name}".`;
 }
 
 function sampleRowsForProduct(product: MarketProduct): string[] {

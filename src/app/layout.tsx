@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sportmatryx-v2.vercel.app"),
   title: "Sportmetryx Football",
   description:
-    "Human Performance Intelligence for Football. Decision support only — not a medical device. Prototype models are for research and demonstration.",
+    "Human Performance Intelligence for Football — validity-gated readiness, explainable scores, consent-governed data.",
   openGraph: {
     siteName: "Sportmetryx Football",
     title: "Sportmetryx Football — decisions you can defend",

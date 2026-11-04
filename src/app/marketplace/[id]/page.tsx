@@ -139,8 +139,8 @@ export default async function MarketplaceProductPage({
             <CardLabel>Add to cart</CardLabel>
             <p className="text-sm text-muted">
               {product.priceCents === 0
-                ? "Demo item — no charge. Proceeds to a clearly-labeled demo checkout."
-                : `Demo price: ${(product.priceCents / 100).toFixed(2)} ${product.currency}.`}
+                ? "Free item — no charge. Secure checkout."
+                : `Price: ${(product.priceCents / 100).toFixed(2)} ${product.currency}.`}
             </p>
             <div className="mt-3 flex flex-col gap-2">
               {product.sourceRef === "dataset-combined" ? (

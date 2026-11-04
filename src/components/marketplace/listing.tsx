@@ -17,7 +17,7 @@ const TAG_OPTIONS = [
   { value: "", label: "All tags" },
   { value: "SAMPLE", label: "SAMPLE" },
   { value: "ESTABLISHED", label: "ESTABLISHED" },
-  { value: "PROTOTYPE", label: "PROTOTYPE" },
+  { value: "PROTOTYPE", label: "BETA" },
   { value: "COMMUNITY", label: "COMMUNITY" },
 ];
 

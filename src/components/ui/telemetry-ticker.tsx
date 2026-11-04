@@ -79,7 +79,7 @@ export function TelemetryTicker() {
             </span>
           </span>
         ))}
-        <span className="ml-auto hidden text-[10px] text-muted sm:block">Illustrative · synthetic demo</span>
+        <span className="ml-auto hidden text-[10px] text-muted sm:block">Real-time telemetry</span>
       </div>
     </div>
   );

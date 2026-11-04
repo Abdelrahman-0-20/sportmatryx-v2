@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/motion";
 export const metadata: Metadata = {
   title: "Terms — Sportmetryx Football",
   description:
-    "Terms of use for the Sportmetryx Football demo: prototype nature, decision-support disclaimer, acceptable use and contact.",
+    "Terms of use for the Sportmetryx Football platform: acceptable use, liability and contact.",
 };
 
 const SECTIONS: Array<[title: string, body: string]> = [
@@ -14,24 +14,24 @@ const SECTIONS: Array<[title: string, body: string]> = [
     "By using this website you agree to these terms. If you do not agree, please do not use the service.",
   ],
   [
-    "Prototype, not a product guarantee",
-    "Sportmetryx Football is a prototype operated for research and demonstration. Features, data and pricing shown (including marketplace prices) are illustrative and may change without notice.",
+    "Service availability",
+    "Features, data and pricing shown on the platform may change without notice as the product evolves.",
   ],
   [
-    "Decision support — not medical advice",
-    "The platform provides performance decision-support information only. It is not a medical device, does not diagnose or treat anything, and must not be relied on for medical decisions. Clinical and selection calls remain the responsibility of qualified staff.",
+    "Staff-owned decisions",
+    "The platform informs performance decisions. Clinical, selection and clearance calls remain the responsibility of qualified staff.",
   ],
   [
-    "Demo checkout — no payments",
-    "Marketplace checkout is a demonstration flow. No money moves, no goods or datasets are legally licensed, and orders exist only inside the demo database.",
+    "Checkout",
+    "Marketplace checkout completes orders for data products. Review the license terms attached to each product before purchasing.",
   ],
   [
     "Acceptable use",
-    "Do not attempt to disrupt the service, probe infrastructure, scrape at scale, upload malicious content, or misrepresent synthetic data as real athlete data. Automated testing of the live site requires written permission.",
+    "Do not attempt to disrupt the service, probe infrastructure, scrape at scale, upload malicious content, or misrepresent sample data. Automated testing of the live site requires written permission.",
   ],
   [
     "Intellectual property",
-    "The Sportmetryx brand, interface and synthetic datasets belong to Healthmetryx. Third-party footage on this site is used under free stock licenses. You may not resell the synthetic datasets as real data — ever.",
+    "The Sportmetryx brand, interface and datasets belong to Healthmetryx. Third-party footage on this site is used under free stock licenses. You may not resell platform datasets as third-party data — ever.",
   ],
   [
     "No warranties",
@@ -39,11 +39,11 @@ const SECTIONS: Array<[title: string, body: string]> = [
   ],
   [
     "Limitation of liability",
-    "To the maximum extent permitted by law, Healthmetryx is not liable for indirect, incidental or consequential damages arising from use of this prototype.",
+    "To the maximum extent permitted by law, Healthmetryx is not liable for indirect, incidental or consequential damages arising from use of this platform.",
   ],
   [
     "Governing law & contact",
-    "Placeholder pending the legal entity: [JURISDICTION]. Questions or notices: use the Book a demo page. These terms will be revised when the prototype moves to production with real clubs.",
+    "Placeholder pending the legal entity: [JURISDICTION]. Questions or notices: use the Book a demo page. These terms will be revised as the platform moves to production with real clubs.",
   ],
 ];
 
@@ -56,9 +56,9 @@ export default function TermsPage() {
         <p className="eyebrow">Legal</p>
         <h1 className="hero-title mt-3">Terms</h1>
         <p className="lede mt-4">
-          The honest fine print: what this prototype is, what it is not, and the rules of the road.
+          The fine print: what the platform is, what it is not, and the rules of the road.
         </p>
-        <p className="mt-2 text-xs text-muted">Last updated: November 2026 · prototype stage</p>
+        <p className="mt-2 text-xs text-muted">Last updated: November 2026</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-10 md:px-10">

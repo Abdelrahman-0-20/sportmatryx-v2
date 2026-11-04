@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/motion";
 export const metadata: Metadata = {
   title: "Changelog — Sportmetryx Football",
   description:
-    "What shipped on Sportmetryx Football — release notes from the prototype: design, product, data and infrastructure changes.",
+    "What shipped on Sportmetryx Football — release notes: design, product, data and infrastructure changes.",
 };
 
 type Release = {
@@ -69,7 +69,7 @@ const RELEASES: Release[] = [
     items: [
       "Readiness board, Player 360, team command, interventions",
       "Governance: consent records, role-based access, hash-chained audit log",
-      "Marketplace catalog, cart and demo checkout; guest mode",
+      "Marketplace catalog, cart and checkout; guest mode",
       "Validity-gated scoring against personal baselines",
     ],
   },

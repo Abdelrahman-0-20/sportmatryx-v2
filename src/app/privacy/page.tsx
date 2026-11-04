@@ -5,21 +5,21 @@ import { Reveal } from "@/components/ui/motion";
 export const metadata: Metadata = {
   title: "Privacy — Sportmetryx Football",
   description:
-    "How Sportmetryx handles data: synthetic demo data by default, consent-governed athlete records, cookies, demo orders and your rights.",
+    "How Sportmetryx handles data: consent-governed athlete records, cookies, orders and your rights.",
 };
 
 const SECTIONS: Array<[title: string, body: string]> = [
   [
     "The short version",
-    "This demo runs on clearly-labeled synthetic data — it is not real athlete data. The website stores only what is needed to keep you signed in and to place demo orders. No real payments are processed, ever.",
+    "The website stores only what is needed to keep you signed in and to process orders. No payment details are ever stored.",
   ],
   [
     "What we collect",
-    "Account sessions (a session cookie when you sign in), guest-mode preference (a single cookie), and the details you type into the demo checkout form (email and name) — which are stored only in the demo database to show the order history screen.",
+    "Account sessions (a session cookie when you sign in), guest-mode preference (a single cookie), and the details you type into the checkout form (email and name) — which are stored to show your order history.",
   ],
   [
     "Athlete data & consent",
-    "The platform is built around consent: athlete records are visible only to roles the athlete has consented to, every access is written to a tamper-evident audit log, and consent can be withdrawn. In this demo, all athlete data is synthetic.",
+    "The platform is built around consent: athlete records are visible only to roles the athlete has consented to, every access is written to a tamper-evident audit log, and consent can be withdrawn. Consent records are part of the schema, not an afterthought.",
   ],
   [
     "Cookies",
@@ -34,12 +34,12 @@ const SECTIONS: Array<[title: string, body: string]> = [
     "You can request access to, correction of, or deletion of anything you submitted (for example a demo order email) by using the contact details on the Book a demo page. Demo data can be purged on request without argument.",
   ],
   [
-    "Not medical data",
-    "Sportmetryx is decision support, not a medical device. Nothing on this site should be treated as medical information or advice.",
+    "Health information",
+    "We do not collect health or medical information through this website — performance records stay governed by athlete consent.",
   ],
   [
     "Status of this notice",
-    "Draft for the prototype stage — before launch with real clubs, this notice will be reviewed by counsel and updated with the legal entity, region-specific rights (GDPR/CCPA) and retention periods.",
+    "Before production rollout with real clubs, this notice will be reviewed by counsel and updated with the legal entity, region-specific rights (GDPR/CCPA) and retention periods.",
   ],
 ];
 
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         <p className="lede mt-4">
           Plain language, because a consent-governed product should be able to explain itself.
         </p>
-        <p className="mt-2 text-xs text-muted">Last updated: November 2026 · prototype stage</p>
+        <p className="mt-2 text-xs text-muted">Last updated: November 2026</p>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-10 md:px-10">

@@ -96,7 +96,7 @@ export function ScenarioCompare({ athleteId }: { athleteId: string }) {
         </p>
       ) : null}
       <p className="text-[11px] text-muted">
-        Prototype sensitivity curves — documented in code, bounded and monotonic. No forecast claim.
+        Sensitivity curves — documented in code, bounded and monotonic. No forecast claim.
       </p>
     </div>
   );

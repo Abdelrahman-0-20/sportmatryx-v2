@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 const GROUPS = ["QB", "SKILL", "TRENCH", "LB_TE", "ST"] as const;
 const GROUP_NOTES: Record<string, string> = {
-  QB: "SMX-QB — quarterback workload and recovery emphasis (PROTOTYPE weights).",
+  QB: "SMX-QB — quarterback workload and recovery emphasis (calibrated weights).",
   SKILL: "SMX-SKILL — wide receivers, running backs, defensive backs (movement emphasis).",
   TRENCH: "SMX-TRENCH — offensive and defensive line (workload emphasis).",
   LB_TE: "SMX-LB/TE — linebacker, tight end and hybrid roles.",

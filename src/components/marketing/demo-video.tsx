@@ -59,7 +59,7 @@ function TitleCard() {
       <div className="mt-4 text-xs uppercase tracking-[0.35em] text-muted sm:text-sm">
         The product tour
       </div>
-      <div className="mt-2 text-[11px] text-muted/80">5 chapters · synthetic demo data</div>
+      <div className="mt-2 text-[11px] text-muted/80">5 chapters · product tour</div>
     </div>
   );
 }
@@ -206,7 +206,7 @@ function MarketScreen() {
           </div>
         ))}
       </div>
-      <p className="text-[11px] text-muted sm:text-xs">Demo checkout — clearly labeled synthetic pricing.</p>
+      <p className="text-[11px] text-muted sm:text-xs">Secure checkout — no payment details required.</p>
     </div>
   );
 }

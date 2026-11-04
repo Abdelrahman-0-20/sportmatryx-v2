@@ -117,7 +117,7 @@ export function Tag({ label, className = "", glow = false }: { label: string; cl
   const style = TAG_STYLES[label] ?? "border-edge text-muted";
   return (
     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${style} ${glow ? "glow-ready" : ""} ${className}`}>
-      {label.replace(/_/g, " ")}
+      {label.replace(/_/g, " ").replace("PROTOTYPE", "BETA")}
     </span>
   );
 }

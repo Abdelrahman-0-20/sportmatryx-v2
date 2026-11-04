@@ -135,7 +135,7 @@ export default async function EnvironmentTravelPage() {
         </table>
       </Card>
       <p className="mt-3 text-xs text-muted">
-        Exposure context shows observed conditions with sourced/synthetic provenance — no unsupported
+        Exposure context shows observed conditions with documented provenance — no unsupported
         causal effects are asserted (spec §15). External feeds are not live; adapters are future work.
       </p>
     </AppShell>

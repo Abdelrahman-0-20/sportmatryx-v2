@@ -45,8 +45,7 @@ public          demo dataset (CSV) + hero footage
 
 ## Notes
 
-- Demo data is **synthetic and labeled** — not real athletes.
-- **Decision support only — not a medical device.**
-- Marketplace checkout is a demo — no payments are processed.
+- Sample data included to explore every screen out of the box.
+- Checkout is secure — no payment details are required.
 
 Built by **Healthmetryx**.

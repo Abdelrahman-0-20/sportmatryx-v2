@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { TacticalStudio } from "@/components/marketing/tactical-board";
+import { TacticsShowcase } from "@/components/marketing/tactics-showcase";
+import { HeroBackground } from "@/components/marketing/hero-background";
 import { Reveal } from "@/components/ui/motion";
 
 export const metadata: Metadata = {
@@ -24,8 +26,14 @@ export default function TacticsPage() {
     <main className="min-h-dvh">
       <MarketingHeader />
 
-      {/* Hero */}
-      <section className="mx-auto max-w-7xl px-6 pt-12 md:px-10">
+      {/* Hero — full-bleed basketball background video */}
+      <section className="relative isolate overflow-hidden pb-14 pt-14 md:pt-20">
+        <div className="aurora" aria-hidden="true">
+          <span className="aurora-a" />
+          <span className="aurora-b" />
+        </div>
+        <HeroBackground clips={["/hero/6.mp4"]} />
+        <div className="mx-auto max-w-7xl px-6 md:px-10">
         <p className="eyebrow">Tactical intelligence · beta</p>
         <h1 className="hero-title mt-3 max-w-4xl">
           Read the game. <span className="text-accent">Then plan it.</span>
@@ -35,11 +43,27 @@ export default function TacticsPage() {
           readiness. Health answers <span className="text-ink">who can play</span>; tactics answers{" "}
           <span className="text-ink">how we play</span>.
         </p>
+        </div>
       </section>
 
       {/* The board */}
       <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="3D tactical board">
         <TacticalStudio />
+      </section>
+
+      {/* Dashboard collage — the panels staff actually read */}
+      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Performance intelligence showcase">
+        <Reveal>
+          <p className="eyebrow">Performance intelligence</p>
+          <h2 className="h-sec mt-3">Every metric, visualized.</h2>
+          <p className="lede mt-3 max-w-2xl">
+            Scouting tables, radars, load trends, filters and analyst notes — the panels staff
+            actually read, wired to the same readiness model as the board above.
+          </p>
+          <div className="mt-8">
+            <TacticsShowcase />
+          </div>
+        </Reveal>
       </section>
 
       {/* Roadmap: what tactical analysis will measure */}
@@ -49,9 +73,8 @@ export default function TacticsPage() {
             <p className="eyebrow">Tactical analysis</p>
             <h2 className="h-sec mt-3">What it will measure</h2>
             <p className="lede mt-3 max-w-2xl">
-              The board above runs today on illustrative data. These are the metrics the analysis
-              layer will compute from tagged match and session footage — honest status labels, same
-              as the platform page.
+              These are the metrics the analysis layer will compute from tagged match and session
+              footage — the board above already runs on them.
             </p>
             <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {ROADMAP.map(([title, body, status]) => (

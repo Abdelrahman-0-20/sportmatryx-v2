@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     return NextResponse.json(purchase, { status: 200 });
   } catch (e) {
     if (e instanceof UnauthorizedError) {
-      return NextResponse.json({ error: "Sign in to complete a demo purchase.", code: "UNAUTHORIZED" }, { status: 401 });
+      return NextResponse.json({ error: "Sign in to complete your purchase.", code: "UNAUTHORIZED" }, { status: 401 });
     }
     const mapped = errorToResponse(e);
     return NextResponse.json(mapped.body, { status: mapped.status });

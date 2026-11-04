@@ -101,7 +101,7 @@ export default async function GameReadinessPage() {
         </table>
       </Card>
       <p className="mt-3 text-xs text-muted">
-        Decision support only — no automated lineup, clearance, or medical decisions (spec §13).
+        Staff-owned decisions — no automated lineup or clearance calls (spec §13).
       </p>
     </AppShell>
   );

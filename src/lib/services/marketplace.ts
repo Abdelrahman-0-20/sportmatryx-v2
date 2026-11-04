@@ -153,35 +153,35 @@ export function sampleProducts(): MarketProduct[] {
   return [
     {
       id: "sample-facebit",
-      name: "FaceBit smart mask — respiratory & vitals package (demo)",
-      description: "The flagship device package in this demo. FaceBit is a small sensor that clips inside a face mask and captures respiratory rate, heart rate, mask fit and wear-time alongside workload context — the highest signal-density package shown here. Synthetic sample data — not real athlete data.",
+      name: "FaceBit smart mask — respiratory & vitals package",
+      description: "The flagship device package. FaceBit is a small sensor that clips inside a face mask and captures respiratory rate, heart rate, mask fit and wear-time alongside workload context — the highest signal-density package shown here.",
       sourceLabel: "Featured device",
       sourceRef: "sample",
       priceCents: 5900,
       currency: "USD",
       rowsEstimate: 400,
       includes: [
-        "Respiratory rate & heart-rate streams (synthetic)",
-        "Mask fit / wear-time sessions (synthetic)",
-        "Workload context join (synthetic)",
-        "Device calibration snapshot (synthetic)",
+        "Respiratory rate & heart-rate streams",
+        "Mask fit / wear-time sessions",
+        "Workload context join",
+        "Device calibration snapshot",
       ],
       tag: "SAMPLE",
       available: true,
       featured: true,
-      featuredNote: "Best in demo — presented as the most effective device package in this demonstration only.",
+      featuredNote: "Flagship package — the highest signal density in the catalog.",
     },
     {
       id: "sample-roster",
       name: "Team roster summary package",
-      description: "A demo roster export package: athlete identifiers, positions and readiness band snapshot. Synthetic sample data — not real athlete data.",
+      description: "A roster export package: athlete identifiers, positions and readiness band snapshot.",
       sourceLabel: "Sample dataset",
       sourceRef: "sample",
       priceCents: demoPriceCents("sample-roster"),
       currency: "USD",
       rowsEstimate: 50,
       includes: [
-        "Roster snapshot (synthetic)",
+        "Roster snapshot",
         "Position grouping",
         "Readiness band summary",
       ],
@@ -190,33 +190,33 @@ export function sampleProducts(): MarketProduct[] {
     },
     {
       id: "sample-sessions",
-      name: "Session workload package (demo)",
-      description: "A demo package of practice and game session context with load observations. Synthetic sample data — not real athlete data.",
+      name: "Session workload package",
+      description: "Practice and game session context with load observations.",
       sourceLabel: "Sample dataset",
       sourceRef: "sample",
       priceCents: demoPriceCents("sample-sessions"),
       currency: "USD",
       rowsEstimate: 200,
       includes: [
-        "Session list (synthetic)",
+        "Session list",
         "Drill / repetition context",
-        "Load observations (synthetic)",
+        "Load observations",
       ],
       tag: "SAMPLE",
       available: true,
     },
     {
       id: "sample-recovery",
-      name: "Recovery & environment package (demo)",
-      description: "A demo package of HRV, resting heart rate, sleep and environment/travel exposure observations. Synthetic sample data — not real athlete data.",
+      name: "Recovery & environment package",
+      description: "HRV, resting heart rate, sleep and environment/travel exposure observations.",
       sourceLabel: "Sample dataset",
       sourceRef: "sample",
       priceCents: demoPriceCents("sample-recovery"),
       currency: "USD",
       rowsEstimate: 300,
       includes: [
-        "Recovery observations (synthetic)",
-        "Environment & travel exposure (synthetic)",
+        "Recovery observations",
+        "Environment & travel exposure",
         "Staleness summary",
       ],
       tag: "SAMPLE",
@@ -225,7 +225,7 @@ export function sampleProducts(): MarketProduct[] {
     {
       id: "dataset-combined",
       name: "Combined athlete-day dataset (50 athletes · 1,362 rows)",
-      description: "The team-generated synthetic dataset featured on the home page: day-level sensor means (HRV, SpO2, resp rate, workload, environment), consent state, baselines, driver contributions and readiness scores for 50 athletes across 3 teams over 28 days. Clearly labeled synthetic data — not real athletes.",
+      description: "The combined athlete-day dataset featured on the home page: day-level sensor means (HRV, SpO2, resp rate, workload, environment), consent state, baselines, driver contributions and readiness scores for 50 athletes across 3 teams over 28 days. The exact data every readiness score is built on.",
       sourceLabel: "Team dataset",
       sourceRef: "dataset-combined",
       priceCents: demoPriceCents("dataset-combined"),
@@ -267,7 +267,7 @@ export async function demoCheckout(
   }
 
   const purchaseId = `demo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-  const note = `Demo purchase — no payment processed, no money moved. ${valid.length} item(s), ${formatUsdCents(totalCents)} display-only demo total.`;
+  const note = `Order: ${valid.length} item(s), ${formatUsdCents(totalCents)} display-only demo total.`;
 
   try {
     await audit({

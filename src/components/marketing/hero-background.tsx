@@ -16,9 +16,11 @@ import { useEffect, useRef, useState } from "react";
 
 const CLIPS = ["/hero/1.mp4", "/hero/2.mp4", "/hero/3.mp4", "/hero/4.mp4", "/hero/5.mp4"];
 
-export function HeroBackground() {
+export function HeroBackground({ clips = CLIPS }: { clips?: string[] }) {
   const aRef = useRef<HTMLVideoElement | null>(null);
   const bRef = useRef<HTMLVideoElement | null>(null);
+  const clipsRef = useRef<string[]>(clips);
+  clipsRef.current = clips;
   const idxRef = useRef(0);
   const activeARef = useRef(true);
   const [activeSide, setActiveSide] = useState<"a" | "b">("a");
@@ -36,14 +38,15 @@ export function HeroBackground() {
     if (!enabled) return;
     const a = aRef.current;
     if (!a) return;
-    a.src = CLIPS[0]!;
+    const c = clipsRef.current;
+    a.src = c[0]!;
     a.dataset.clip = "0";
     const onCanPlay = () => {
       setReady(true);
       a.play().catch(() => undefined);
       const b = bRef.current;
       if (b && b.dataset.clip !== "1") {
-        b.src = CLIPS[1]!;
+        b.src = c[1]!;
         b.dataset.clip = "1";
       }
     };
@@ -61,9 +64,10 @@ export function HeroBackground() {
     const nxt = activeARef.current ? bRef.current : aRef.current;
     if (!cur || !nxt) return;
 
-    const nextIdx = (idxRef.current + 1) % CLIPS.length;
+    const c = clipsRef.current;
+    const nextIdx = (idxRef.current + 1) % c.length;
     if (nxt.dataset.clip !== String(nextIdx)) {
-      nxt.src = CLIPS[nextIdx]!;
+      nxt.src = c[nextIdx]!;
       nxt.dataset.clip = String(nextIdx);
     }
     nxt.currentTime = 0;
@@ -75,10 +79,10 @@ export function HeroBackground() {
 
     /* After the fade, preload the following clip into the hidden layer. */
     window.setTimeout(() => {
-      const after = (idxRef.current + 1) % CLIPS.length;
+      const after = (idxRef.current + 1) % clipsRef.current.length;
       cur.pause();
       if (cur.dataset.clip !== String(after)) {
-        cur.src = CLIPS[after]!;
+        cur.src = clipsRef.current[after]!;
         cur.dataset.clip = String(after);
       }
     }, 1200);

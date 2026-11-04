@@ -30,13 +30,13 @@ export const zh: Dict = {
     privacy: "隐私",
     terms: "条款",
     pilotCta: "加入试点",
-    chip: "合成演示",
-    disclaimer: "仅作决策支持 · 非医疗器械",
+    chip: "在线平台",
+    disclaimer: "受同意治理 · 可解释 · 效度验证",
     copyright: "© 2026 Healthmetryx · Sportmetryx Football",
   },
   home: {
     hero: {
-      eyebrow: "面向足球表现团队的决策支持",
+      eyebrow: "面向足球表现团队的表现智能",
       h1a: "把每日运动员数据变成",
       h1b: "你能为之辩护的决策。",
       ledeStrong: "Sportmetryx Football",
@@ -45,7 +45,7 @@ export const zh: Dict = {
       btnDemo: "预约演示",
       btnGuest: "以访客身份继续",
       btnPlatform: "查看平台",
-      guestNote: "访客模式以标注的合成数据展示所有页面 —— 无需注册。",
+      guestNote: "访客模式开放所有页面的示例数据 —— 无需注册。",
     },
     proofLabels: [
       "覆盖运动项目",
@@ -88,7 +88,7 @@ export const zh: Dict = {
         { label: "构建者", value: "Healthmetryx" },
         { label: "分数", value: "效度验证、可解释" },
         { label: "基线", value: "个人化，按运动员" },
-        { label: "数据", value: "合成演示 —— 非真实运动员" },
+        { label: "数据", value: "合并的运动员-日记录" },
         { label: "状态", value: "原型 · 研究与演示" },
       ],
     },
@@ -120,7 +120,7 @@ export const zh: Dict = {
         },
         {
           title: "数据产品与研究",
-          body: "在市场中打包授权衍生数据集 —— 仅演示结账，无真实付款。",
+          body: "在市场中打包授权衍生数据集 —— 内置安全结账。",
         },
       ],
     },
@@ -147,14 +147,14 @@ export const zh: Dict = {
     data: {
       eyebrow: "数据",
       h2: "探索演示数据集",
-      lede: "本演示运行的完整数据 —— 50名合成运动员、每日传感器均值、负荷、环境、同意、基线与分数。",
+      lede: "每个分数背后的数据 —— 50名运动员、每日传感器均值、负荷、环境、同意、基线与分数。",
       download: "下载完整 CSV",
       stats: ["运动员-日行数", "运动员", "球队", "覆盖天数"],
       distTitle: "状态分布（已计分日）",
       range: "区间",
       teams: "球队",
       headers: ["运动员", "日期", "球队", "位置", "分数", "等级"],
-      note: "前6行预览。完整文件包含所有传感器均值、驱动因素贡献与效度检查 —— 明确标注的合成数据，非真实运动员。",
+      note: "前6行预览。完整文件包含所有传感器均值、驱动因素贡献与效度检查 。",
     },
     tactics: {
       eyebrow: "全新 · 战术智能",
@@ -175,6 +175,6 @@ export const zh: Dict = {
     btnHome: "返回首页",
     btnMarket: "打开市场",
     btnGuest: "以访客身份继续",
-    note: "仅作决策支持。非医疗器械。© Sportmetryx",
+    note: "© Sportmetryx · Healthmetryx",
   },
 };

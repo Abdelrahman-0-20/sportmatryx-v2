@@ -48,7 +48,7 @@ export async function withFallback<T>(dbFn: () => Promise<T>, sample: () => T): 
 export const GUEST_USER = {
   id: "guest",
   email: "guest",
-  name: "Guest (synthetic demo)",
+  name: "Guest (sample data)",
   role: "GUEST",
   memberships: [],
 };

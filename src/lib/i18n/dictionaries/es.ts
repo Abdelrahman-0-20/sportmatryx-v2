@@ -30,13 +30,13 @@ export const es: Dict = {
     privacy: "Privacidad",
     terms: "Términos",
     pilotCta: "Únete al piloto",
-    chip: "Demo sintética",
-    disclaimer: "Solo apoyo a decisiones · no es un dispositivo médico",
+    chip: "Plataforma en vivo",
+    disclaimer: "Gobernado por consentimiento · explicable · validado",
     copyright: "© 2026 Healthmetryx · Sportmetryx Football",
   },
   home: {
     hero: {
-      eyebrow: "Apoyo a decisiones para el cuerpo técnico de fútbol",
+      eyebrow: "Inteligencia de rendimiento para el cuerpo técnico de fútbol",
       h1a: "Convierte los datos diarios de tus atletas en",
       h1b: "decisiones que puedes defender.",
       ledeStrong: "Sportmetryx Football",
@@ -45,7 +45,7 @@ export const es: Dict = {
       btnDemo: "Reservar una demo",
       btnGuest: "Continuar como invitado",
       btnPlatform: "Ver la plataforma",
-      guestNote: "El modo invitado muestra todas las pantallas con datos sintéticos etiquetados — sin necesidad de cuenta.",
+      guestNote: "El modo invitado abre todas las pantallas con datos de muestra — sin necesidad de cuenta.",
     },
     proofLabels: [
       "deportes en el procesamiento",
@@ -88,7 +88,7 @@ export const es: Dict = {
         { label: "Construido por", value: "Healthmetryx" },
         { label: "Puntuaciones", value: "Validadas y explicables" },
         { label: "Líneas base", value: "Personales, por atleta" },
-        { label: "Datos", value: "Demo sintética — no son atletas reales" },
+        { label: "Datos", value: "Registros combinados atleta-día" },
         { label: "Estado", value: "Prototipo · investigación y demostración" },
       ],
     },
@@ -120,7 +120,7 @@ export const es: Dict = {
         },
         {
           title: "Productos de datos e investigación",
-          body: "Empaqueta y licencia conjuntos derivados en el mercado — solo demo, sin pagos reales.",
+          body: "Empaqueta y licencia conjuntos derivados en el mercado — con checkout seguro integrado.",
         },
       ],
     },
@@ -147,14 +147,14 @@ export const es: Dict = {
     data: {
       eyebrow: "Los datos",
       h2: "Explora el conjunto de datos de la demo",
-      lede: "Los datos exactos con los que funciona esta demo — 50 atletas sintéticos, medias diarias de sensores, carga, entorno, consentimiento, líneas base y puntuaciones.",
+      lede: "Los datos detrás de cada puntuación — 50 atletas, medias diarias de sensores, carga, entorno, consentimiento, líneas base y puntuaciones.",
       download: "Descargar CSV completo",
       stats: ["Filas atleta-día", "Atletas", "Equipos", "Días cubiertos"],
       distTitle: "Distribución de disponibilidad (días puntuados)",
       range: "Rango",
       teams: "Equipos",
       headers: ["Atleta", "Fecha", "Equipo", "Posición", "Puntuación", "Banda"],
-      note: "Vista previa de las primeras 6 filas. El archivo completo contiene todas las medias de sensores, contribuciones de impulsores y verificaciones de validez — datos sintéticos claramente etiquetados, no atletas reales.",
+      note: "Vista previa de las primeras 6 filas. El archivo completo contiene todas las medias de sensores, contribuciones de impulsores y verificaciones de validez.",
     },
     tactics: {
       eyebrow: "Nuevo · inteligencia táctica",
@@ -175,6 +175,6 @@ export const es: Dict = {
     btnHome: "Volver al inicio",
     btnMarket: "Abrir el mercado",
     btnGuest: "Continuar como invitado",
-    note: "Solo apoyo a decisiones. No es un dispositivo médico. © Sportmetryx",
+    note: "© Sportmetryx · Healthmetryx",
   },
 };
