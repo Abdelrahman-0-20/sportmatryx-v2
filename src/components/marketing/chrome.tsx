@@ -53,6 +53,8 @@ const EXPLORE: Array<[href: string, label: string]> = [
   ["/solutions", "Solutions"],
   ["/tactics", "Tactics"],
   ["/proof", "Proof"],
+  ["/pilot", "Pilot program"],
+  ["/changelog", "Changelog"],
   ["/demo", "Book a demo"],
   ["/privacy", "Privacy"],
   ["/terms", "Terms"],

@@ -70,8 +70,12 @@ export default function DemoPage() {
                 Not ready to talk?{" "}
                 <Link href="/guest" className="text-accent underline-offset-2 hover:underline">
                   Continue as guest
+                </Link>
+                , or join the{" "}
+                <Link href="/pilot" className="text-accent underline-offset-2 hover:underline">
+                  pilot waitlist
                 </Link>{" "}
-                and explore every screen yourself first.
+                and we&apos;ll reach out when a slot opens.
               </p>
             </div>
 

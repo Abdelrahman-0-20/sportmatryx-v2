@@ -643,3 +643,17 @@ model MarketProductImage {
   @@index([productKey, sortOrder])
   @@map("market_product_images")
 }
+
+// Pilot-program waitlist signups (marketing site /pilot).
+model PilotWaitlist {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  org          String?
+  squadSize    String?
+  seasonWindow String?
+  note         String?
+  createdAt    DateTime @default(now())
+
+  @@map("pilot_waitlist")
+}
