@@ -2,26 +2,16 @@
   "name": "sportmetryx-football",
   "version": "0.1.0",
   "private": true,
-  "description": "Sportmetryx Football — Human Performance Intelligence for Football (synthetic demo data only)",
+  "description": "Sportmetryx Football \u2014 Human Performance Intelligence for Football (synthetic demo data only)",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "db:init": "scripts/db.sh init",
-    "db:start": "scripts/db.sh start",
-    "db:stop": "scripts/db.sh stop",
-    "db:status": "scripts/db.sh status",
-    "db:reset": "scripts/db.sh reset",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
-    "db:setup": "scripts/db.sh init && scripts/db.sh start && prisma migrate deploy && prisma db seed",
-    "prisma:generate": "prisma generate",
-    "e2e": "playwright test"
+    "prisma:generate": "prisma generate"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
