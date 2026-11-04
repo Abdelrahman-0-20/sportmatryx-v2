@@ -37,3 +37,9 @@ tsconfig.tsbuildinfo
 .vercel
 .env*
 .tmp-lo-profile/
+
+# local-only assets — never push
+.pylibs/
+combine_final1/
+data-combined/
+Prompts+Docs/
