@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { Reveal } from "@/components/ui/motion";
+import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Proof — Sportmetryx Football",
@@ -9,72 +10,31 @@ export const metadata: Metadata = {
     "The engineering proof behind Sportmetryx: live deployments, the data pipeline at scale, architecture, governance principles and the pilot framework.",
 };
 
-const NUMBERS: Array<[value: string, label: string]> = [
-  ["2", "live deployments (Vercel)"],
-  ["8", "sports in the pipeline"],
-  ["158,747", "device observations processed"],
-  ["1,431", "sessions modeled end-to-end"],
-  ["1,362", "athlete-day rows in the wide dataset"],
-  ["50", "athletes, fully modeled"],
-  ["6", "versioned database migrations"],
-  ["5", "device metric streams (HR · SpO₂ · resp · accel · GPS)"],
-];
+/* Metric values don't translate — labels come from the dictionary. */
+const NUMBER_VALUES = ["2", "8", "158,747", "1,431", "1,362", "50", "6", "5"];
 
-const FLOW = [
-  "GPS · HR · wellness · environment CSVs",
-  "Combined athlete-day record",
-  "Validity gates",
-  "Score vs personal baseline",
-  "Staff dashboard & marketplace",
-];
+export default async function ProofPage() {
+  const t = (await getDict()).proof;
 
-const STANDARDS: Array<[title: string, body: string]> = [
-  ["Type-safe end to end", "TypeScript + Prisma — schema changes break the build before they break production."],
-  ["Gates on every push", "Lint, type-check and a production build run before any deploy; CI ships only green builds."],
-  ["Versioned schema", "Six ordered migrations — every database change is reviewable, repeatable and reversible in history."],
-  ["Secrets never in git", "Only placeholder templates are committed; real credentials live in env config on the host."],
-  ["Guest mode by design", "Anyone can audit the full product end to end — zero privacy exposure."],
-  ["Accessible motion", "Every animation respects prefers-reduced-motion; keyboard focus is always visible."],
-];
-
-const PRINCIPLES: Array<[title: string, body: string]> = [
-  ["Validity-gated", "Garbage in → WITHHELD out. Never a silent score."],
-  ["Baseline-first", "Each athlete measured against their own history."],
-  ["Explainable", "Drivers visible on every number — no black boxes."],
-  ["Human in the loop", "Staff own every call; the audit trail reconstructs it."],
-  ["Consent-governed", "Access follows recorded consent, enforced in the schema."],
-];
-
-const PILOT: Array<[phase: string, title: string, body: string]> = [
-  ["Phase 1", "Data audit", "Two weeks: map your existing exports to the combined record, confirm coverage and quality."],
-  ["Phase 2", "Pilot season", "8–12 weeks with one squad: readiness board in the daily loop, guest-free real sessions."],
-  ["Phase 3", "Measure", "Weekly active staff, decisions supported per week, exceptions caught early — agreed up front."],
-  ["Phase 4", "Convert & scale", "Season-end review against the numbers. Convert to contract, add squads, enable marketplace."],
-];
-
-export default function ProofPage() {
   return (
     <main className="min-h-dvh">
       <MarketingHeader />
 
       <section className="mx-auto max-w-7xl px-6 pt-12 md:px-10">
-        <p className="eyebrow">Proof</p>
+        <p className="eyebrow">{t.eyebrow}</p>
         <h1 className="hero-title mt-3 max-w-4xl">
-          The proof is <span className="text-accent">already running.</span>
+          {t.h1a} <span className="text-accent">{t.h1b}</span>
         </h1>
-        <p className="lede mt-5 max-w-3xl">
-          Not a deck — a deployed product with a production database, versioned migrations and a
-          data pipeline that has processed real volume. These are the numbers behind the demo.
-        </p>
+        <p className="lede mt-5 max-w-3xl">{t.lede}</p>
       </section>
 
       {/* Numbers */}
       <section className="mx-auto max-w-7xl px-6 pt-10 md:px-10" aria-label="Engineering numbers">
         <Reveal>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {NUMBERS.map(([value, label]) => (
+            {t.numbers.map((label, i) => (
               <div key={label} className="surface rounded-2xl p-5">
-                <div className="h-sec text-accent md:text-3xl">{value}</div>
+                <div className="h-sec text-accent md:text-3xl">{NUMBER_VALUES[i]}</div>
                 <div className="mt-1 text-xs leading-snug text-muted">{label}</div>
               </div>
             ))}
@@ -85,14 +45,14 @@ export default function ProofPage() {
       {/* Architecture flow */}
       <section className="mx-auto max-w-7xl px-6 py-12 md:px-10" aria-label="Architecture">
         <Reveal>
-          <h2 className="h-sec">How the data moves</h2>
+          <h2 className="h-sec">{t.flowTitle}</h2>
           <ol className="mt-4 flex flex-col gap-2 md:flex-row md:items-stretch">
-            {FLOW.map((step, i) => (
+            {t.flow.map((step, i) => (
               <li key={step} className="flex flex-1 items-center gap-2">
                 <div className="surface flex-1 rounded-2xl px-4 py-4 text-center text-xs font-semibold text-ink">
                   {step}
                 </div>
-                {i < FLOW.length - 1 ? (
+                {i < t.flow.length - 1 ? (
                   <span className="hidden shrink-0 text-accent md:block" aria-hidden="true">
                     →
                   </span>
@@ -100,10 +60,7 @@ export default function ProofPage() {
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-[11px] text-muted">
-            Next.js on Vercel · PostgreSQL (Neon) via Prisma · session auth with role-based access ·
-            hash-chained audit log.
-          </p>
+          <p className="mt-3 text-[11px] text-muted">{t.flowNote}</p>
         </Reveal>
       </section>
 
@@ -112,23 +69,23 @@ export default function ProofPage() {
         <Reveal>
           <div className="grid gap-6 lg:grid-cols-2">
             <div>
-              <h2 className="h-sec">Engineering standards</h2>
+              <h2 className="h-sec">{t.standardsTitle}</h2>
               <ul className="mt-4 space-y-3">
-                {STANDARDS.map(([title, body]) => (
-                  <li key={title} className="surface rounded-2xl p-5">
-                    <div className="display-heading text-base text-accent">{title}</div>
-                    <p className="mt-1 text-xs leading-relaxed text-muted">{body}</p>
+                {t.standards.map((item) => (
+                  <li key={item.title} className="surface rounded-2xl p-5">
+                    <div className="display-heading text-base text-accent">{item.title}</div>
+                    <p className="mt-1 text-xs leading-relaxed text-muted">{item.body}</p>
                   </li>
                 ))}
               </ul>
             </div>
             <div>
-              <h2 className="h-sec">Governance principles</h2>
+              <h2 className="h-sec">{t.principlesTitle}</h2>
               <ul className="mt-4 space-y-3">
-                {PRINCIPLES.map(([title, body]) => (
-                  <li key={title} className="surface rounded-2xl p-5">
-                    <div className="display-heading text-base text-accent">{title}</div>
-                    <p className="mt-1 text-xs leading-relaxed text-muted">{body}</p>
+                {t.principles.map((item) => (
+                  <li key={item.title} className="surface rounded-2xl p-5">
+                    <div className="display-heading text-base text-accent">{item.title}</div>
+                    <p className="mt-1 text-xs leading-relaxed text-muted">{item.body}</p>
                   </li>
                 ))}
               </ul>
@@ -140,22 +97,20 @@ export default function ProofPage() {
       {/* Pilot framework */}
       <section className="mx-auto max-w-7xl px-6 pb-12 md:px-10" aria-label="Pilot framework">
         <Reveal>
-          <h2 className="h-sec">The pilot framework</h2>
-          <p className="mt-1 text-sm text-muted">
-            How a first club goes live — measured against numbers agreed before the pilot starts.
-          </p>
+          <h2 className="h-sec">{t.pilotTitle}</h2>
+          <p className="mt-1 text-sm text-muted">{t.pilotLede}</p>
           <ol className="mt-4 grid gap-3 md:grid-cols-4">
-            {PILOT.map(([phase, title, body]) => (
-              <li key={phase} className="surface rounded-2xl p-5">
-                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-accent">{phase}</span>
-                <div className="display-heading mt-1 text-lg">{title}</div>
-                <p className="mt-1.5 text-xs leading-relaxed text-muted">{body}</p>
+            {t.pilot.map((item) => (
+              <li key={item.phase} className="surface rounded-2xl p-5">
+                <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+                  {item.phase}
+                </span>
+                <div className="display-heading mt-1 text-lg">{item.title}</div>
+                <p className="mt-1.5 text-xs leading-relaxed text-muted">{item.body}</p>
               </li>
             ))}
           </ol>
-          <p className="mt-3 text-[11px] text-muted">
-            Pilot slots open — early entries choose their window first.
-          </p>
+          <p className="mt-3 text-[11px] text-muted">{t.pilotNote}</p>
         </Reveal>
       </section>
 
@@ -163,17 +118,14 @@ export default function ProofPage() {
       <section className="mx-auto max-w-7xl px-6 pb-14 md:px-10">
         <Reveal>
           <div className="cta-band rounded-3xl p-8 text-center">
-            <h2 className="h-sec">Verify it yourself</h2>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-muted">
-              Open the live product, download the dataset, or walk the architecture with us —
-              whichever proves it faster for you.
-            </p>
+            <h2 className="h-sec">{t.ctaH2}</h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-muted">{t.ctaLede}</p>
             <div className="mt-5 flex flex-wrap justify-center gap-3">
               <Link href="/demo" className="btn-primary">
-                Book a demo
+                {t.ctaBtn1}
               </Link>
               <Link href="/guest" className="btn-ghost">
-                Open the live product
+                {t.ctaBtn2}
               </Link>
             </div>
           </div>

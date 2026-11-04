@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import type { Dict } from "@/lib/i18n/dictionaries";
 
 /**
- * Demo request form. No backend on purpose: on submit it opens the visitor's
- * mail client with a prefilled message. Replace CONTACT_EMAIL with the real
- * inbox before sharing this page publicly.
+ * Demo request form. No backend: on submit it opens the visitor's mail
+ * client with a prefilled message. All labels come from the i18n dictionary.
  */
 const CONTACT_EMAIL = "hello@healthmetryx.com"; // TODO: replace with your real inbox
 
-export function DemoForm() {
+export function DemoForm({ labels }: { labels: Dict["demo"]["form"] }) {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -31,89 +31,64 @@ export function DemoForm() {
 
   if (sent) {
     return (
-      <div className="rounded-[10px] border border-ready/50 bg-ready/10 p-6">
-        <div className="display-heading text-lg text-ready">Your mail app is opening</div>
+      <div className="rounded-2xl border border-ready/50 bg-ready/10 p-6">
+        <div className="display-heading text-lg text-ready">{labels.successTitle}</div>
         <p className="mt-2 text-xs leading-relaxed text-muted">
-          If nothing happened, copy your details and email them to{" "}
-          <span className="text-ink">{CONTACT_EMAIL}</span> — we will get back to you with a
-          30-minute slot.
+          {labels.successBody.replace("{email}", CONTACT_EMAIL)}
         </p>
         <button
           type="button"
           onClick={() => setSent(false)}
-          className="mt-4 rounded-md border border-edge px-4 py-2 text-xs font-semibold text-ink hover:bg-panel"
+          className="btn-ghost mt-4 inline-flex !text-xs"
         >
-          Edit details
+          {labels.editBtn}
         </button>
       </div>
     );
   }
 
+  const INPUT =
+    "mt-1 w-full rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none";
+
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="block">
-          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">Name</span>
-          <input
-            name="name"
-            required
-            autoComplete="name"
-            className="mt-1 w-full rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
-            placeholder="Your name"
-          />
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{labels.name}</span>
+          <input name="name" autoComplete="name" className={INPUT} placeholder={labels.namePh} />
         </label>
         <label className="block">
-          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">Organization</span>
-          <input
-            name="organization"
-            required
-            autoComplete="organization"
-            className="mt-1 w-full rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
-            placeholder="Club, academy or company"
-          />
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{labels.organization}</span>
+          <input name="organization" autoComplete="organization" className={INPUT} placeholder={labels.orgPh} />
         </label>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="block">
-          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">Role</span>
-          <input
-            name="role"
-            className="mt-1 w-full rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
-            placeholder="Performance staff, coach, analyst…"
-          />
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{labels.role}</span>
+          <input name="role" className={INPUT} placeholder={labels.rolePh} />
         </label>
         <label className="block">
-          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">Email</span>
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
+            {labels.email} <span className="text-accent">*</span>
+          </span>
           <input
             name="email"
             type="email"
             required
             autoComplete="email"
-            className="mt-1 w-full rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
-            placeholder="you@club.com"
+            className={INPUT}
+            placeholder={labels.emailPh}
           />
         </label>
       </div>
       <label className="block">
-        <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
-          What do you want to see?
-        </span>
-        <textarea
-          name="message"
-          rows={4}
-          className="mt-1 w-full rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none"
-          placeholder="Which seat are you solving for? Which data do you already collect?"
-        />
+        <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted">{labels.message}</span>
+        <textarea name="message" rows={4} className={INPUT} placeholder={labels.msgPh} />
       </label>
-      <button
-        type="submit"
-        className="btn-primary w-full"
-      >
-        Request my demo
+      <button type="submit" className="btn-primary w-full">
+        {labels.submit}
       </button>
-      <p className="text-[11px] text-muted">
-        This opens your mail app with the details prefilled — nothing is stored on this site.
-      </p>
+      <p className="text-[11px] text-muted">{labels.mailNote}</p>
     </form>
   );
 }
