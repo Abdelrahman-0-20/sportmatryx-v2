@@ -7,7 +7,7 @@ import type { Dict } from "@/lib/i18n/dictionaries";
  * Demo request form. No backend: on submit it opens the visitor's mail
  * client with a prefilled message. All labels come from the i18n dictionary.
  */
-const CONTACT_EMAIL = "hello@healthmetryx.com"; // TODO: replace with your real inbox
+const CONTACT_EMAIL = "sportmatryx@protonmail.com";
 
 export function DemoForm({ labels }: { labels: Dict["demo"]["form"] }) {
   const [sent, setSent] = useState(false);
