@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
+import { PageHero } from "@/components/ui/page-hero";
 import { SectionTabs } from "@/components/ui/section-tabs";
 import {Card,  Tag, Sparkline, ConfidenceRing, WithheldStamp } from "@/components/ui/primitives";
 import {Avatar,  AvatarFallback } from "@/components/ui/avatar";
@@ -49,17 +50,19 @@ export default async function RosterPage({
 
   return (
     <AppShell crumb="/roster" title="Athletes">
-      {/* Professional intro */}
-      <p className="mb-2 max-w-3xl text-sm leading-relaxed text-muted">
-        The live readiness picture for every athlete on the roster — one row per athlete, built
-        from their latest valid athlete-day record. Use it to decide who trains full, who needs
-        closer monitoring and who sits out, before the session starts.
-      </p>
-      <p className="mb-3 max-w-3xl text-xs text-muted">
-        Rows are sorted by exception severity first, then by lowest readiness — the athletes who
-        need attention surface at the top. Click any athlete to open Player 360 for the full
-        profile, baselines and score history.
-      </p>
+      {/* Professional intro — cinematic video banner */}
+      <PageHero clip={3} className="mb-4">
+        <p className="max-w-3xl text-sm leading-relaxed text-ink">
+          The live readiness picture for every athlete on the roster — one row per athlete, built
+          from their latest valid athlete-day record. Use it to decide who trains full, who needs
+          closer monitoring and who sits out, before the session starts.
+        </p>
+        <p className="mt-2 max-w-3xl text-xs text-muted">
+          Rows are sorted by exception severity first, then by lowest readiness — the athletes who
+          need attention surface at the top. Click any athlete to open Player 360 for the full
+          profile, baselines and score history.
+        </p>
+      </PageHero>
       <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs text-muted">
         <span className="text-[11px] font-semibold uppercase tracking-wider">How to read the bands</span>
         <span className="flex items-center gap-1.5">

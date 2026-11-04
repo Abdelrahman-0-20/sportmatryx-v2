@@ -1,4 +1,5 @@
 import { AppShell } from "@/components/ui/app-shell";
+import { PageHero } from "@/components/ui/page-hero";
 import { MarketplaceListing } from "@/components/marketplace/listing";
 import { requireReadForGuest } from "@/lib/offline";
 import { listProducts, type MarketProduct } from "@/lib/services/marketplace";
@@ -30,13 +31,15 @@ export default async function MarketplacePage() {
 
   return (
     <AppShell crumb="/marketplace" title="Marketplace">
-      <p className="lede mb-2 max-w-3xl">
-        Browse purchasable data-product packages derived from existing import jobs and demo
-        datasets — the revenue layer of the platform.
-      </p>
-      <p className="mb-6 text-xs font-semibold text-accent">
-        Demo checkout · no real payments · consent-governed, clearly labeled synthetic data
-      </p>
+      <PageHero clip={2} className="mb-6">
+        <p className="lede max-w-3xl">
+          Browse purchasable data-product packages derived from existing import jobs and demo
+          datasets — the revenue layer of the platform.
+        </p>
+        <p className="mt-2 text-xs font-semibold text-accent">
+          Demo checkout · no real payments · consent-governed, clearly labeled synthetic data
+        </p>
+      </PageHero>
 
       <MarketplaceListing products={products} />
     </AppShell>

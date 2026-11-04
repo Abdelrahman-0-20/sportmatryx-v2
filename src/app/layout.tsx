@@ -15,9 +15,23 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sportmatryx-v2.vercel.app"),
   title: "Sportmetryx Football",
   description:
     "Human Performance Intelligence for Football. Decision support only — not a medical device. Prototype models are for research and demonstration.",
+  openGraph: {
+    siteName: "Sportmetryx Football",
+    title: "Sportmetryx Football — decisions you can defend",
+    description:
+      "Validity-gated readiness intelligence for football: one daily readiness score per athlete, always explainable, consent-governed.",
+    locale: "en_GB",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sportmetryx Football — decisions you can defend",
+    description: "Validity-gated readiness intelligence for football.",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -51,8 +51,11 @@ export function MarketingHeader() {
 const EXPLORE: Array<[href: string, label: string]> = [
   ["/platform", "Platform"],
   ["/solutions", "Solutions"],
+  ["/tactics", "Tactics"],
   ["/proof", "Proof"],
   ["/demo", "Book a demo"],
+  ["/privacy", "Privacy"],
+  ["/terms", "Terms"],
 ];
 
 const PRODUCT: Array<[href: string, label: string]> = [
