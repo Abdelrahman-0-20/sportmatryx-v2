@@ -39,7 +39,7 @@ export function DemoForm({ labels }: { labels: Dict["demo"]["form"] }) {
         <button
           type="button"
           onClick={() => setSent(false)}
-          className="btn-ghost mt-4 inline-flex !text-xs"
+          className="btn-ghost mt-4 inline-flex text-xs!"
         >
           {labels.editBtn}
         </button>

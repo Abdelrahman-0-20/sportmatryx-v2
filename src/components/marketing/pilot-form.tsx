@@ -56,7 +56,7 @@ export function PilotForm({ labels }: { labels: Dict["pilot"]["form"] }) {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="btn-ghost mt-5 inline-flex !text-xs"
+          className="btn-ghost mt-5 inline-flex text-xs!"
         >
           {labels.addAnother}
         </button>
