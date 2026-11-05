@@ -11,7 +11,10 @@ const API = "https://api.resend.com/emails";
 const KEY = process.env.RESEND_API_KEY;
 const FROM = process.env.RESEND_FROM ?? "Sportmetryx Football <onboarding@resend.dev>";
 const SITE = "https://sportmatryx-v2.vercel.app";
-const OWNER = "sportmatryx@protonmail.com";
+/* Interim: Resend testing mode only delivers to the account email
+ * (egydarknight10@gmail.com). After verifying a domain at resend.com/domains,
+ * switch this (or set NEWSLETTER_OWNER) to the official inbox. */
+const OWNER = process.env.NEWSLETTER_OWNER ?? "egydarknight10@gmail.com";
 
 type SendArgs = { to: string; subject: string; html: string; text: string };
 
