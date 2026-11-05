@@ -183,6 +183,7 @@ export const es: Dict = {
       download: "Descargar dataset atleta-día",
       download2: "Descargar dataset de sesiones",
       download3: "Diccionario de datos (106 columnas)",
+      afOnly: "Las puntuaciones, bandas y la vista previa pertenecen al dataset atleta-día — una cohorte de fútbol americano. Selecciona American football arriba para explorarlo.",
       stats: ["Filas atleta-día", "Atletas", "Equipos", "Días cubiertos"],
       distTitle: "Distribución de disponibilidad (días puntuados)",
       range: "Rango",

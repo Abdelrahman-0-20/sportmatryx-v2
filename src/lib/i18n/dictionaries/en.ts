@@ -181,6 +181,7 @@ export const en = {
       download: "Download athlete-day dataset",
       download2: "Download sessions dataset",
       download3: "Data dictionary (106 columns)",
+      afOnly: "Scores, bands and the preview belong to the athlete-day dataset — an American football cohort. Select American football above to explore it.",
       stats: ["Athlete-day rows", "Athletes", "Teams", "Days covered"],
       distTitle: "Readiness distribution (scored days)",
       range: "Range",

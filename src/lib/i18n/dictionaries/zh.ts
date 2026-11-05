@@ -183,6 +183,7 @@ export const zh: Dict = {
       download: "下载运动员-日数据集",
       download2: "下载训练数据集",
       download3: "数据字典（106列）",
+      afOnly: "分数、等级与预览属于运动员-日数据集 —— 一个美式足球群体。在上方选择 American football 即可查看。",
       stats: ["运动员-日行数", "运动员", "球队", "覆盖天数"],
       distTitle: "状态分布（已计分日）",
       range: "区间",

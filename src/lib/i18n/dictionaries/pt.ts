@@ -183,6 +183,7 @@ export const pt: Dict = {
       download: "Baixar dataset atleta-dia",
       download2: "Baixar dataset de sessões",
       download3: "Dicionário de dados (106 colunas)",
+      afOnly: "Pontuações, bandas e prévia pertencem ao dataset atleta-dia — uma coorte de futebol americano. Selecione American football acima para explorá-lo.",
       stats: ["Linhas atleta-dia", "Atletas", "Times", "Dias cobertos"],
       distTitle: "Distribuição de prontidão (dias pontuados)",
       range: "Intervalo",
