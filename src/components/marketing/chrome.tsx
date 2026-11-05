@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/motion";
 import { BackToTop } from "@/components/marketing/back-to-top";
-import { NewsletterForm } from "@/components/marketing/newsletter-form";
 import { LanguageSwitcher } from "@/components/marketing/language-switcher";
 import { getDict, getLocale } from "@/lib/i18n/server";
 
@@ -143,11 +142,6 @@ export async function MarketingFooter() {
                     <span className="text-accent">Sportmetryx</span> Football
                   </div>
                   <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{f.tagline}</p>
-                  <div className="max-w-sm">
-                    <NewsletterForm
-                      labels={{ title: f.newsTitle, ph: f.newsPh, submit: f.newsSubmit, success: f.newsSuccess }}
-                    />
-                  </div>
                 </div>
               </div>
               <div className="flex shrink-0 flex-wrap gap-3">
