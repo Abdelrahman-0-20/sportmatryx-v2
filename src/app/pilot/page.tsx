@@ -31,7 +31,8 @@ export default async function PilotPage() {
         <p className="lede mt-5 max-w-2xl">{t.lede}</p>
       </section>
 
-      {/* Live waitlist counter + cohort size — real database social proof */}
+      {/* Live waitlist counter + cohort size — real database social proof (hidden at zero) */}
+      {waitlistCount > 0 ? (
       <section className="mt-8 border-y border-edge/70 bg-panel-2/50" aria-label="Waitlist status">
         <div className="mx-auto grid max-w-7xl grid-cols-1 px-6 sm:grid-cols-2 md:px-10">
           <div className="stat-cell py-6 md:py-7">
@@ -46,6 +47,7 @@ export default async function PilotPage() {
           </div>
         </div>
       </section>
+      ) : null}
 
       <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="What the pilot includes">
         <Reveal>
@@ -93,6 +95,9 @@ export default async function PilotPage() {
               </div>
               <div className="display-heading mt-3 text-3xl">{t.costValue}</div>
               <p className="mt-3 text-sm leading-relaxed text-muted">{t.costBody}</p>
+              <p className="mt-4 rounded-lg border border-ready/40 bg-ready/10 px-3 py-2.5 text-xs font-semibold text-ready">
+                {t.termsLine}
+              </p>
               <p className="mt-4 text-xs text-muted">
                 {t.costTail}{" "}
                 <Link href="/guest" className="text-accent underline-offset-2 hover:underline">

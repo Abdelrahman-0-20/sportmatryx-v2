@@ -106,10 +106,10 @@ function OverviewScreen() {
 function BoardScreen() {
   const rows: Array<[name: string, pos: string, score: string, band: string, bandCls: string]> = [
     ["Amari Osei", "TRENCH", "91", "READY", "bg-ready/15 text-ready"],
-    ["Cinder_01", "SKILL", "84", "READY", "bg-ready/15 text-ready"],
-    ["Nova_07", "LB_TE", "61", "MONITOR", "bg-monitor/15 text-monitor"],
-    ["Rook_12", "QB", "42", "COMPROMISED", "bg-compromised/15 text-compromised"],
-    ["Vale_03", "ST", "—", "WITHHELD", "bg-withheld/15 text-withheld"],
+    ["Marcus Reid", "SKILL", "84", "READY", "bg-ready/15 text-ready"],
+    ["Luca Bennett", "LB_TE", "61", "MONITOR", "bg-monitor/15 text-monitor"],
+    ["Diego Alvarez", "QB", "42", "COMPROMISED", "bg-compromised/15 text-compromised"],
+    ["Samir Haddad", "ST", "—", "WITHHELD", "bg-withheld/15 text-withheld"],
   ];
   return (
     <div className="flex h-full flex-col justify-center gap-2.5 p-6 sm:p-10">

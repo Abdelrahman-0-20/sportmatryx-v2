@@ -118,6 +118,7 @@ export async function MarketingFooter() {
       title: f.trust,
       links: [
         ["/proof", dict.nav.proof],
+        ["/methodology", dict.methodology.eyebrow],
         ["/changelog", f.changelog],
         ["/investors", dict.investors.eyebrow],
         ["/privacy", f.privacy],
@@ -192,6 +193,9 @@ export async function MarketingFooter() {
               <BackToTop />
             </div>
           </div>
+          <p className="px-6 pb-4 text-center text-[11px] leading-relaxed text-muted md:px-10">
+            {f.medical}
+          </p>
         </div>
       </div>
     </footer>

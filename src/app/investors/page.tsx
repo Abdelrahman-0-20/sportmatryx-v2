@@ -34,6 +34,14 @@ export default async function InvestorsPage() {
         </div>
       </section>
 
+      {/* Honest stage banner */}
+      <section className="mx-auto max-w-7xl px-6 pt-8 md:px-10" aria-label="Stage">
+        <div className="rounded-2xl border border-prototype/50 bg-prototype/10 px-6 py-5">
+          <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-prototype">{t.stageTag}</div>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{t.stageNote}</p>
+        </div>
+      </section>
+
       {/* Traction band */}
       <section className="border-y border-edge/70 bg-panel-2/50" aria-label="Traction">
         <div className="mx-auto grid max-w-7xl grid-cols-2 px-6 md:grid-cols-4 md:px-10">

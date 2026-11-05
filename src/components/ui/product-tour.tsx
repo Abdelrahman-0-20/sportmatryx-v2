@@ -91,9 +91,9 @@ function ValidateMock() {
 function DecideMock() {
   const rows: Array<[string, string, string, string]> = [
     ["Amari Osei", "TRENCH", "91", "READY"],
-    ["Cinder_01", "SKILL", "84", "READY"],
-    ["Nova_07", "LB_TE", "61", "MONITOR"],
-    ["Rook_12", "QB", "42", "COMPROMISED"],
+    ["Marcus Reid", "SKILL", "84", "READY"],
+    ["Luca Bennett", "LB_TE", "61", "MONITOR"],
+    ["Diego Alvarez", "QB", "42", "COMPROMISED"],
   ];
   const bandColor: Record<string, string> = {
     READY: "bg-ready/15 text-ready",

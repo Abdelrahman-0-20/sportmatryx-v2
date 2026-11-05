@@ -8,6 +8,7 @@ const ROUTES: Array<[path: string, priority: number]> = [
   ["/solutions", 0.9],
   ["/tactics", 0.8],
   ["/proof", 0.8],
+  ["/methodology", 0.8],
   ["/demo", 0.9],
   ["/marketplace", 0.8],
   ["/guest", 0.7],

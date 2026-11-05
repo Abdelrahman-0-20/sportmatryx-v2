@@ -117,10 +117,10 @@ const TABLE_ROWS: Array<{
   cells: Array<[value: string, tier: 0 | 1 | 2 | 3]>;
 }> = [
   { name: "Amari Osei", cells: [["2,372", 0], [".22", 1], [".12", 2], ["33.4", 1], ["18", 3]] },
-  { name: "Cinder_01", cells: [["2,899", 0], [".22", 1], [".10", 3], ["31.8", 3], ["15", 2]] },
-  { name: "Nova_07", cells: [["1,224", 0], [".33", 2], [".12", 2], ["34.1", 1], ["7", 3]] },
-  { name: "Rook_12", cells: [["4,869", 0], [".39", 2], [".11", 3], ["30.2", 3], ["10", 3]] },
-  { name: "Vale_03", cells: [["1,813", 0], [".17", 3], [".06", 3], ["32.6", 1], ["40", 1]] },
+  { name: "Marcus Reid", cells: [["2,899", 0], [".22", 1], [".10", 3], ["31.8", 3], ["15", 2]] },
+  { name: "Luca Bennett", cells: [["1,224", 0], [".33", 2], [".12", 2], ["34.1", 1], ["7", 3]] },
+  { name: "Diego Alvarez", cells: [["4,869", 0], [".39", 2], [".11", 3], ["30.2", 3], ["10", 3]] },
+  { name: "Samir Haddad", cells: [["1,813", 0], [".17", 3], [".06", 3], ["32.6", 1], ["40", 1]] },
 ];
 
 const TIER_CLS = ["", "bg-ready/15 text-ready", "bg-accent/15 text-accent", "bg-monitor/15 text-monitor"];
@@ -130,7 +130,7 @@ function ScoutingTable({ t }: { t: Labels }) {
   return (
     <Panel title={t.scouting} className="md:col-span-2">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+        <table className="w-full min-w-[560px] text-left text-xs">
           <thead>
             <tr className="text-[10px] uppercase tracking-wider text-muted">
               {headers.map((h, i) => (
@@ -238,8 +238,8 @@ function SlidersPanel({ t }: { t: Labels }) {
 
 const SPEED_BOARD: Array<[rank: number, name: string, value: string]> = [
   [1, "Amari Osei", "33.4"],
-  [2, "Vale_03", "32.6"],
-  [3, "Cinder_01", "31.8"],
+  [2, "Samir Haddad", "32.6"],
+  [3, "Marcus Reid", "31.8"],
 ];
 
 function Leaderboard({ t }: { t: Labels }) {

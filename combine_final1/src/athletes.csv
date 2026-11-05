@@ -1,0 +1,51 @@
+athlete_id,alias,sport,level,age,sex,height_cm,weight_kg,body_fat_pct,primary_position,team_id,home_city,training_age_years,devices_used,resting_hr_bpm,vo2max_estimated_ml_kg_min,fitness_level_0_1,trend_slope_pct_per_month,metabolic_included,is_synthetic
+ATH-001,Marcus Reid,American football,high_school,18,M,186.3,92.5,9.3,OL,AAFC,"Seattle, WA",14.0,FaceBit V.1; chest strap; smartwatch,57,49.0,0.37,-0.0,True,True
+ATH-002,Luca Bennett,track and field,college,19,M,183.6,75.4,19.6,throws,TMFC,"Miami, FL",3.7,FaceBit V.1; chest strap; smartwatch,56,54.1,0.692,-0.52,True,True
+ATH-003,Diego Alvarez,rugby,professional,20,F,167.2,62.4,13.2,flanker,RRFC,"Seattle, WA",7.1,FaceBit V.1; chest strap; smartwatch,56,51.3,0.678,0.65,True,True
+ATH-004,Samir Haddad,basketball,high_school,21,M,182.5,91.8,10.0,PF,BRFC,"Miami, FL",7.4,FaceBit V.1; chest strap; smartwatch,52,50.9,0.617,-0.59,True,True
+ATH-005,Jonas Weber,soccer,college,20,M,169.2,81.0,16.9,DF,SAFC,"Flagstaff, AZ",6.7,FaceBit V.1; chest strap; smartwatch,50,46.6,0.519,-0.7,True,True
+ATH-006,Amir Okafor,cycling,professional,19,M,182.0,90.2,15.8,climber,CAFC,"Chicago, IL",2.3,FaceBit V.1; chest strap; smartwatch,50,53.5,0.65,-0.51,True,True
+ATH-007,Tomas Novak,baseball,high_school,22,M,184.1,90.0,13.3,catcher,BNFC,"Los Angeles, CA",13.7,FaceBit V.1; chest strap; smartwatch,49,55.6,0.842,0.94,True,True
+ATH-008,Rafael Costa,volleyball,college,22,F,175.2,58.6,11.8,outside_hitter,VMFC,"Seattle, WA",3.5,FaceBit V.1; chest strap; smartwatch,52,43.9,0.259,0.5,True,True
+ATH-009,Kenji Watanabe,American football,professional,21,F,181.2,64.8,9.2,LB,ANFC,"Denver, CO",9.2,FaceBit V.1; chest strap; smartwatch,54,43.9,0.373,0.25,True,True
+ATH-010,Oliver Grant,track and field,high_school,21,M,185.4,82.0,21.4,middle,TAFC,"Flagstaff, AZ",9.0,FaceBit V.1; chest strap; smartwatch,49,44.1,0.248,-0.2,True,True
+ATH-011,Malik Diallo,rugby,college,22,M,180.0,93.6,20.5,prop,RRFC,"Phoenix, AZ",11.2,FaceBit V.1; chest strap; smartwatch,53,59.5,0.864,0.85,True,True
+ATH-012,Andrei Popescu,basketball,professional,22,M,174.2,77.5,13.2,SG,BSFC,"Seattle, WA",4.6,FaceBit V.1; chest strap; smartwatch,52,52.5,0.609,-0.72,True,True
+ATH-013,Felix Andersen,soccer,high_school,22,F,171.2,81.2,20.5,DF,SSFC,"Atlanta, GA",2.3,FaceBit V.1; chest strap; smartwatch,63,45.8,0.334,0.89,True,True
+ATH-014,Carlos Mendoza,cycling,college,23,M,192.6,99.5,10.1,all_round,CRFC,"Flagstaff, AZ",8.0,FaceBit V.1; chest strap; smartwatch,53,54.9,0.731,-0.39,True,True
+ATH-015,Youssef Benali,baseball,professional,22,F,155.6,66.6,17.7,pitcher,BMFC,"Boulder, CO",2.7,FaceBit V.1; chest strap; smartwatch,58,45.4,0.393,-0.26,True,True
+ATH-016,Liam O'Connor,volleyball,high_school,23,M,184.8,96.0,12.0,setter,VMFC,"Houston, TX",6.9,FaceBit V.1; chest strap; smartwatch,66,51.3,0.393,0.88,False,True
+ATH-017,Nikola Jovanovic,American football,college,25,M,176.9,86.8,9.5,LB,ASFC,"Flagstaff, AZ",9.4,FaceBit V.1; chest strap; smartwatch,50,55.5,0.895,0.37,False,True
+ATH-018,Pedro Silva,track and field,professional,25,F,159.7,86.2,11.3,jumps,TAFC,"Houston, TX",12.5,FaceBit V.1; chest strap; smartwatch,55,39.4,0.093,0.86,False,True
+ATH-019,Ethan Brooks,rugby,high_school,25,M,180.1,71.6,8.3,fly_half,RMFC,"Boulder, CO",5.5,FaceBit V.1; chest strap; smartwatch,55,51.9,0.632,0.73,False,True
+ATH-020,Hany Farouk,basketball,college,25,M,180.3,102.8,16.0,PG,BAFC,"Flagstaff, AZ",2.4,FaceBit V.1; chest strap; smartwatch,57,57.2,0.822,0.96,False,True
+ATH-021,Dmitri Volkov,soccer,professional,24,F,170.4,64.4,9.9,FW,SAFC,"Denver, CO",4.7,FaceBit V.1; chest strap; smartwatch,56,40.1,0.293,-0.05,False,True
+ATH-022,Santi Romero,cycling,high_school,26,M,170.3,91.8,12.6,all_round,CCFC,"Atlanta, GA",5.6,FaceBit V.1; chest strap; smartwatch,56,56.0,0.62,0.37,False,True
+ATH-023,Noah Fischer,baseball,college,25,M,181.5,77.7,18.3,infielder,BNFC,"Denver, CO",2.2,FaceBit V.1; chest strap; smartwatch,50,46.0,0.373,0.93,False,True
+ATH-024,Kwame Mensah,volleyball,professional,27,F,180.6,72.7,19.1,middle_blocker,VRFC,"Houston, TX",8.9,FaceBit V.1; chest strap; smartwatch,57,46.5,0.648,0.14,False,True
+ATH-025,Luka Horvat,American football,high_school,28,F,181.3,48.4,21.0,LB,AAFC,"Flagstaff, AZ",10.4,FaceBit V.1; chest strap; smartwatch,60,47.8,0.418,0.57,False,True
+ATH-026,Emil Larsen,track and field,college,28,M,175.0,82.7,10.2,jumps,TRFC,"Seattle, WA",14.1,FaceBit V.1; chest strap; smartwatch,54,58.0,0.813,-0.12,False,True
+ATH-027,Tariq Rahman,rugby,professional,27,F,175.9,72.0,19.9,fly_half,RNFC,"Chicago, IL",12.6,FaceBit V.1; chest strap; smartwatch,52,40.3,0.285,-0.0,False,True
+ATH-028,Joao Ferreira,basketball,high_school,28,M,184.7,86.5,9.5,PG,BMFC,"Boulder, CO",1.4,FaceBit V.1; chest strap; smartwatch,52,51.2,0.619,0.6,False,True
+ATH-029,Viktor Petrov,soccer,college,29,F,173.6,64.6,8.1,DF,SCFC,"Phoenix, AZ",12.2,FaceBit V.1; chest strap; smartwatch,51,57.9,0.881,0.46,False,True
+ATH-030,Marco Bianchi,cycling,professional,27,F,169.5,79.2,16.8,sprinter,CNFC,"Miami, FL",14.7,FaceBit V.1; chest strap; smartwatch,48,55.4,0.746,0.31,False,True
+ATH-031,Owen Callahan,baseball,high_school,28,F,157.2,75.4,9.3,catcher,BSFC,"Boulder, CO",3.0,FaceBit V.1; chest strap; smartwatch,60,50.5,0.606,0.24,False,True
+ATH-032,Rami Khouri,volleyball,college,29,F,167.7,77.0,10.1,setter,VCFC,"Phoenix, AZ",5.3,FaceBit V.1; chest strap; smartwatch,54,44.5,0.259,0.34,False,True
+ATH-033,Stefan Muller,American football,professional,30,M,169.9,65.3,12.4,QB,ASFC,"Los Angeles, CA",10.8,FaceBit V.1; chest strap; smartwatch,57,43.2,0.217,-0.23,False,True
+ATH-034,Bruno Santos,track and field,high_school,30,F,177.4,56.7,16.8,throws,TCFC,"Seattle, WA",8.3,FaceBit V.1; chest strap; smartwatch,51,53.8,0.669,0.71,False,True
+ATH-035,Daniel Kim,rugby,college,30,M,185.7,93.8,8.8,prop,RMFC,"Flagstaff, AZ",12.6,FaceBit V.1; chest strap; smartwatch,49,54.1,0.577,-0.52,False,True
+ATH-036,Isaac Thompson,basketball,professional,29,F,159.5,40.3,21.4,PF,BMFC,"Los Angeles, CA",10.0,FaceBit V.1; chest strap; smartwatch,52,59.4,0.885,0.15,False,True
+ATH-037,Omar Sylla,soccer,high_school,31,M,187.3,98.7,15.8,FW,SAFC,"Los Angeles, CA",11.6,FaceBit V.1; chest strap; smartwatch,57,51.5,0.436,-0.53,False,True
+ATH-038,Pavel Novotny,cycling,college,30,M,177.9,88.1,11.3,climber,CRFC,"Phoenix, AZ",12.8,FaceBit V.1; chest strap; smartwatch,57,47.9,0.472,0.41,False,True
+ATH-039,Gabriel Rocha,baseball,professional,32,M,173.9,90.4,12.7,catcher,BSFC,"Atlanta, GA",9.2,FaceBit V.1; chest strap; smartwatch,51,47.5,0.572,0.1,False,True
+ATH-040,Hugo Martins,volleyball,high_school,33,M,174.8,83.4,20.8,setter,VSFC,"Flagstaff, AZ",7.3,FaceBit V.1; chest strap; smartwatch,57,43.6,0.418,-0.79,False,True
+ATH-041,Idris Bello,American football,college,32,F,171.3,53.9,16.7,RB,ACFC,"Denver, CO",13.1,FaceBit V.1; chest strap; smartwatch,57,57.9,0.677,-0.01,False,True
+ATH-042,Jan Kowalski,track and field,professional,33,F,171.6,81.5,21.8,throws,TCFC,"Atlanta, GA",14.8,FaceBit V.1; chest strap; smartwatch,53,53.1,0.89,-0.06,False,True
+ATH-043,Kevin Delaney,rugby,high_school,32,M,176.6,78.3,20.9,flanker,RNFC,"Flagstaff, AZ",11.0,FaceBit V.1; chest strap; smartwatch,54,56.2,0.921,0.53,False,True
+ATH-044,Mateo Rios,basketball,college,34,F,171.7,61.5,16.7,PG,BMFC,"Atlanta, GA",13.5,FaceBit V.1; chest strap; smartwatch,61,45.0,0.437,0.74,False,True
+ATH-045,Nikos Papadopoulos,soccer,professional,33,F,167.2,49.6,13.6,MF,SAFC,"Atlanta, GA",12.3,FaceBit V.1; chest strap; smartwatch,62,54.8,0.746,-0.07,False,True
+ATH-046,Oscar Lindgren,cycling,high_school,35,M,185.3,68.4,13.5,climber,CAFC,"Phoenix, AZ",1.2,FaceBit V.1; chest strap; smartwatch,52,50.1,0.531,-0.18,False,True
+ATH-047,Quentin Dubois,baseball,college,34,F,169.9,58.9,12.0,catcher,BSFC,"Flagstaff, AZ",9.3,FaceBit V.1; chest strap; smartwatch,54,55.2,0.861,-0.37,False,True
+ATH-048,Ruben Castillo,volleyball,professional,35,M,183.4,105.4,15.9,libero,VSFC,"Denver, CO",12.4,FaceBit V.1; chest strap; smartwatch,54,47.6,0.485,-0.47,False,True
+ATH-049,Samuel Adeyemi,American football,high_school,34,M,177.8,80.2,15.2,RB,ANFC,"Chicago, IL",1.9,FaceBit V.1; chest strap; smartwatch,48,58.1,0.937,-0.24,False,True
+ATH-050,Tomasz Zielinski,track and field,college,34,M,173.8,83.5,8.8,middle,TNFC,"Chicago, IL",2.6,FaceBit V.1; chest strap; smartwatch,53,44.4,0.291,0.11,False,True

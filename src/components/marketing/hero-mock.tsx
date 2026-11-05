@@ -6,9 +6,9 @@
 
 const ROWS: Array<[initials: string, name: string, pos: string, score: string, band: string, bars: number[]]> = [
   ["AO", "Amari Osei", "TRENCH", "91", "READY", [62, 68, 71, 74, 83, 88, 91]],
-  ["C1", "Cinder_01", "SKILL", "84", "READY", [70, 66, 72, 78, 80, 82, 84]],
-  ["N7", "Nova_07", "LB_TE", "61", "MONITOR", [77, 74, 70, 66, 64, 62, 61]],
-  ["R12", "Rook_12", "QB", "42", "COMPROMISED", [74, 68, 61, 55, 49, 45, 42]],
+  ["C1", "Marcus Reid", "SKILL", "84", "READY", [70, 66, 72, 78, 80, 82, 84]],
+  ["N7", "Luca Bennett", "LB_TE", "61", "MONITOR", [77, 74, 70, 66, 64, 62, 61]],
+  ["R12", "Diego Alvarez", "QB", "42", "COMPROMISED", [74, 68, 61, 55, 49, 45, 42]],
 ];
 
 const BAND_CLASS: Record<string, string> = {

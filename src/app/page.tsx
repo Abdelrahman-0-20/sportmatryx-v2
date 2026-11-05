@@ -23,6 +23,7 @@ import { Rich } from "@/lib/i18n/rich";
  */
 
 const CSV_PUBLIC = "/datasets/Sportmetryx_Combined_Wide_Athlete_Day.csv";
+const SESSIONS_PUBLIC = "/datasets/final1.csv";
 
 function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
@@ -126,11 +127,13 @@ export default async function HomePage() {
               <Link href="/guest" className="btn-ghost">
                 {t.hero.btnGuest}
               </Link>
-              <Link href="/platform" className="btn-ghost">
-                {t.hero.btnPlatform}
-              </Link>
             </div>
-            <p className="hero-in hero-in-3 mt-5 text-xs text-muted">{t.hero.guestNote}</p>
+            <p className="hero-in hero-in-3 mt-5 text-xs text-muted">
+              {t.hero.guestNote}{" "}
+              <Link href="/platform" className="font-semibold text-accent underline-offset-2 hover:underline">
+                {t.hero.btnPlatform} →
+              </Link>
+            </p>
           </div>
 
           <div className="hidden lg:block">
@@ -219,6 +222,23 @@ export default async function HomePage() {
                 </dl>
               </div>
             </div>
+
+            <div className="mt-10 rounded-2xl border border-accent/30 bg-accent/5 p-6 md:p-7">
+              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
+                {t.consent.title}
+              </div>
+              <ul className="mt-4 space-y-2.5">
+                {[t.consent.b1, t.consent.b2, t.consent.b3].map((line) => (
+                  <li key={line} className="flex gap-2.5 text-sm leading-relaxed text-muted">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/privacy" className="mt-4 inline-block text-xs font-bold text-accent underline-offset-2 hover:underline">
+                {t.consent.link} →
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -301,6 +321,9 @@ export default async function HomePage() {
             <a href={CSV_PUBLIC} download className="btn-primary">
               {t.data.download}
             </a>
+            <a href={SESSIONS_PUBLIC} download="Sportmetryx_Combined_Sessions.csv" className="btn-ghost">
+              {t.data.download2}
+            </a>
           </div>
         </div>
 
@@ -349,7 +372,7 @@ export default async function HomePage() {
               </div>
 
               <div className="mt-4 overflow-x-auto rounded-2xl border border-edge/70 bg-panel/70">
-                <table className="w-full text-left text-sm">
+                <table className="w-full min-w-[640px] text-left text-sm">
                   <thead>
                     <tr className="border-b border-edge/70 text-[11px] uppercase tracking-wider text-muted">
                       {t.data.headers.map((h) => (

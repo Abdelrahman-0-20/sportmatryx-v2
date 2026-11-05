@@ -42,6 +42,29 @@ export default async function ProofPage() {
         </Reveal>
       </section>
 
+      {/* Validation result — real numbers from the reference dataset */}
+      <section className="mx-auto max-w-7xl px-6 pb-4 md:px-10" aria-label="Validation result">
+        <Reveal>
+          <div className="rounded-2xl border border-ready/40 bg-ready/5 p-6 md:p-8">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h2 className="h-sec text-2xl">{t.validationTitle}</h2>
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-ready">
+                Reproducible from the public dataset
+              </span>
+            </div>
+            <p className="mt-2 max-w-3xl text-sm text-muted">{t.validationLede}</p>
+            <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {t.validationStats.map((s) => (
+                <div key={s.l}>
+                  <div className="stat-num">{s.v}</div>
+                  <div className="stat-label">{s.l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
       {/* Architecture flow */}
       <section className="mx-auto max-w-7xl px-6 py-12 md:px-10" aria-label="Architecture">
         <Reveal>
