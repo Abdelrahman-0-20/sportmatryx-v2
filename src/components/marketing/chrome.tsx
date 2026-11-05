@@ -102,6 +102,7 @@ export async function MarketingFooter() {
         ["/tactics", dict.nav.tactics],
         ["/marketplace", dict.nav.marketplace],
         ["/roster", dict.header.athletes],
+        ["/data", f.data],
       ],
     },
     {

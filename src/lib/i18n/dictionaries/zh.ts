@@ -31,6 +31,7 @@ export const zh: Dict = {
     terms: "条款",
     pilotCta: "加入试点",
     medical: "非医疗器械。面向表现团队的决策支持 —— 临床、选拔与归队决定仍由合格人员负责。",
+    data: "数据",
     chip: "在线平台",
     disclaimer: "受同意治理 · 可解释 · 效度验证",
     copyright: "© 2026 Healthmetryx · Sportmetryx",
@@ -54,6 +55,11 @@ export const zh: Dict = {
       "端到端建模训练",
       "在线部署",
     ],
+    problem: {
+      eyebrow: "问题所在",
+      h2: "每天二十个可用性判断 —— 却建立在零散数据上。",
+      body: "教练、医疗与表现团队在电子表格和仪表盘之间来回拼凑 GPS 导出、健康表单和负荷报告。一次错误判断可能输掉一场比赛 —— 或一名球员的整个赛季。Sportmetryx 把这团混乱变成每位运动员每天一个站得住脚的决策。",
+    },
     consent: {
       title: "受同意治理，落到实处",
       b1: "谁能看到什么：按角色访问 —— 每条记录只对其运动员同意的角色可见。",

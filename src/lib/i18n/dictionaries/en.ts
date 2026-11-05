@@ -29,6 +29,7 @@ export const en = {
     terms: "Terms",
     pilotCta: "Join the pilot",
     medical: "Not a medical device. Decision support for performance staff — clinical, selection and clearance decisions remain with qualified medical staff.",
+    data: "Data",
     chip: "Live platform",
     disclaimer: "Consent-governed · explainable · validity-gated",
     copyright: "© 2026 Healthmetryx · Sportmetryx",
@@ -52,6 +53,11 @@ export const en = {
       "sessions modeled end-to-end",
       "live deployments",
     ],
+    problem: {
+      eyebrow: "The problem",
+      h2: "Twenty availability decisions a day — made on scattered data.",
+      body: "Coaches, medical staff and performance teams juggle GPS exports, wellness forms and load reports across spreadsheets and dashboards. One wrong call costs a match — or a player's season. Sportmetryx turns that chaos into one defensible decision per athlete, per day.",
+    },
     consent: {
       title: "Consent-governed, in practice",
       b1: "Who sees what: role-based access — every record is visible only to the roles the athlete\u2019s consent allows.",

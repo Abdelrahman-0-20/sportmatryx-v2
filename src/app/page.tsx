@@ -1,19 +1,9 @@
 import Link from "next/link";
-import fs from "node:fs";
-import path from "node:path";
-import { Tag } from "@/components/ui/primitives";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
-import { DemoVideo } from "@/components/marketing/demo-video";
 import { HeroBackground } from "@/components/marketing/hero-background";
-import { HeroMock } from "@/components/marketing/hero-mock";
 import { BootScreen } from "@/components/ui/boot-screen";
 import { CountUp, Reveal } from "@/components/ui/motion";
 import { ProductTour } from "@/components/ui/product-tour";
-import { SportsMarquee } from "@/components/ui/sports-marquee";
-import { TelemetryTicker } from "@/components/ui/telemetry-ticker";
-import { TiltCard } from "@/components/ui/tilt-card";
-import { DatasetSection } from "@/components/marketing/dataset-section";
-import { sportStats } from "@/lib/sport-stats";
 import { getDict } from "@/lib/i18n/server";
 import { Rich } from "@/lib/i18n/rich";
 
@@ -24,72 +14,11 @@ import { Rich } from "@/lib/i18n/rich";
  * demo CTA.
  */
 
-const CSV_PUBLIC = "/datasets/Sportmetryx_Combined_Wide_Athlete_Day.csv";
-const SESSIONS_PUBLIC = "/datasets/final1.csv";
-
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [], field = "", inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i]!;
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++; } else inQuotes = false;
-      } else field += c;
-    } else if (c === '"') inQuotes = true;
-    else if (c === ",") { row.push(field); field = ""; }
-    else if (c === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
-    else if (c !== "\r") field += c;
-  }
-  if (field || row.length) { row.push(field); rows.push(row); }
-  return rows;
-}
-
-function datasetStats() {
-  try {
-    const table = parseCsv(
-      fs.readFileSync(path.join(process.cwd(), "public", "datasets", "Sportmetryx_Combined_Wide_Athlete_Day.csv"), "utf8"),
-    );
-    const head = table[0]!.map((h, i) => [h, i] as const);
-    const col = (name: string) => head.find(([h]) => h === name)?.[1] ?? -1;
-    const cAthlete = col("athlete_name"), cDate = col("date"), cTeam = col("team"),
-      cPos = col("position"), cScore = col("score"), cBand = col("score_band");
-    const rows = table.slice(1).filter((r) => r[cAthlete]);
-    const athletes = new Set(rows.map((r) => r[cAthlete]));
-    const teams = new Set(rows.map((r) => r[cTeam]));
-    const positions = new Set(rows.map((r) => r[cPos]));
-    const dates = rows.map((r) => r[cDate]).sort();
-    const bands: Record<string, number> = {};
-    for (const r of rows) {
-      const b = r[cBand];
-      if (b) bands[b] = (bands[b] ?? 0) + 1;
-    }
-    const scored = rows.filter((r) => r[cScore] && r[cBand] && r[cBand] !== "WITHHELD");
-    const preview = (scored.length >= 6 ? scored : rows).slice(0, 6).map((r) => ({
-      athlete: r[cAthlete], date: r[cDate], team: r[cTeam], position: r[cPos],
-      score: r[cScore], band: r[cBand],
-    }));
-    return { ok: true as const, rows: rows.length, athletes: athletes.size, teams: [...teams],
-      positions: [...positions], range: [dates[0], dates[dates.length - 1]] as const, bands, preview };
-  } catch {
-    return { ok: false as const, rows: 0, athletes: 0, teams: [] as string[], positions: [] as string[],
-      range: ["-", "-"] as const, bands: {}, preview: [] };
-  }
-}
-
-const stats = datasetStats();
-
 const PROOF_VALUES = [8, 158747, 1431, 2];
 const SOL_IDS = ["readiness", "medical", "coaching", "data"];
 const GLOBE_RINGS = [0, 30, 60, 90, 120, 150];
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ sport?: string }>;
-}) {
-  const sp = await searchParams;
-  const bySport = sportStats(sp?.sport);
+export default async function HomePage() {
   const dict = await getDict();
   const t = dict.home;
 
@@ -141,18 +70,17 @@ export default async function HomePage({
             </p>
           </div>
 
-          <div className="hidden lg:block">
-            <HeroMock />
-          </div>
         </div>
+        </div>
+      </section>
 
-        <div className="mt-12 xl:mt-14">
-          <TelemetryTicker />
-        </div>
-        <div className="mt-6 lg:hidden">
-          <HeroMock />
-        </div>
-        </div>
+      {/* The problem */}
+      <section className="mx-auto max-w-7xl px-6 pt-10 md:px-10" aria-label="The problem">
+        <Reveal>
+          <p className="eyebrow">{t.problem.eyebrow}</p>
+          <h2 className="h-sec mt-3 max-w-4xl">{t.problem.h2}</h2>
+          <p className="lede mt-4 max-w-3xl">{t.problem.body}</p>
+        </Reveal>
       </section>
 
       {/* Proof strip — hairline stats, no boxes */}
@@ -248,74 +176,6 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Who it is for */}
-      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Who uses Sportmetryx">
-        <Reveal>
-          <p className="eyebrow">{t.who.eyebrow}</p>
-          <h2 className="h-sec mt-3">{t.who.h2}</h2>
-          <ul className="stagger mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {t.who.cards.map((card) => (
-              <li key={card.title} className="surface rounded-2xl p-6">
-                <div className="text-base font-semibold text-ink">{card.title}</div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{card.line}</p>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-      </section>
-
-      {/* What it is used for — 3D tilt surfaces */}
-      <section className="section-y border-t border-edge/50 bg-panel-2/30" aria-label="What Sportmetryx is used for">
-        <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <Reveal>
-            <p className="eyebrow">{t.usecases.eyebrow}</p>
-            <h2 className="h-sec mt-3">{t.usecases.h2}</h2>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {t.usecases.cards.map((card) => (
-                <TiltCard key={card.title} className="surface rounded-2xl p-6">
-                  <div className="text-lg font-semibold text-ink">{card.title}</div>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{card.body}</p>
-                </TiltCard>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* What only Sportmetryx does */}
-      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="What makes Sportmetryx unique">
-        <Reveal>
-          <p className="eyebrow">{t.unique.eyebrow}</p>
-          <h2 className="h-sec mt-3">{t.unique.h2}</h2>
-          <p className="lede mt-3 max-w-2xl">{t.unique.lede}</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {t.unique.cards.map((card, i) => (
-              <div key={card.title} className="surface rounded-2xl p-6">
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="mt-2 text-base font-semibold text-ink">{card.title}</div>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{card.body}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
-      {/* Demo video */}
-      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Product tour video">
-        <Reveal>
-          <p className="eyebrow">{t.watch.eyebrow}</p>
-          <h2 className="h-sec mt-3">{t.watch.h2}</h2>
-          <p className="lede mt-3 max-w-2xl">
-            <Rich text={t.watch.lede} />
-          </p>
-          <div className="mt-8 max-w-4xl">
-            <DemoVideo />
-          </div>
-        </Reveal>
-      </section>
-
       {/* How it works — interactive product tour */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="How Sportmetryx works">
         <Reveal>
@@ -325,64 +185,6 @@ export default async function HomePage({
           <div className="mt-8">
             <ProductTour />
           </div>
-        </Reveal>
-      </section>
-
-      {/* Multisport pipeline marquee */}
-      <div className="border-y border-edge/70 bg-panel-2/50 py-4">
-        <SportsMarquee items={t.sports} />
-      </div>
-
-      {/* Explore the demo dataset */}
-      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Combined athlete-day dataset">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow">{t.data.eyebrow}</p>
-            <h2 className="h-sec mt-3">{t.data.h2}</h2>
-            <p className="lede mt-3 max-w-2xl">{t.data.lede}</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Tag label="DATASET" />
-            <a href={CSV_PUBLIC} download className="btn-primary">
-              {t.data.download}
-            </a>
-            <a href={SESSIONS_PUBLIC} download="Sportmetryx_Combined_Sessions.csv" className="btn-ghost">
-              {t.data.download2}
-            </a>
-          </div>
-          <a
-            href="/datasets/Sportmetryx_Wide_Data_Dictionary.csv"
-            download
-            className="w-full text-xs font-semibold text-accent underline-offset-2 hover:underline sm:w-auto"
-          >
-            {t.data.download3} →
-          </a>
-        </div>
-
-        <DatasetSection
-          labels={t.data}
-          sportLabels={t.sportPanel}
-          initial={bySport}
-          athleteDay={stats}
-        />
-      </section>
-
-      {/* Tactics teaser */}
-      <section className="mx-auto max-w-7xl px-6 pb-6 md:px-10">
-        <Reveal>
-          <Link
-            href="/tactics"
-            className="cta-band group flex flex-col items-start gap-6 rounded-3xl px-8 py-12 md:flex-row md:items-center md:justify-between md:px-12"
-          >
-            <div>
-              <span className="eyebrow">{t.tactics.eyebrow}</span>
-              <span className="h-sec mt-3 block">{t.tactics.h2}</span>
-              <span className="lede mt-3 block max-w-xl">{t.tactics.lede}</span>
-            </div>
-            <span className="btn-primary shrink-0 transition-transform group-hover:translate-x-1">
-              {t.tactics.btn}
-            </span>
-          </Link>
         </Reveal>
       </section>
 

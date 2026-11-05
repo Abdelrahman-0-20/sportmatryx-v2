@@ -31,6 +31,7 @@ export const es: Dict = {
     terms: "Términos",
     pilotCta: "Únete al piloto",
     medical: "No es un dispositivo m\u00e9dico. Apoyo a decisiones para el personal de rendimiento \u2014 las decisiones cl\u00ednicas, de convocatoria y de alta siguen siendo del personal cualificado.",
+    data: "Datos",
     chip: "Plataforma en vivo",
     disclaimer: "Gobernado por consentimiento · explicable · validado",
     copyright: "© 2026 Healthmetryx · Sportmetryx",
@@ -54,6 +55,11 @@ export const es: Dict = {
       "sesiones modeladas de extremo a extremo",
       "despliegues en vivo",
     ],
+    problem: {
+      eyebrow: "El problema",
+      h2: "Veinte decisiones de disponibilidad al día — tomadas con datos dispersos.",
+      body: "Entrenadores, cuerpo médico y equipos de rendimiento mezclan exportaciones de GPS, formularios de bienestar e informes de carga entre hojas de cálculo y paneles. Una decisión equivocada cuesta un partido — o la temporada de un jugador. Sportmetryx convierte ese caos en una decisión defendible por atleta, por día.",
+    },
     consent: {
       title: "Consentimiento, en la práctica",
       b1: "Quién ve qué: acceso por roles — cada registro solo es visible para los roles que el consentimiento del atleta permite.",
