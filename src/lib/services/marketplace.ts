@@ -33,6 +33,9 @@ export interface MarketProduct {
   imageId?: string | null;
   // Seller display name (community listings only).
   sellerName?: string | null;
+  // Sport this item belongs to (community listings carry the seller's pick;
+  // platform datasets are multi-sport and leave it undefined).
+  sport?: string;
 }
 
 export interface CartItem {
@@ -132,6 +135,7 @@ async function queryProducts(): Promise<MarketProduct[]> {
     description: c.description,
     sourceLabel: "Community listing",
     sourceRef: c.id,
+    sport: c.sport,
     priceCents: Math.round(c.priceUsd * 100),
     currency: "USD",
     rowsEstimate: null,

@@ -46,6 +46,11 @@ export function ProductCard({ product, onAddToCart }: { product: MarketProduct; 
           </h3>
           <div className="mt-1.5 flex items-center gap-1.5">
             <Tag label={product.tag} />
+            {product.sport ? (
+              <span className="rounded-full border border-edge bg-panel-2 px-2 py-0.5 text-[10px] font-semibold text-muted">
+                {product.sport}
+              </span>
+            ) : null}
             {product.featured ? (
               <span className="rounded-full border border-accent/50 bg-accent/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
                 Best in demo

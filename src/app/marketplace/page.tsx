@@ -1,7 +1,7 @@
 import { AppShell } from "@/components/ui/app-shell";
 import { PageHero } from "@/components/ui/page-hero";
 import { MarketplaceListing } from "@/components/marketplace/listing";
-import { requireReadForGuest } from "@/lib/offline";
+import { isGuest, requireReadForGuest } from "@/lib/offline";
 import { listProducts, type MarketProduct } from "@/lib/services/marketplace";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +12,10 @@ export const dynamic = "force-dynamic";
  */
 export default async function MarketplacePage() {
   let products: MarketProduct[];
+  let guest = false;
   try {
     await requireReadForGuest("roster.read");
+    guest = await isGuest();
     products = await listProducts();
   } catch (e) {
     const { errorToResponse, UnauthorizedError } = await import("@/lib/auth/rbac");
@@ -41,7 +43,7 @@ export default async function MarketplacePage() {
         </p>
       </PageHero>
 
-      <MarketplaceListing products={products} />
+      <MarketplaceListing products={products} guest={guest} />
     </AppShell>
   );
 }

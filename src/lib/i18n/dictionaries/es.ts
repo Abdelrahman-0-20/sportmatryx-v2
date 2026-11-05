@@ -61,6 +61,28 @@ export const es: Dict = {
       b3: "Alineación con el RGPD: minimización de datos, exportación y borrado a petición, historial completo de accesos — los registros de consentimiento son datos de primera clase.",
       link: "Leer el aviso de privacidad",
     },
+    unique: {
+      eyebrow: "Por qué Sportmetryx",
+      h2: "Lo que solo Sportmetryx hace.",
+      lede: "Los competidores te dan gráficos. Sportmetryx te da decisiones defendibles — seis cosas que nadie más reúne.",
+      cards: [
+        { title: "Puntuaciones que se niegan a adivinar", body: "Las validaciones retiran un mal día en vez de puntuarlo — cada WITHHELD lleva un código de motivo explícito, nunca un número silencioso." },
+        { title: "Líneas base personales, no normas poblacionales", body: "Cada atleta se mide contra su propia historia de 28 días — un juvenil y un veterano nunca se comparan con el mismo promedio." },
+        { title: "Explicabilidad en cada número", body: "Cada puntuación muestra los impulsores que la movieron. Un entrenador siempre puede responder por qué — en una revisión, en un tribunal, ante los medios." },
+        { title: "El consentimiento como infraestructura", body: "El consentimiento vive en el esquema con acceso por roles y una auditoría encadenada por hash — el cumplimiento es el producto, no papeleo." },
+        { title: "Un mercado dentro de la plataforma", body: "Empaqueta y licencia conjuntos derivados directamente — la única plataforma de disponibilidad donde tus datos pueden ganar en vez de solo estar." },
+        { title: "La táctica junto a la salud", body: "Un tablero táctico 3D vive en la misma herramienta que la disponibilidad — quién puede jugar y cómo jugamos, un solo inicio." },
+      ],
+    },
+    sportPanel: {
+      title: "Sesiones por deporte",
+      caption: "Del dataset de sesiones — elige un deporte para ver sus números reales.",
+      all: "Todos los deportes",
+      sessions: "Sesiones",
+      athletes: "Atletas",
+      hours: "Horas de entrenamiento",
+      intensity: "Intensidad media (RPE)",
+    },
     solutions: {
       eyebrow: "Soluciones",
       h2: "Cuatro puestos en la mesa. Un modelo de datos.",

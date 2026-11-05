@@ -61,6 +61,28 @@ export const pt: Dict = {
       b3: "Alinhamento com a LGPD: minimização de dados, exportação e exclusão sob demanda, histórico completo de acessos — registros de consentimento são dados de primeira classe.",
       link: "Ler o aviso de privacidade",
     },
+    unique: {
+      eyebrow: "Por que o Sportmetryx",
+      h2: "O que só o Sportmetryx faz.",
+      lede: "Concorrentes dão gráficos. O Sportmetryx dá decisões defensáveis — seis coisas que ninguém mais reúne.",
+      cards: [
+        { title: "Pontuações que se recusam a chutar", body: "Os portões retiram um dia ruim em vez de pontuá-lo — cada WITHHELD carrega um código de motivo explícito, nunca um número silencioso." },
+        { title: "Linhas de base pessoais, não normas populacionais", body: "Cada atleta é medido contra a própria história de 28 dias — um juvenil e um veterano nunca são comparados à mesma média." },
+        { title: "Explicabilidade em cada número", body: "Toda pontuação mostra os drivers que a moveram. Um treinador sempre responde por quê — em uma revisão, numa disputa, na imprensa." },
+        { title: "Consentimento como infraestrutura", body: "O consentimento vive no esquema com acesso por papéis e auditoria encadeada por hash — conformidade é o produto, não papelada." },
+        { title: "Um marketplace dentro da plataforma", body: "Empacote e licencie conjuntos derivados direto — a única plataforma de prontidão onde seus dados podem render em vez de só ficar parado." },
+        { title: "Tática ao lado da saúde", body: "Um tabuleiro tático 3D vive na mesma ferramenta que a prontidão — quem pode jogar e como jogamos, um único login." },
+      ],
+    },
+    sportPanel: {
+      title: "Sessões por esporte",
+      caption: "Do dataset de sessões — escolha um esporte para ver seus números reais.",
+      all: "Todos os esportes",
+      sessions: "Sessões",
+      athletes: "Atletas",
+      hours: "Horas de treino",
+      intensity: "Intensidade média (RPE)",
+    },
     solutions: {
       eyebrow: "Soluções",
       h2: "Quatro assentos na mesa. Um modelo de dados.",

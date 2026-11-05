@@ -14,7 +14,7 @@ import { MAX_LISTING_FILES, ListingFiles, type ListingFile } from "./listing-fil
  * browse but only signed-in users can publish.
  */
 
-const SPORT_OPTIONS = ["Football", "Basketball", "Cycling", "Running", "Other"];
+const SPORT_OPTIONS = ["Soccer", "Basketball", "American football", "Rugby", "Baseball", "Cycling", "Track & field", "Volleyball", "Running", "Other"];
 const CATEGORY_OPTIONS = ["Performance", "Recovery", "Environment", "Workload", "Other"];
 
 export function SellListing() {

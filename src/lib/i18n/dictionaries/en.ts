@@ -59,6 +59,28 @@ export const en = {
       b3: "GDPR alignment: data minimization, export and deletion on request, full access history — consent records are first-class data.",
       link: "Read the privacy notice",
     },
+    unique: {
+      eyebrow: "Why Sportmetryx",
+      h2: "What only Sportmetryx does.",
+      lede: "Competitors give you charts. Sportmetryx gives you decisions you can defend — six things nobody else ships together.",
+      cards: [
+        { title: "Scores that refuse to guess", body: "Validity gates withhold a bad day instead of scoring it — every WITHHELD carries an explicit reason code, never a silent number." },
+        { title: "Personal baselines, not population norms", body: "Every athlete is measured against their own 28-day history — a junior and a veteran are never compared to the same average." },
+        { title: "Explainability on every number", body: "Each score shows the drivers that moved it. A coach can always answer why — in review, in court, in the media." },
+        { title: "Consent as infrastructure", body: "Consent lives in the schema with role-based access and a hash-chained audit trail — compliance is the product, not paperwork." },
+        { title: "A marketplace inside the platform", body: "Package and license derived datasets directly — the only readiness platform where your data can earn instead of just sit." },
+        { title: "Tactics beside health", body: "A 3D tactical board lives in the same tool as readiness — who can play and how we play, one login." },
+      ],
+    },
+    sportPanel: {
+      title: "Sessions by sport",
+      caption: "From the sessions dataset — pick a sport to see its real numbers.",
+      all: "All sports",
+      sessions: "Sessions",
+      athletes: "Athletes",
+      hours: "Training hours",
+      intensity: "Avg intensity (RPE)",
+    },
     solutions: {
       eyebrow: "Solutions",
       h2: "Four seats at the table. One data model.",

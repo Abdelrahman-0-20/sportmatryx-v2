@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MarketplaceCart } from "@/components/marketplace/cart";
 import { ProductCard } from "@/components/marketplace/product-card";
@@ -34,21 +35,37 @@ const SORT_OPTIONS = [
   { value: "price", label: "Price (low to high)" },
 ];
 
-export function MarketplaceListing({ products }: { products: MarketProduct[] }) {
+export function MarketplaceListing({
+  products,
+  guest,
+}: {
+  products: MarketProduct[];
+  guest: boolean;
+}) {
   return (
     <MarketplaceProvider>
-      <MarketplaceListInner products={products} />
+      <MarketplaceListInner products={products} guest={guest} />
     </MarketplaceProvider>
   );
 }
 
-function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
+function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; guest: boolean }) {
   const { filters, setFilters } = useMarketplace();
   const [cartOpen, setCartOpen] = useState(false);
   const [items, setItems] = useState<CartItem[]>([]);
   const [view, setView] = useState<"buy" | "sell">("buy");
   // Marketplace tabs: Data = platform data products; Goods = community-listed items.
   const [section, setSection] = useState<"data" | "goods">("data");
+  // Sport filter — platform datasets are multi-sport (undefined) and always
+  // match; community listings match their seller-selected sport.
+  const [sportSel, setSportSel] = useState<string | null>(null);
+  const sports = [...new Set(products.map((p) => p.sport ?? "Multi-sport"))].sort((a, b) =>
+    a === "Multi-sport" ? 1 : b === "Multi-sport" ? -1 : a.localeCompare(b),
+  );
+  const pillStyle = (active: boolean) =>
+    active
+      ? "rounded-full border border-accent bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent"
+      : "rounded-full border border-edge/80 bg-panel-2/60 px-3.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink";
   const featured = products.find((p) => p.featured) ?? null;
   // Cart ↔ cookie sync: the full cart page (/marketplace/cart) and the header
   // count read the smx_marketplace_cart cookie via /api/marketplace/cart-state.
@@ -92,9 +109,12 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
     }).catch(() => {});
   }, [items]);
   const base = filteredProducts(products, filters);
-  const filtered = section === "goods"
+  const sectioned = section === "goods"
     ? base.filter((p) => p.tag === "COMMUNITY")
     : base.filter((p) => p.tag !== "COMMUNITY");
+  const filtered = sportSel
+    ? sectioned.filter((p) => p.sport === undefined || p.sport === sportSel)
+    : sectioned;
 
   function addToCart(product: MarketProduct) {
     setItems((prev) => {
@@ -165,9 +185,21 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
       </div>
 
       {view === "sell" ? (
-        <SellListing />
+        guest ? <SignInToSell onBack={() => setView("buy")} /> : <SellListing />
       ) : (
         <>
+      <div className="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filter by sport">
+        <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-muted">Sport</span>
+        <button type="button" onClick={() => setSportSel(null)} aria-pressed={sportSel === null} className={pillStyle(sportSel === null)}>
+          All sports
+        </button>
+        {sports.map((sp) => (
+          <button key={sp} type="button" onClick={() => setSportSel(sp)} aria-pressed={sportSel === sp} className={pillStyle(sportSel === sp)}>
+            {sp}
+          </button>
+        ))}
+      </div>
+
       <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-edge/70 bg-panel/60 px-4 py-3">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
           <input
@@ -296,5 +328,27 @@ function MarketplaceListInner({ products }: { products: MarketProduct[] }) {
         onOpenChange={setCartOpen}
       />
     </>
+  );
+}
+
+function SignInToSell({ onBack }: { onBack: () => void }) {
+  return (
+    <div className="surface rounded-2xl p-8 text-center">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-accent/40 bg-accent/10 text-accent">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+          <rect x="4" y="10" width="16" height="10" rx="2" />
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+        </svg>
+      </div>
+      <h3 className="display-heading mt-4 text-xl">Sign in to list a product or dataset</h3>
+      <p className="mx-auto mt-2 max-w-md text-sm text-muted">
+        Guests can browse the full marketplace — publishing a listing requires a real account.
+        It takes seconds and keeps the catalog trustworthy.
+      </p>
+      <div className="mt-5 flex flex-wrap justify-center gap-3">
+        <Link href="/login?next=/marketplace" className="btn-primary">Sign in</Link>
+        <button type="button" onClick={onBack} className="btn-ghost">Keep browsing</button>
+      </div>
+    </div>
   );
 }

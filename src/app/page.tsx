@@ -75,6 +75,32 @@ function datasetStats() {
   }
 }
 
+/** Aggregate the sessions dataset (final1.csv) for the sport selector. */
+function sportStats(sport?: string) {
+  try {
+    const table = parseCsv(
+      fs.readFileSync(path.join(process.cwd(), "public", "datasets", "final1.csv"), "utf8"),
+    );
+    const head = table[0]!.map((h, i) => [h, i] as const);
+    const col = (name: string) => head.find(([h]) => h === name)?.[1] ?? -1;
+    const cSport = col("sport"), cAth = col("ath_alias"),
+      cDur = col("duration_min"), cRpe = col("intensity_rpe_1_10");
+    const all = table.slice(1).filter((r) => r[cSport]);
+    const sports = [...new Set(all.map((r) => r[cSport]))].sort();
+    const current = sport && sports.includes(sport) ? sport : "";
+    const rows = current ? all.filter((r) => r[cSport] === current) : all;
+    const athletes = new Set(rows.map((r) => r[cAth]).filter(Boolean));
+    const minutes = rows.reduce((a, r) => a + (Number(r[cDur]) || 0), 0);
+    const rpes = rows.map((r) => Number(r[cRpe])).filter((n) => Number.isFinite(n) && n > 0);
+    const avgRpe = rpes.length ? (rpes.reduce((a, b) => a + b, 0) / rpes.length).toFixed(1) : "\u2014";
+    return { ok: true as const, sports, current, sessions: rows.length,
+      athletes: athletes.size, hours: Math.round(minutes / 60), avgRpe };
+  } catch {
+    return { ok: false as const, sports: [] as string[], current: "",
+      sessions: 0, athletes: 0, hours: 0, avgRpe: "\u2014" };
+  }
+}
+
 const stats = datasetStats();
 const BAND_COLORS: Record<string, string> = {
   READY: "bg-ready", MONITOR: "bg-monitor", COMPROMISED: "bg-compromised", WITHHELD: "bg-withheld",
@@ -84,7 +110,13 @@ const PROOF_VALUES = [8, 158747, 1431, 2];
 const SOL_IDS = ["readiness", "medical", "coaching", "data"];
 const GLOBE_RINGS = [0, 30, 60, 90, 120, 150];
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ sport?: string }>;
+}) {
+  const sp = await searchParams;
+  const bySport = sportStats(sp?.sport);
   const dict = await getDict();
   const t = dict.home;
 
@@ -277,6 +309,26 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* What only Sportmetryx does */}
+      <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="What makes Sportmetryx unique">
+        <Reveal>
+          <p className="eyebrow">{t.unique.eyebrow}</p>
+          <h2 className="h-sec mt-3">{t.unique.h2}</h2>
+          <p className="lede mt-3 max-w-2xl">{t.unique.lede}</p>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {t.unique.cards.map((card, i) => (
+              <div key={card.title} className="surface rounded-2xl p-6">
+                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="mt-2 text-base font-semibold text-ink">{card.title}</div>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{card.body}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      </section>
+
       {/* Demo video */}
       <section className="section-y mx-auto max-w-7xl px-6 md:px-10" aria-label="Product tour video">
         <Reveal>
@@ -332,6 +384,60 @@ export default async function HomePage() {
           >
             {t.data.download3} →
           </a>
+        </div>
+
+        {/* Sessions by sport — real aggregation from the sessions dataset */}
+        <div className="mt-8 rounded-2xl border border-edge/70 bg-panel/70 p-5 md:p-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
+              {t.sportPanel.title}
+            </div>
+            <div className="text-[11px] text-muted">{t.sportPanel.caption}</div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/"
+              className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                bySport.current === ""
+                  ? "border-accent bg-accent/15 text-accent"
+                  : "border-edge/80 text-muted hover:border-accent/40 hover:text-ink"
+              }`}
+            >
+              {t.sportPanel.all}
+            </Link>
+            {bySport.sports.map((sportName) => (
+              <Link
+                key={sportName}
+                href={`/?sport=${encodeURIComponent(sportName)}`}
+                className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                  bySport.current === sportName
+                    ? "border-accent bg-accent/15 text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+                    : "border-edge/80 text-muted hover:border-accent/40 hover:text-ink"
+                }`}
+              >
+                {sportName}
+              </Link>
+            ))}
+          </div>
+          {bySport.ok ? (
+            <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {(
+                [
+                  [t.sportPanel.sessions, String(bySport.sessions), true],
+                  [t.sportPanel.athletes, String(bySport.athletes), true],
+                  [t.sportPanel.hours, String(bySport.hours), true],
+                  [t.sportPanel.intensity, bySport.avgRpe, false],
+                ] as Array<[string, string, boolean]>
+              ).map(([label, value, countUp]) => (
+                <div key={label} className="rounded-xl border border-edge/60 bg-panel-2/70 p-4">
+                  <div className="stat-num">{countUp ? <CountUp value={Number(value)} /> : value}</div>
+                  <div className="mt-1 text-xs text-muted">{label}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-muted">{t.sportPanel.caption}</p>
+          )}
         </div>
 
         {stats.ok ? (
