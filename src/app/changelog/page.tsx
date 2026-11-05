@@ -5,9 +5,9 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Changelog — Sportmetryx Football",
+  title: "Changelog — Sportmetryx",
   description:
-    "What shipped on Sportmetryx Football — release notes: design, product, data and infrastructure changes.",
+    "What shipped at Sportmetryx — release notes: design, product, data and infrastructure changes.",
 };
 
 export default async function ChangelogPage() {

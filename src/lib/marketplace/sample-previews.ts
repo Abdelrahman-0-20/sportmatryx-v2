@@ -10,7 +10,7 @@ import type { MarketProduct } from "@/lib/services/marketplace";
 
 export function samplePreviewCsv(product: MarketProduct): string {
   const header = [
-    "// Sportmetryx Football — demo product sample preview",
+    "// Sportmetryx — product sample preview",
     `// Product: ${product.name} (${product.id})`,
     "// Source: sample dataset",
     `// Rows shown: sample preview (not the full package)`,

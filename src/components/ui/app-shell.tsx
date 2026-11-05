@@ -60,7 +60,7 @@ async function Sidebar({ guest }: { guest?: boolean }) {
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-edge bg-panel-2 px-3 py-4 md:flex">
       <Link href="/" className="mb-6 block px-2">
         <span className="display-heading text-xl">
-          <span className="text-accent">Sportmetryx</span> Football
+          <span className="text-accent">Sportmetryx</span>
         </span>
         <span className="block text-[10px] uppercase tracking-widest text-muted">
           <span className="live-dot mr-1.5" aria-hidden="true" />

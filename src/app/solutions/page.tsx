@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Solutions — Sportmetryx Football",
+  title: "Solutions — Sportmetryx",
   description:
     "Four solutions on one platform: readiness & performance, medical & rehab, coaching & development, and governed data products.",
 };

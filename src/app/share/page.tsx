@@ -6,7 +6,7 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Share a readiness card — Sportmetryx Football",
+  title: "Share a readiness card — Sportmetryx",
   description:
     "Generate a branded squad-readiness card and post it anywhere — WhatsApp, X and LinkedIn previews included.",
 };

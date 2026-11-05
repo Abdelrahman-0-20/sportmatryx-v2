@@ -46,14 +46,14 @@ export default function OpengraphImage() {
             &gt;&gt;
           </div>
           <div style={{ fontSize: 34, letterSpacing: 4, fontWeight: 700, color: "#5fd0f0" }}>
-            SPORTMETRYX FOOTBALL
+            SPORTMETRYX
           </div>
         </div>
         <div style={{ fontSize: 86, fontWeight: 700, marginTop: 34, lineHeight: 1.02 }}>
           Decisions you can defend.
         </div>
         <div style={{ fontSize: 32, marginTop: 26, color: "#a9bbd6" }}>
-          Validity-gated readiness intelligence for football
+          Validity-gated readiness intelligence for sport
         </div>
         <div
           style={{

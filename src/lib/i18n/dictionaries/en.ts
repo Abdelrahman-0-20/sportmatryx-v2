@@ -17,7 +17,7 @@ export const en = {
   },
   footer: {
     tagline:
-      "Validity-gated readiness intelligence for football — one daily score per athlete, always explainable, consent-governed. Built by Healthmetryx.",
+      "Validity-gated readiness intelligence for sport — one daily score per athlete, always explainable, consent-governed. Built by Healthmetryx.",
     product: "Product",
     getStarted: "Get started",
     trust: "Trust & legal",
@@ -30,14 +30,14 @@ export const en = {
     pilotCta: "Join the pilot",
     chip: "Live platform",
     disclaimer: "Consent-governed · explainable · validity-gated",
-    copyright: "© 2026 Healthmetryx · Sportmetryx Football",
+    copyright: "© 2026 Healthmetryx · Sportmetryx",
   },
   home: {
     hero: {
-      eyebrow: "Performance intelligence for football performance staff",
+      eyebrow: "Performance intelligence for athletes and performance staff",
       h1a: "Turn daily athlete data into",
-      h1b: "decisions you can defend.",
-      ledeStrong: "Sportmetryx Football",
+      h1b: "decisions you can defend — in any sport.",
+      ledeStrong: "Sportmetryx",
       ledeRest:
         "converts the data your staff already collects — GPS, session load, wellness, environment — into one daily readiness score per athlete: validity-checked first, built on personal baselines, always explainable.",
       btnDemo: "Book a demo",
@@ -77,12 +77,12 @@ export const en = {
     what: {
       eyebrow: "What it is",
       h2: "A readiness intelligence layer — not another dashboard.",
-      p1: "Sportmetryx unifies the scattered exports a football organization already produces — sensor files, wellness forms, load reports — into a single **combined athlete-day record**: one row per athlete per day, and a readiness score derived from it.",
+      p1: "Sportmetryx unifies the scattered exports a sports organization already produces — sensor files, wellness forms, load reports — into a single **combined athlete-day record**: one row per athlete per day, and a readiness score derived from it.",
       p2: "Every score is **validity-gated** (bad or missing inputs are flagged, never silently scored), **explainable** (you can always see which drivers moved the number) and **consent-governed** (athlete data is visible only under the access controls each athlete consents to).",
       p3: "The result is a shared, auditable picture the whole staff can act on before every session.",
       glanceTitle: "At a glance",
       glance: [
-        { label: "Domain", value: "Football (soccer) performance" },
+        { label: "Domain", value: "Multi-sport performance intelligence" },
         { label: "Built by", value: "Healthmetryx" },
         { label: "Scores", value: "Validity-gated, explainable" },
         { label: "Baselines", value: "Personal, per athlete" },
@@ -125,7 +125,7 @@ export const en = {
     watch: {
       eyebrow: "Watch",
       h2: "Watch the product tour",
-      lede: "A title card and five chapters — overview, athletes board, Player 360, marketplace, governance. Press play, or jump to any chapter. Drop a real screen recording into **public/demo.mp4** and this player switches to it.",
+      lede: "A title card and five chapters — overview, athletes board, Player 360, marketplace, governance. Press play, or jump to any chapter.",
     },
     tour: {
       eyebrow: "How it works",
@@ -133,14 +133,16 @@ export const en = {
       sub: "Click through the flow — or let it play.",
     },
     sports: [
-      "Soccer",
-      "American football",
-      "Basketball",
-      "Baseball",
-      "Cycling",
-      "Rugby",
-      "Track & field",
-      "Volleyball",
+      "Soccer · Live",
+      "American football · In demo",
+      "Basketball · In demo",
+      "Baseball · In demo",
+      "Cycling · In demo",
+      "Rugby · In demo",
+      "Track & field · In demo",
+      "Volleyball · In demo",
+      "Hockey · Planned",
+      "Tennis · Planned",
     ],
     data: {
       eyebrow: "The data",
@@ -152,7 +154,7 @@ export const en = {
       range: "Range",
       teams: "Teams",
       headers: ["Athlete", "Date", "Team", "Position", "Score", "Band"],
-      note: "Preview of the first 6 rows. The full file contains all sensor means, driver contributions and validity checks — covering all sensor means, driver contributions and validity checks.",
+      note: "Preview of the first scored rows. The full file contains every sensor mean, driver contribution and validity check across all athlete-days.",
     },
     tactics: {
       eyebrow: "New · tactical intelligence",
@@ -345,7 +347,7 @@ export const en = {
   platform: {
     eyebrow: "The platform",
     h1a: "One platform.",
-    h1b: "Every football decision surface.",
+    h1b: "Every decision surface in sport.",
     lede: "Eight modules on one shared data model — from the daily roster to licensed datasets. Nothing is a bolt-on: every module reads the same validity-gated, consent-governed athlete-day record.",
     pipeline: [
       { title: "Import", body: "Sensor, wellness and environment CSVs land in one pipeline with row-level error reports." },
@@ -384,7 +386,7 @@ export const en = {
     eyebrow: "Solutions",
     h1a: "One platform.",
     h1b: "Four seats at the table.",
-    lede: "Every organization runs the same loop — import, validate, score, decide. What changes is the seat you sit in. Find yours below.",
+    lede: "Every organization — in any sport — runs the same loop: import, validate, score, decide. What changes is the seat you sit in. Find yours below.",
     problemsLabel: "The problems",
     outcomesLabel: "The outcomes",
     screensLabel: "Screens you will use",
@@ -464,7 +466,7 @@ export const en = {
     ],
     industriesTitle: "Designed for every level of the game",
     industries: ["Academies & schools", "Semi-pro clubs", "Professional clubs", "Leagues & governing bodies"],
-    industriesNote: "The data model already spans 8 sports — football is the beachhead, not the ceiling.",
+    industriesNote: "The data model already spans 8 sports in the demo — from soccer to volleyball — with more planned.",
     ctaH2: "Find your solution in 30 minutes",
     ctaLede: "Tell us which seat you sit in — we will walk the exact screens that solve your problems.",
     ctaBtn1: "Book a demo",

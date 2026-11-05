@@ -14,7 +14,7 @@ export default async function LoginPage() {
       <div className="fade-up w-full max-w-md rounded-[10px] border border-edge bg-panel p-6 shadow-[0_30px_80px_-40px_rgba(34,211,238,0.25)]">
         <div className="mb-6">
           <span className="display-heading text-2xl">
-            <span className="text-accent">Sportmetryx</span> Football
+            <span className="text-accent">Sportmetryx</span>
           </span>
           <p className="mt-1 text-xs text-muted">Sign in to Team Command (demo environment).</p>
         </div>

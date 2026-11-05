@@ -53,7 +53,7 @@ function TitleCard() {
   return (
     <div className="flex h-full flex-col items-center justify-center text-center">
       <div className="display-heading text-4xl sm:text-6xl">
-        <span className="text-accent">Sportmetryx</span> Football
+        <span className="text-accent">Sportmetryx</span>
       </div>
       <span className="title-line mt-4 block h-0.5 w-44 bg-gradient-to-r from-accent to-prototype" />
       <div className="mt-4 text-xs uppercase tracking-[0.35em] text-muted sm:text-sm">

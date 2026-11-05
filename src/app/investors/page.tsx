@@ -5,7 +5,7 @@ import { CountUp, Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Investors — Sportmetryx Football",
+  title: "Investors — Sportmetryx",
   description:
     "The Sportmetryx raise: what the round funds, the milestones it buys, why now, and how to reach the team.",
 };

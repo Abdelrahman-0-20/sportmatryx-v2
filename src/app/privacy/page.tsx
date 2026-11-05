@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Privacy — Sportmetryx Football",
+  title: "Privacy — Sportmetryx",
   description:
     "How Sportmetryx handles data: consent-governed athlete records, cookies, orders and your rights.",
 };

@@ -55,7 +55,7 @@ export function TelemetryTicker() {
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5">
         <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-ready">
           <span className="live-dot" aria-hidden="true" />
-          Live telemetry
+          Sample device data
         </span>
         <svg className="ecg h-4 w-16 text-accent" viewBox="0 0 64 16" fill="none" aria-hidden="true">
           <path
@@ -79,7 +79,7 @@ export function TelemetryTicker() {
             </span>
           </span>
         ))}
-        <span className="ml-auto hidden text-[10px] text-muted sm:block">Real-time telemetry</span>
+        <span className="ml-auto hidden text-[10px] text-muted sm:block">From the sample dataset</span>
       </div>
     </div>
   );

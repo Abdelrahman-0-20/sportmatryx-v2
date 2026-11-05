@@ -1,8 +1,8 @@
 [![Live](https://img.shields.io/badge/live-sportmatryx--v2.vercel.app-0b1529?style=flat&logo=vercel&logoColor=5fd0f0)](https://sportmatryx-v2.vercel.app)
 
-# Sportmetryx Football
+# Sportmetryx
 
-**Human performance intelligence for football** — validity-gated readiness scores, explainable drivers, consent-governed data.
+**Human performance intelligence for sport** — validity-gated readiness scores, explainable drivers, consent-governed data.
 
 **Live: https://sportmatryx-v2.vercel.app**
 

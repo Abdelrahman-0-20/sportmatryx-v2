@@ -9,7 +9,7 @@ import { getDict } from "@/lib/i18n/server";
 import { Rich } from "@/lib/i18n/rich";
 
 export const metadata: Metadata = {
-  title: "Tactics — Sportmetryx Football",
+  title: "Tactics — Sportmetryx",
   description:
     "Tactical intelligence in development: a 3D board with formation switcher, phase animations, game-systems library and coaching drills — the planning layer beside readiness.",
 };

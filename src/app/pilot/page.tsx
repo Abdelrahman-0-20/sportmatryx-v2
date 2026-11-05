@@ -8,7 +8,7 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Pilot program — Sportmetryx Football",
+  title: "Pilot program — Sportmetryx",
   description:
     "Run Sportmetryx with your squad for a season: full platform access, a data audit and success metrics agreed before the pilot starts.",
 };

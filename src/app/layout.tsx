@@ -16,21 +16,21 @@ const barlowCondensed = Barlow_Condensed({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sportmatryx-v2.vercel.app"),
-  title: "Sportmetryx Football",
+  title: "Sportmetryx",
   description:
-    "Human Performance Intelligence for Football — validity-gated readiness, explainable scores, consent-governed data.",
+    "Human Performance Intelligence for sport — validity-gated readiness, explainable scores, consent-governed data.",
   openGraph: {
-    siteName: "Sportmetryx Football",
-    title: "Sportmetryx Football — decisions you can defend",
+    siteName: "Sportmetryx",
+    title: "Sportmetryx — decisions you can defend",
     description:
-      "Validity-gated readiness intelligence for football: one daily readiness score per athlete, always explainable, consent-governed.",
+      "Validity-gated readiness intelligence for sport: one daily readiness score per athlete, always explainable, consent-governed.",
     locale: "en_GB",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sportmetryx Football — decisions you can defend",
-    description: "Validity-gated readiness intelligence for football.",
+    title: "Sportmetryx — decisions you can defend",
+    description: "Validity-gated readiness intelligence for sport.",
   },
 };
 

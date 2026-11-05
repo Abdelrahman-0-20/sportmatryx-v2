@@ -58,7 +58,7 @@ export async function GET(request: Request) {
               &gt;&gt;
             </div>
             <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: 3, color: "#5fd0f0" }}>
-              SPORTMETRYX FOOTBALL
+              SPORTMETRYX
             </div>
           </div>
           <div

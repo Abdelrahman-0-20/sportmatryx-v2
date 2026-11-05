@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Platform — Sportmetryx Football",
+  title: "Platform — Sportmetryx",
   description:
     "The Sportmetryx platform: team command, explainable performance index, load and recovery intelligence, environment context, athlete twin, marketplace and governance.",
 };

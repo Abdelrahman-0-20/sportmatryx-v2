@@ -25,7 +25,7 @@ export async function MarketingHeader() {
     <header className="sticky top-0 z-50 border-b border-edge/70 bg-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5 md:px-10">
         <Link href="/" className="display-heading text-xl tracking-tight">
-          <span className="text-accent">Sportmetryx</span> Football
+          <span className="text-accent">Sportmetryx</span>
         </Link>
         <nav className="hidden items-center gap-7 text-sm md:flex" aria-label="Primary">
           {nav.map((item) => (
@@ -139,7 +139,7 @@ export async function MarketingFooter() {
                 <FooterMark />
                 <div>
                   <div className="display-heading text-xl">
-                    <span className="text-accent">Sportmetryx</span> Football
+                    <span className="text-accent">Sportmetryx</span>
                   </div>
                   <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">{f.tagline}</p>
                 </div>

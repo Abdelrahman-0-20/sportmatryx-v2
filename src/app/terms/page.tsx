@@ -5,9 +5,9 @@ import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
-  title: "Terms — Sportmetryx Football",
+  title: "Terms — Sportmetryx",
   description:
-    "Terms of use for the Sportmetryx Football platform: acceptable use, liability and contact.",
+    "Terms of use for the Sportmetryx platform: acceptable use, liability and contact.",
 };
 
 export default async function TermsPage() {

@@ -19,7 +19,7 @@ export const pt: Dict = {
   },
   footer: {
     tagline:
-      "Inteligência de prontidão com validação para o futebol — uma pontuação diária por atleta, sempre explicável e governada por consentimento. Construído pela Healthmetryx.",
+      "Inteligência de prontidão com validação para o esporte — uma pontuação diária por atleta, sempre explicável e governada por consentimento. Construído pela Healthmetryx.",
     product: "Produto",
     getStarted: "Começar",
     trust: "Confiança e legal",
@@ -32,14 +32,14 @@ export const pt: Dict = {
     pilotCta: "Entrar na lista do piloto",
     chip: "Plataforma ao vivo",
     disclaimer: "Governado por consentimento · explicável · validado",
-    copyright: "© 2026 Healthmetryx · Sportmetryx Football",
+    copyright: "© 2026 Healthmetryx · Sportmetryx",
   },
   home: {
     hero: {
-      eyebrow: "Inteligência de performance para comissões técnicas de futebol",
+      eyebrow: "Inteligência de performance para atletas e equipes técnicas",
       h1a: "Transforme os dados diários dos atletas em",
-      h1b: "decisões que você pode defender.",
-      ledeStrong: "Sportmetryx Football",
+      h1b: "decisões que você pode defender — em qualquer esporte.",
+      ledeStrong: "Sportmetryx",
       ledeRest:
         "converte os dados que sua comissão já coleta — GPS, carga de sessões, bem-estar, ambiente — em uma pontuação diária de prontidão por atleta: primeiro validada, construída sobre linhas de base pessoais e sempre explicável.",
       btnDemo: "Agendar demo",
@@ -79,12 +79,12 @@ export const pt: Dict = {
     what: {
       eyebrow: "O que é",
       h2: "Uma camada de inteligência de prontidão — não mais um painel.",
-      p1: "Sportmetryx unifica as exportações dispersas que um clube de futebol já produz — arquivos de sensores, formulários de bem-estar, relatórios de carga — em um único **registro combinado atleta-dia**: uma linha por atleta por dia, e uma pontuação de prontidão derivada dele.",
+      p1: "Sportmetryx unifica as exportações dispersas que uma organização esportiva já produz — arquivos de sensores, formulários de bem-estar, relatórios de carga — em um único **registro combinado atleta-dia**: uma linha por atleta por dia, e uma pontuação de prontidão derivada dele.",
       p2: "Toda pontuação é **validada** (entradas ruins ou ausentes são sinalizadas, nunca pontuadas em silêncio), **explicável** (você sempre vê quais drivers moveram o número) e **governada por consentimento** (dados do atleta são visíveis apenas sob os controles de acesso que cada atleta autoriza).",
       p3: "O resultado é uma imagem compartilhada e auditável em que toda a equipe pode agir antes de cada sessão.",
       glanceTitle: "Em resumo",
       glance: [
-        { label: "Domínio", value: "Performance no futebol" },
+        { label: "Domínio", value: "Inteligência de performance multiesporte" },
         { label: "Construído por", value: "Healthmetryx" },
         { label: "Pontuações", value: "Validadas e explicáveis" },
         { label: "Linhas de base", value: "Pessoais, por atleta" },
@@ -127,7 +127,7 @@ export const pt: Dict = {
     watch: {
       eyebrow: "Assista",
       h2: "Assista ao tour do produto",
-      lede: "Uma capa e cinco capítulos — visão geral, painel de atletas, Player 360, marketplace, governança. Dê play ou pule para qualquer capítulo. Coloque uma gravação real em **public/demo.mp4** e este player passa a usá-la.",
+      lede: "Uma capa e cinco capítulos — visão geral, painel de atletas, Player 360, marketplace, governança. Dê play ou pule para qualquer capítulo.",
     },
     tour: {
       eyebrow: "Como funciona",
@@ -135,14 +135,16 @@ export const pt: Dict = {
       sub: "Percorra o fluxo — ou deixe rodar.",
     },
     sports: [
-      "Futebol",
-      "Futebol americano",
-      "Basquete",
-      "Beisebol",
-      "Ciclismo",
-      "Rugby",
-      "Atletismo",
-      "Vôlei",
+      "Futebol · Ao vivo",
+      "Futebol americano · Em demo",
+      "Basquete · Em demo",
+      "Beisebol · Em demo",
+      "Ciclismo · Em demo",
+      "Rugby · Em demo",
+      "Atletismo · Em demo",
+      "Vôlei · Em demo",
+      "Hóquei · Planejado",
+      "Tênis · Planejado",
     ],
     data: {
       eyebrow: "Os dados",
@@ -154,7 +156,7 @@ export const pt: Dict = {
       range: "Intervalo",
       teams: "Times",
       headers: ["Atleta", "Data", "Time", "Posição", "Pontuação", "Banda"],
-      note: "Prévia das primeiras 6 linhas. O arquivo completo contém todas as médias de sensores, contribuições de drivers e verificações de validade.",
+      note: "Prévia das primeiras linhas pontuadas. O arquivo completo contém todas as médias de sensores, contribuições de drivers e verificações de validade.",
     },
     tactics: {
       eyebrow: "Novo · inteligência tática",
@@ -347,7 +349,7 @@ export const pt: Dict = {
   platform: {
     eyebrow: "A plataforma",
     h1a: "Uma plataforma.",
-    h1b: "Toda superfície de decisão do futebol.",
+    h1b: "Toda superfície de decisão do esporte.",
     lede: "Oito módulos sobre um modelo de dados compartilhado — do elenco diário aos conjuntos licenciados. Nada é um adicional: cada módulo lê o mesmo registro combinado atleta-dia, validado e consentido.",
     pipeline: [
       { title: "Importar", body: "CSVs de sensores, bem-estar e ambiente chegam a um único pipeline com relatórios de erro por linha." },
@@ -386,7 +388,7 @@ export const pt: Dict = {
     eyebrow: "Solu\u00e7\u00f5es",
     h1a: "Uma plataforma.",
     h1b: "Quatro assentos na mesa.",
-    lede: "Toda organiza\u00e7\u00e3o percorre o mesmo ciclo — importar, validar, pontuar, decidir. O que muda \u00e9 o assento de onde voc\u00ea faz isso. Encontre o seu abaixo.",
+    lede: "Toda organiza\u00e7\u00e3o — em qualquer esporte — percorre o mesmo ciclo: importar, validar, pontuar, decidir. O que muda \u00e9 o assento de onde voc\u00ea faz isso. Encontre o seu abaixo.",
     problemsLabel: "Os problemas",
     outcomesLabel: "Os resultados",
     screensLabel: "Telas que voc\u00ea vai usar",
@@ -466,7 +468,7 @@ export const pt: Dict = {
     ],
     industriesTitle: "Projetado para cada n\u00edvel do jogo",
     industries: ["Academias e escolas", "Clubes semiprofissionais", "Clubes profissionais", "Ligas e federa\u00e7\u00f5es"],
-    industriesNote: "O modelo de dados j\u00e1 abrange 8 esportes — o futebol \u00e9 a cabe\u00e7a de ponta, n\u00e3o o teto.",
+    industriesNote: "O modelo de dados j\u00e1 abrange 8 esportes na demo — do futebol ao v\u00f4lei — com mais a venir.",
     ctaH2: "Encontre sua solu\u00e7\u00e3o em 30 minutos",
     ctaLede: "Conte de qual assento voc\u00ea decide — percorreremos as telas exatas que resolvem seus problemas.",
     ctaBtn1: "Agendar demo",

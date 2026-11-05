@@ -9,7 +9,7 @@
 
 const API = "https://api.resend.com/emails";
 const KEY = process.env.RESEND_API_KEY;
-const FROM = process.env.RESEND_FROM ?? "Sportmetryx Football <onboarding@resend.dev>";
+const FROM = process.env.RESEND_FROM ?? "Sportmetryx <onboarding@resend.dev>";
 const SITE = "https://sportmatryx-v2.vercel.app";
 /* Interim: Resend testing mode only delivers to the account email
  * (egydarknight10@gmail.com). After verifying a domain at resend.com/domains,
@@ -42,7 +42,7 @@ export async function sendEmail({ to, subject, html, text }: SendArgs): Promise<
 
 function wrap(inner: string): string {
   return `<div style="font-family:Georgia,serif;background:#0b1529;color:#e8f0f9;padding:36px 40px;max-width:560px;margin:0 auto;border-radius:14px;border:1px solid #253755;">
-    <div style="font-family:sans-serif;font-size:13px;letter-spacing:3px;color:#5fd0f0;font-weight:700;">SPORTMETRYX FOOTBALL</div>
+    <div style="font-family:sans-serif;font-size:13px;letter-spacing:3px;color:#5fd0f0;font-weight:700;">SPORTMETRYX</div>
     <div style="height:3px;background:linear-gradient(90deg,#5fd0f0,#9d78f5);border-radius:3px;margin:16px 0 24px;"></div>
     ${inner}
     <div style="font-family:sans-serif;font-size:12px;color:#a9bbd6;margin-top:28px;">
@@ -55,22 +55,22 @@ function wrap(inner: string): string {
 /* Localized welcome — matches the subscriber's site language at signup. */
 const WELCOME: Record<string, { subject: string; heading: string; body: string }> = {
   en: {
-    subject: "You're subscribed — Sportmetryx Football",
+    subject: "You're subscribed — Sportmetryx",
     heading: "You're on the list.",
     body: "Thanks for joining. You'll get shipping updates and product news — a few per month, no spam. Explore the platform in the meantime, or continue as guest.",
   },
   es: {
-    subject: "Ya estás suscrito — Sportmetryx Football",
+    subject: "Ya estás suscrito — Sportmetryx",
     heading: "Ya estás en la lista.",
     body: "Gracias por unirte. Recibirás novedades de entregas y producto — unos pocos al mes, sin spam. Mientras tanto, explora la plataforma o continúa como invitado.",
   },
   pt: {
-    subject: "Você está inscrito — Sportmetryx Football",
+    subject: "Você está inscrito — Sportmetryx",
     heading: "Você está na lista.",
     body: "Obrigado por entrar. Você receberá novidades de entregas e produto — algumas por mês, sem spam. Enquanto isso, explore a plataforma ou continue como convidado.",
   },
   zh: {
-    subject: "订阅成功 — Sportmetryx Football",
+    subject: "订阅成功 — Sportmetryx",
     heading: "你已加入名单。",
     body: "感谢订阅。你会收到发布与产品更新 — 每月几封，绝不打扰。在此期间，可以探索平台或以访客身份继续。",
   },

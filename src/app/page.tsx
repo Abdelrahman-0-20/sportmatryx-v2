@@ -61,7 +61,8 @@ function datasetStats() {
       const b = r[cBand];
       if (b) bands[b] = (bands[b] ?? 0) + 1;
     }
-    const preview = rows.slice(0, 6).map((r) => ({
+    const scored = rows.filter((r) => r[cScore] && r[cBand] && r[cBand] !== "WITHHELD");
+    const preview = (scored.length >= 6 ? scored : rows).slice(0, 6).map((r) => ({
       athlete: r[cAthlete], date: r[cDate], team: r[cTeam], position: r[cPos],
       score: r[cScore], band: r[cBand],
     }));

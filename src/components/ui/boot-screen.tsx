@@ -55,7 +55,7 @@ export function BootScreen() {
     <div className={`boot-overlay ${phase === "done" ? "is-done" : ""}`} aria-hidden="true">
       <div className="boot-card">
         <div className="display-heading text-xl">
-          <span className="text-accent">Sportmetryx</span> Football
+          <span className="text-accent">Sportmetryx</span>
         </div>
         <ul className="mt-3 space-y-1">
           {LINES.map((line, i) => (
