@@ -2,168 +2,81 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Dict } from "@/lib/i18n/dictionaries";
+import {
+  FORMATIONS,
+  FORMATION_KEYS,
+  PHASES,
+  PHASE_KEYS,
+  SYSTEMS,
+  formationForPhase,
+  phaseForFormation,
+  resolveArrows,
+  type PhaseKey,
+} from "@/lib/tactics/american-football";
 
 /**
- * TacticalStudio — the CSS-3D tactical board: formation switcher, phase
- * animations (passing arrows draw themselves), a coaching drill loop and a
- * game-systems library that drives the board. All data is illustrative —
- * labeled on the UI.
+ * TacticalStudio — the CSS-3D American-football board: formation switcher,
+ * phase animations (routes and rush lanes draw themselves), a drill loop and a
+ * game-systems library that drives the board.
+ *
+ * All formations, phases and systems come from
+ * `lib/tactics/american-football.ts` — this file only renders them. Display
+ * copy (phase/system names and descriptions) is looked up in the locale
+ * dictionary by index, so the data module stays language-neutral.
+ * All data is illustrative — labeled on the UI.
  */
 
-type Pos = [number, number];
-type Arrow = { f: number; t: Pos };
-type Phase = { label: string; ball: Pos; desc: string; arrows: Arrow[] };
+/* Field geometry in the 460×660 viewBox, matching the 0–100 token space:
+ * end zones sit outside the goal lines, yard lines every 10 yards between. */
+const FIELD = { top: 14, bottom: 646, goalTop: 66, goalBottom: 594, left: 14, right: 446 };
+const YARD_STEP = (FIELD.goalBottom - FIELD.goalTop) / 10;
+const YARD_LINES = Array.from({ length: 9 }, (_, i) => FIELD.goalTop + YARD_STEP * (i + 1));
+const YARD_LABELS = YARD_LINES.map((y, i) => ({ y, value: i < 5 ? (i + 1) * 10 : (9 - i) * 10 }));
 
-const FORMATIONS: Record<string, Pos[]> = {
-  "4-3-3": [
-    [50, 94], [85, 78], [63, 82], [37, 82], [15, 78],
-    [72, 58], [50, 63], [28, 58],
-    [85, 25], [50, 18], [15, 25],
-  ],
-  "4-2-3-1": [
-    [50, 94], [85, 78], [63, 82], [37, 82], [15, 78],
-    [62, 70], [38, 70],
-    [82, 45], [50, 48], [18, 45],
-    [50, 20],
-  ],
-  "3-5-2": [
-    [50, 94], [68, 84], [50, 87], [32, 84],
-    [88, 62], [65, 66], [50, 70], [35, 66], [12, 62],
-    [62, 25], [38, 25],
-  ],
-  "4-4-2": [
-    [50, 94], [85, 78], [63, 82], [37, 82], [15, 78],
-    [85, 55], [62, 60], [38, 60], [15, 55],
-    [62, 22], [38, 22],
-  ],
-};
-
-const PHASES: Record<string, Phase> = {
-  build: {
-    label: "Build-up",
-    ball: [50, 93],
-    desc: "Play out from the back: centre-backs split, full-backs push high, the pivot offers the passing lane through the first line.",
-    arrows: [
-      { f: 0, t: [70, 80] },
-      { f: 1, t: [80, 52] },
-      { f: 4, t: [20, 52] },
-    ],
-  },
-  press: {
-    label: "High press",
-    ball: [50, 12],
-    desc: "Trigger from the front: the striker curves to screen the centre-back, wingers jump the full-backs, midfield steps up on the bounce pass.",
-    arrows: [
-      { f: 9, t: [52, 6] },
-      { f: 8, t: [76, 10] },
-      { f: 10, t: [24, 10] },
-    ],
-  },
-  transition: {
-    label: "Transition",
-    ball: [50, 44],
-    desc: "First three seconds after regaining: vertical to the nine, wingers attack the channels before the opponent block resets.",
-    arrows: [
-      { f: 9, t: [50, 24] },
-      { f: 8, t: [78, 30] },
-      { f: 6, t: [50, 34] },
-    ],
-  },
-  setpiece: {
-    label: "Set piece",
-    ball: [97, 3],
-    desc: "Corner routine: near-post screen, far-post overload, edge-of-box second ball — three rehearsed variants.",
-    arrows: [
-      { f: 9, t: [64, 12] },
-      { f: 10, t: [44, 8] },
-      { f: 7, t: [74, 18] },
-    ],
-  },
-};
-
-const SYSTEMS: Array<{
-  name: string;
-  tag: string;
-  body: string;
-  formation: string;
-  phase: string;
-}> = [
-  {
-    name: "High press",
-    tag: "Out of possession",
-    body: "Win it high: the front three screen central passes, the midfield line jumps on the bounce, full-backs squeeze.",
-    formation: "4-3-3",
-    phase: "press",
-  },
-  {
-    name: "Mid block",
-    tag: "Out of possession",
-    body: "Compact banks of four, force play wide, spring forward on the bad touch or the forced pass inside.",
-    formation: "4-2-3-1",
-    phase: "press",
-  },
-  {
-    name: "Positional play",
-    tag: "In possession",
-    body: "Third-man combinations through the half-spaces; full-backs invert, wingers hold the width, the pivot ghosts between lines.",
-    formation: "4-3-3",
-    phase: "build",
-  },
-  {
-    name: "Counter-press",
-    tag: "Transition",
-    body: "Five-second swarm after losing it — the nearest three press while the rest protect the central lane.",
-    formation: "4-2-3-1",
-    phase: "transition",
-  },
-  {
-    name: "Quick transition",
-    tag: "Transition",
-    body: "Direct vertical attack in three passes; wingers sprint the channels, the nine pins both centre-backs.",
-    formation: "4-4-2",
-    phase: "transition",
-  },
-  {
-    name: "Corner routines",
-    tag: "Set piece",
-    body: "Near-post screen, far-post overload, edge-of-box second ball — rehearsed delivery variants.",
-    formation: "4-4-2",
-    phase: "setpiece",
-  },
-];
-
-const FORMATION_KEYS = Object.keys(FORMATIONS);
-const PHASE_KEYS = Object.keys(PHASES);
-
-/* viewBox matches the pitch aspect (46:66) so strokes scale uniformly. */
+/* viewBox matches the field aspect (460:660) so strokes scale uniformly. */
 const VX = (x: number) => x * 4.6;
 const VY = (y: number) => y * 6.6;
 
 export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
-  const [formation, setFormation] = useState("4-3-3");
-  const [phase, setPhase] = useState("build");
+  const [board, setBoard] = useState<{ formation: string; phase: PhaseKey }>({
+    formation: "I-Form",
+    phase: "run",
+  });
   const [playing, setPlaying] = useState(false);
   const boardRef = useRef<HTMLDivElement | null>(null);
 
-  const positions = FORMATIONS[formation]!;
-  const currentPhase = PHASES[phase]!;
-  const curText = labels.phases[PHASE_KEYS.indexOf(phase)]!;
+  const positions = FORMATIONS[board.formation]!;
+  const currentPhase = PHASES.find((p) => p.key === board.phase)!;
+  const arrows = resolveArrows(currentPhase, positions);
+  const curText = labels.phases[PHASE_KEYS.indexOf(board.phase)]!;
 
-  /* Coaching drill loop. */
+  /* Coaching drill loop — each phase keeps a formation that can run it. */
   useEffect(() => {
     if (!playing) return;
     const id = window.setInterval(() => {
-      setPhase((p) => {
-        const i = PHASE_KEYS.indexOf(p);
-        return PHASE_KEYS[(i + 1) % PHASE_KEYS.length]!;
+      setBoard((b) => {
+        const next = PHASE_KEYS[(PHASE_KEYS.indexOf(b.phase) + 1) % PHASE_KEYS.length]!;
+        return { phase: next, formation: formationForPhase(next, b.formation) };
       });
     }, 2600);
     return () => window.clearInterval(id);
   }, [playing]);
 
+  /** Pick a phase; swap the shape only when the current one cannot run it. */
+  const pickPhase = (key: PhaseKey) =>
+    setBoard((b) => ({ phase: key, formation: formationForPhase(key, b.formation) }));
+
+  /** Pick a shape; keep the phase when it is legal for that shape. */
+  const pickFormation = (key: string) =>
+    setBoard((b) => {
+      const active = PHASES.find((p) => p.key === b.phase)!;
+      return active.formations.includes(key)
+        ? { ...b, formation: key }
+        : { formation: key, phase: phaseForFormation(key) };
+    });
+
   const applySystem = (sys: (typeof SYSTEMS)[number]) => {
-    setFormation(sys.formation);
-    setPhase(sys.phase);
+    setBoard({ formation: sys.formation, phase: sys.phase });
     setPlaying(false);
     window.requestAnimationFrame(() => {
       boardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -182,7 +95,7 @@ export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
         <div ref={boardRef} className="glass scroll-mt-24 rounded-2xl p-4 sm:p-6">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-              {formation} · {curText.label}
+              {board.formation} · {curText.label}
             </span>
             <span className="text-[10px] text-muted">{labels.boardTag}</span>
           </div>
@@ -206,49 +119,66 @@ export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
                     </marker>
                   </defs>
 
-                  {/* Pitch markings */}
+                  {/* Field markings — end zones, goal lines, yard lines, yard numbers */}
                   <g fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="2.5">
-                    <rect x="14" y="14" width="432" height="632" rx="4" />
-                    <line x1="14" y1="330" x2="446" y2="330" />
-                    <circle cx="230" cy="330" r="58" />
-                    <rect x="97" y="14" width="266" height="101" />
-                    <rect x="146" y="14" width="168" height="36" />
-                    <rect x="97" y="545" width="266" height="101" />
-                    <rect x="146" y="610" width="168" height="36" />
-                    <circle cx="230" cy="80" r="3.5" fill="rgba(95,208,240,0.55)" stroke="none" />
-                    <circle cx="230" cy="580" r="3.5" fill="rgba(95,208,240,0.55)" stroke="none" />
+                    <rect x={FIELD.left} y={FIELD.top} width={FIELD.right - FIELD.left} height={FIELD.bottom - FIELD.top} rx="4" />
+                    {/* End zones */}
+                    <rect x={FIELD.left} y={FIELD.top} width={FIELD.right - FIELD.left} height={FIELD.goalTop - FIELD.top} fill="rgba(95,208,240,0.10)" />
+                    <rect x={FIELD.left} y={FIELD.goalBottom} width={FIELD.right - FIELD.left} height={FIELD.bottom - FIELD.goalBottom} fill="rgba(95,208,240,0.10)" />
+                    {/* Goal lines */}
+                    <line x1={FIELD.left} y1={FIELD.goalTop} x2={FIELD.right} y2={FIELD.goalTop} />
+                    <line x1={FIELD.left} y1={FIELD.goalBottom} x2={FIELD.right} y2={FIELD.goalBottom} />
+                    {/* Yard lines every 10 yards */}
+                    {YARD_LINES.map((y) => (
+                      <line
+                        key={y}
+                        x1={FIELD.left}
+                        y1={y}
+                        x2={FIELD.right}
+                        y2={y}
+                        stroke="rgba(95,208,240,0.16)"
+                        strokeWidth="1.5"
+                      />
+                    ))}
                   </g>
 
-                  {/* Passing / running arrows — remount per phase to replay */}
-                  <g key={`${formation}-${phase}`}>
-                    {currentPhase.arrows.map((a, i) => {
-                      const from = positions[a.f]!;
-                      return (
-                        <line
-                          key={i}
-                          x1={VX(from[0])}
-                          y1={VY(from[1])}
-                          x2={VX(a.t[0])}
-                          y2={VY(a.t[1])}
-                          pathLength={1}
-                          className="play-arrow"
-                          stroke="var(--color-accent)"
-                          strokeWidth={3}
-                          strokeLinecap="round"
-                          markerEnd="url(#smx-arrow)"
-                          style={{ animationDelay: `${i * 150}ms` }}
-                        />
-                      );
-                    })}
+                  {/* Yard numbers, both sidelines */}
+                  <g fill="rgba(255,255,255,0.18)" fontSize="26" fontWeight="700" textAnchor="middle">
+                    {YARD_LABELS.map(({ y, value }) => (
+                      <g key={`n${y}`}>
+                        <text x="64" y={y + 9}>{value}</text>
+                        <text x="396" y={y + 9}>{value}</text>
+                      </g>
+                    ))}
+                  </g>
+
+                  {/* Routes / rush lanes — remount per formation + phase to replay */}
+                  <g key={`${board.formation}-${board.phase}`}>
+                    {arrows.map((a, i) => (
+                      <line
+                        key={i}
+                        x1={VX(a.from[0])}
+                        y1={VY(a.from[1])}
+                        x2={VX(a.to[0])}
+                        y2={VY(a.to[1])}
+                        pathLength={1}
+                        className="play-arrow"
+                        stroke="var(--color-accent)"
+                        strokeWidth={3}
+                        strokeLinecap="round"
+                        markerEnd="url(#smx-arrow)"
+                        style={{ animationDelay: `${i * 150}ms` }}
+                      />
+                    ))}
                   </g>
                 </svg>
 
-                {/* Ground shadows (flat on the pitch plane) */}
+                {/* Ground shadows (flat on the field plane) */}
                 {positions.map((p, i) => (
                   <span
                     key={`s${i}`}
                     className="token-shadow"
-                    style={{ left: `${p[0]}%`, top: `${p[1]}%` }}
+                    style={{ left: `${p.x}%`, top: `${p.y}%` }}
                   />
                 ))}
               </div>
@@ -259,8 +189,8 @@ export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
                   key={`t${i}`}
                   className="token-pos"
                   style={{
-                    left: `${p[0]}%`,
-                    top: `${p[1]}%`,
+                    left: `${p.x}%`,
+                    top: `${p.y}%`,
                     transform: "translate(-50%, -50%) translateZ(16px) rotateX(-50deg)",
                   }}
                 >
@@ -281,7 +211,7 @@ export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
           <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{labels.formation}</div>
           <div className="mt-2.5 grid grid-cols-2 gap-2">
             {FORMATION_KEYS.map((k) => (
-              <button key={k} type="button" onClick={() => setFormation(k)} className={pill(k === formation)}>
+              <button key={k} type="button" onClick={() => pickFormation(k)} className={pill(k === board.formation)}>
                 {k}
               </button>
             ))}
@@ -294,10 +224,10 @@ export function TacticalStudio({ labels }: { labels: Dict["tacticsBoard"] }) {
                 key={k}
                 type="button"
                 onClick={() => {
-                  setPhase(k);
+                  pickPhase(k);
                   setPlaying(false);
                 }}
-                className={pill(k === phase)}
+                className={pill(k === board.phase)}
               >
                 {labels.phases[PHASE_KEYS.indexOf(k)]!.label}
               </button>

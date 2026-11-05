@@ -34,12 +34,12 @@ function Panel({
 
 function RadarPanel({ t }: { t: Labels }) {
   const labels: Array<[x: number, y: number, text: string]> = [
-    [120, 16, "xG"],
-    [196, 56, "NP xG/Shot"],
-    [196, 146, "NP Shots"],
-    [120, 188, "Key Passes"],
-    [44, 146, "Carries"],
-    [44, 56, "Crosses"],
+    [120, 16, "EPA/play"],
+    [196, 56, "Success %"],
+    [196, 146, "Air yards"],
+    [120, 188, "Pressures"],
+    [44, 146, "YAC"],
+    [44, 56, "Explosive %"],
   ];
   const ring = (r: number) =>
     [0, 1, 2, 3, 4, 5]
@@ -116,17 +116,17 @@ const TABLE_ROWS: Array<{
   name: string;
   cells: Array<[value: string, tier: 0 | 1 | 2 | 3]>;
 }> = [
-  { name: "Amari Osei", cells: [["2,372", 0], [".22", 1], [".12", 2], ["33.4", 1], ["18", 3]] },
-  { name: "Marcus Reid", cells: [["2,899", 0], [".22", 1], [".10", 3], ["31.8", 3], ["15", 2]] },
-  { name: "Luca Bennett", cells: [["1,224", 0], [".33", 2], [".12", 2], ["34.1", 1], ["7", 3]] },
-  { name: "Diego Alvarez", cells: [["4,869", 0], [".39", 2], [".11", 3], ["30.2", 3], ["10", 3]] },
-  { name: "Samir Haddad", cells: [["1,813", 0], [".17", 3], [".06", 3], ["32.6", 1], ["40", 1]] },
+  { name: "Amari Osei", cells: [["612", 0], [".14", 1], ["46.1", 1], ["34.2", 2], ["24", 3]] },
+  { name: "Marcus Reid", cells: [["548", 0], [".22", 2], ["49.4", 2], ["32.8", 1], ["31", 3]] },
+  { name: "Luca Bennett", cells: [["377", 0], ["-.04", 3], ["41.2", 0], ["35.1", 2], ["12", 1]] },
+  { name: "Diego Alvarez", cells: [["689", 0], [".31", 2], ["52.7", 3], ["31.4", 0], ["28", 3]] },
+  { name: "Samir Haddad", cells: [["421", 0], [".08", 1], ["44.8", 1], ["33.6", 2], ["19", 2]] },
 ];
 
 const TIER_CLS = ["", "bg-ready/15 text-ready", "bg-accent/15 text-accent", "bg-monitor/15 text-monitor"];
 
 function ScoutingTable({ t }: { t: Labels }) {
-  const headers = ["Player", "Minutes", "xG", "xG/Shot", "Speed", "Presses"];
+  const headers = ["Player", "Snaps", "EPA/play", "Success %", "Speed", "Pressures"];
   return (
     <Panel title={t.scouting} className="md:col-span-2">
       <div className="overflow-x-auto">
@@ -169,10 +169,10 @@ function ScoutingTable({ t }: { t: Labels }) {
 /* ---------- team-average sparkline cards ---------- */
 
 const TEAM_STATS: Array<[value: string, delta: string, up: boolean, path: string]> = [
-  ["5,385", "89.3%", false, "M0,26 L16,20 L32,22 L48,12 L64,16 L80,9 L100,13"],
-  ["113.29", "101.5%", true, "M0,24 L16,25 L32,18 L48,20 L64,12 L80,14 L100,7"],
-  ["327.4", "86.2%", false, "M0,10 L16,14 L32,12 L48,18 L64,16 L80,23 L100,25"],
-  ["1.8", "23.1%", false, "M0,8 L16,12 L32,11 L48,17 L64,21 L80,20 L100,27"],
+  ["5,385", "4.1%", true, "M0,26 L16,20 L32,22 L48,12 L64,16 L80,9 L100,13"],
+  ["22.6", "1.8%", true, "M0,24 L16,25 L32,18 L48,20 L64,12 L80,14 L100,7"],
+  ["18", "12.5%", false, "M0,10 L16,14 L32,12 L48,18 L64,16 L80,23 L100,25"],
+  ["52.4", "2.3%", true, "M0,8 L16,12 L32,11 L48,17 L64,21 L80,20 L100,27"],
 ];
 
 function TeamAverages({ t }: { t: Labels }) {
@@ -293,21 +293,29 @@ function AnalystNote({ t }: { t: Labels }) {
 /* ---------- formation map ---------- */
 
 const MAP_DOTS: Array<[x: number, y: number, label: string, active?: boolean]> = [
-  [50, 90, "GK"],
-  [82, 74, "RB"], [64, 78, "CB"], [36, 78, "CB"], [18, 74, "LB"],
-  [76, 54, "RM"], [56, 58, "CM"], [44, 58, "CM"], [24, 54, "LM"],
-  [62, 28, "ST"], [38, 28, "ST"],
+  [16, 54, "X"], [84, 54, "Z"],
+  [36, 61, "LT"], [43, 61, "LG"], [50, 61, "C"], [57, 61, "RG"], [64, 61, "RT"],
+  [72, 61, "TE"],
+  [50, 68, "QB"], [50, 75, "FB", true], [50, 82, "TB", true],
 ];
+
+/** Yard lines every 10 yards between the goal lines (y = 15 and y = 89). */
+const MAP_YARD_LINES = Array.from({ length: 9 }, (_, i) => 15 + 7.4 * (i + 1));
 
 function FormationMap({ t }: { t: Labels }) {
   return (
     <Panel title={t.formation}>
       <svg viewBox="0 0 100 104" className="w-full" aria-hidden="true">
         <rect x="3" y="3" width="94" height="98" rx="4" fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
-        <line x1="3" y1="52" x2="97" y2="52" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
-        <circle cx="50" cy="52" r="12" fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
-        <rect x="32" y="3" width="36" height="14" fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="1.2" />
-        <rect x="32" y="87" width="36" height="14" fill="none" stroke="rgba(95,208,240,0.35)" strokeWidth="1.2" />
+        {/* End zones */}
+        <rect x="3" y="3" width="94" height="12" fill="rgba(95,208,240,0.10)" stroke="rgba(95,208,240,0.35)" strokeWidth="1.2" />
+        <rect x="3" y="89" width="94" height="12" fill="rgba(95,208,240,0.10)" stroke="rgba(95,208,240,0.35)" strokeWidth="1.2" />
+        {/* Goal lines + yard lines */}
+        <line x1="3" y1="15" x2="97" y2="15" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
+        <line x1="3" y1="89" x2="97" y2="89" stroke="rgba(95,208,240,0.35)" strokeWidth="1.4" />
+        {MAP_YARD_LINES.map((y) => (
+          <line key={y} x1="3" y1={y} x2="97" y2={y} stroke="rgba(95,208,240,0.16)" strokeWidth="0.8" />
+        ))}
         {MAP_DOTS.map(([x, y, label, active], i) => (
           <g key={label + i}>
             <circle

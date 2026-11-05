@@ -1,5 +1,6 @@
 import { AppShell } from "@/components/ui/app-shell";
 import { Card, CardLabel, Tag, LinkButton } from "@/components/ui/primitives";
+import { SportSessionsCard } from "@/components/app/sport-sessions";
 import { requireReadForGuest } from "@/lib/offline";
 import { getAthleteProfile } from "@/lib/services/athlete";
 
@@ -83,8 +84,15 @@ function TrendStrip({ rows }: { rows: { date: string; score: number | null; band
 
 // --- Page -------------------------------------------------------------------
 
-export default async function PlayerProfilePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PlayerProfilePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ sport?: string }>;
+}) {
   const { id } = await params;
+  const { sport } = await searchParams;
 
   let detail: Awaited<ReturnType<typeof getAthleteProfile>>["detail"];
   let isSample = false;
@@ -166,6 +174,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2">
           <h1 className="text-2xl font-bold text-ink">{athlete.displayName}</h1>
           <Tag label={athlete.position} />
+          <Tag label={athlete.sport} glow />
           {athlete.isActive ? <Tag label="Active" /> : <Tag label="Inactive" />}
           {isSample ? <Tag label="Sample data" /> : null}
         </div>
@@ -246,35 +255,7 @@ export default async function PlayerProfilePage({ params }: { params: Promise<{ 
           <CardLabel>Readiness Trend (last 14 scores)</CardLabel>
           <TrendStrip rows={trendRows ?? []} />
         </Card>
-        <Card ariaLabel="Recent sessions">
-          <CardLabel>Recent Sessions (last 10)</CardLabel>
-          {sessions.length === 0 ? (
-            <p className="text-sm text-muted">No sessions recorded.</p>
-          ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-                  <th className="pb-1">Date</th>
-                  <th className="pb-1">Type</th>
-                  <th className="pb-1">Duration</th>
-                  <th className="pb-1">Intensity</th>
-                  <th className="pb-1">Venue</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sessions.map((sess) => (
-                  <tr key={sess.id} className="border-b border-edge/50">
-                    <td className="tabular py-1.5 text-muted">{fmtDate(sess.date)}</td>
-                    <td className="py-1.5">{sess.type.replace(/_/g, " ")}</td>
-                    <td className="tabular py-1.5 text-muted">{sess.durationMinutes ?? "—"} min</td>
-                    <td className="py-1.5 text-muted">{sess.intensity ?? "—"}</td>
-                    <td className="py-1.5 text-muted">{sess.venue ?? "—"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </Card>
+        <SportSessionsCard sessions={sessions} athleteSport={athlete.sport} initialSport={sport} />
       </div>
 
       {/* 6. Validity checks */}

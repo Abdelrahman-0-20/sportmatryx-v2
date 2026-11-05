@@ -910,13 +910,25 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
 }
 .ball {
   position: absolute;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #ffffff, #c7d2e2);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.55);
-  transform: translate(-50%, -50%) translateZ(9px);
+  width: 18px;
+  height: 11px;
+  border-radius: 50% / 60%;
+  background: radial-gradient(circle at 32% 28%, #c07a42, #7a3f1c 70%, #5a2d13);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  transform: translate(-50%, -50%) translateZ(9px) rotate(-24deg);
   transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1), top 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* laces on the American football */
+.ball::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.85);
+  transform: translate(-50%, -50%);
 }
 @keyframes smx-draw-arrow {
   from { stroke-dashoffset: 1; }

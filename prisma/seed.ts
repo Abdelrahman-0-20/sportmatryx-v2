@@ -63,6 +63,22 @@ function iso(d: Date): string {
 // ---------------------------------------------------------------------------
 // Athlete generation archetypes
 // ---------------------------------------------------------------------------
+/**
+ * The eight sports covered by the curated dataset (public/datasets/final1.csv).
+ * Generated athletes cycle through these so every sport has a demo roster and
+ * the sport filters on /roster and Player 360 have something to show.
+ */
+const SPORTS = [
+  "American football",
+  "basketball",
+  "baseball",
+  "cycling",
+  "rugby",
+  "soccer",
+  "track and field",
+  "volleyball",
+] as const;
+
 interface AthleteSpec {
   externalId: string;
   first: string;
@@ -71,6 +87,8 @@ interface AthleteSpec {
   team: 0 | 1 | 2;
   archetype: "VALID_READY" | "VALID_MONITOR" | "LOAD_SPIKE" | "STALE_CAL" | "MULTI_FAIL" | "CONSENT_RESTRICTED" | "LOW_BASELINE" | "ORDINARY";
   rosterRole?: string;
+  /** Defaults to American football — the seeded archetype roster is football. */
+  sport?: string;
 }
 
 const FIRST_NAMES = [
@@ -114,6 +132,7 @@ function athleteSpecs(): AthleteSpec[] {
         first: FIRST_NAMES[fi++ % FIRST_NAMES.length],
         last: LAST_NAMES[li++ % LAST_NAMES.length],
         position,
+        sport: SPORTS[n % SPORTS.length],
         team: t as 0 | 1 | 2,
         archetype: n % 9 === 0 ? "VALID_MONITOR" : "ORDINARY",
         rosterRole: n % 4 === 0 ? "Starter" : n % 4 === 1 ? "Rotation" : "Practice Squad",
@@ -436,6 +455,7 @@ async function main() {
         lastName: spec.last,
         teamId: teams[spec.team].id,
         position: spec.position,
+        sport: spec.sport ?? "American football",
         rosterRole: spec.rosterRole ?? "Rotation",
         isActive: true,
         dateOfBirth: new Date(1996 + (seedFromString(spec.externalId) % 8), (seedFromString(spec.first) % 12), 1 + (seedFromString(spec.last) % 27)),
@@ -856,6 +876,7 @@ async function seedPhase2(refs?: Phase1Refs): Promise<void> {
       sessionRows.push({
         athleteId,
         sessionType: type,
+        sport: spec.sport ?? "American football",
         date: day,
         durationMinutes: type === "GAME" ? 180 : type === "RECOVERY" ? 45 : 90 + Math.round(rnd() * 30),
         intensity: type === "GAME" ? "High" : rnd() > 0.5 ? "Medium" : "High",

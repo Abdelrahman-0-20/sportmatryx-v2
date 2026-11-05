@@ -10,6 +10,7 @@ import {Tooltip,  TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
 import {getRosterRows,  type RosterRow } from "@/lib/services/dashboard";
+import { orderSports } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
 
@@ -18,11 +19,12 @@ const FILTERS = ["ALL", "READY", "MONITOR", "COMPROMISED", "WITHHELD", "EXCEPTIO
 export default async function RosterPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; group?: string }>;
+  searchParams: Promise<{ view?: string; group?: string; sport?: string }>;
 }) {
   const params = await searchParams;
   const view = (params.view ?? "ALL").toUpperCase();
   const group = params.group ?? "ALL";
+  const sport = params.sport ?? "";
 
   let rows: RosterRow[];
   try {
@@ -39,13 +41,29 @@ export default async function RosterPage({
     );
   }
 
+  const sports = orderSports(rows.map((r) => r.sport));
+
+  /** Build a /roster href that keeps the other two filters intact. */
+  const hrefFor = (next: { view?: string; group?: string; sport?: string }) => {
+    const q = new URLSearchParams();
+    const v = next.view ?? view;
+    const g = next.group ?? group;
+    const s = next.sport ?? sport;
+    if (v !== "ALL") q.set("view", v);
+    if (g !== "ALL") q.set("group", g);
+    if (s) q.set("sport", s);
+    const qs = q.toString();
+    return qs ? `/roster?${qs}` : "/roster";
+  };
+
   const filtered = rows.filter((r) => {
     const bandOk =
       view === "ALL" ||
       (view === "EXCEPTIONS" && r.openExceptions > 0) ||
       r.band === view;
     const groupOk = group === "ALL" || r.position === group;
-    return bandOk && groupOk;
+    const sportOk = sport === "" || r.sport === sport;
+    return bandOk && groupOk && sportOk;
   });
 
   return (
@@ -85,7 +103,7 @@ export default async function RosterPage({
           {FILTERS.map((f) => (
             <Link
               key={f}
-              href={`/roster?view=${f}${group === "ALL" ? "" : `&group=${group}`}`}
+              href={hrefFor({ view: f })}
               className={`rounded-md border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide ${
                 view === f ? "border-accent bg-accent/10 text-accent" : "border-edge text-muted hover:text-ink"
               }`}
@@ -97,12 +115,36 @@ export default async function RosterPage({
           {["ALL", "QB", "SKILL", "TRENCH", "LB_TE", "ST"].map((g) => (
             <Link
               key={g}
-              href={`/roster?view=${view}${g === "ALL" ? "" : `&group=${g}`}`}
+              href={hrefFor({ group: g })}
               className={`rounded-md border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide ${
                 group === g ? "border-accent bg-accent/10 text-accent" : "border-edge text-muted hover:text-ink"
               }`}
             >
               {g}
+            </Link>
+          ))}
+        </div>
+
+        {/* Sport filter — the multi-sport roster lens */}
+        <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-edge/60 pt-3">
+          <span className="mr-1 text-[11px] font-semibold uppercase tracking-wider text-muted">Sport</span>
+          <Link
+            href={hrefFor({ sport: "" })}
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-wide ${
+              sport === "" ? "border-accent bg-accent/10 text-accent" : "border-edge text-muted hover:text-ink"
+            }`}
+          >
+            All
+          </Link>
+          {sports.map((s) => (
+            <Link
+              key={s}
+              href={hrefFor({ sport: s })}
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                sport === s ? "border-accent bg-accent/10 text-accent" : "border-edge text-muted hover:text-ink"
+              }`}
+            >
+              {s}
             </Link>
           ))}
         </div>
@@ -115,12 +157,13 @@ export default async function RosterPage({
             No athletes match this filter.
           </p>
         ) : (
-          <table className="w-full min-w-[860px] text-sm">
+          <table className="w-full min-w-[960px] text-sm">
             <thead>
               <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
                 <th className="pb-2 pr-3">Athlete</th>
                 <th className="pb-2 pr-3">ID</th>
                 <th className="pb-2 pr-3">Position</th>
+                <th className="pb-2 pr-3">Sport</th>
                 <th className="pb-2 pr-3">Readiness</th>
                 <th className="pb-2 pr-3">Band</th>
                 <th className="pb-2 pr-3">Confidence</th>
@@ -149,6 +192,7 @@ export default async function RosterPage({
                     </td>
                     <td className="tabular py-2.5 pr-3 text-muted">{r.externalId ?? "—"}</td>
                     <td className="py-2.5 pr-3 text-muted">{r.position}</td>
+                    <td className="py-2.5 pr-3 text-muted">{r.sport}</td>
                     <td className="hero-number py-2.5 pr-3 text-xl">
                       {withheld || r.score === null ? "—" : r.score.toFixed(1)}
                     </td>

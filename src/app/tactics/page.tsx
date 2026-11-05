@@ -11,7 +11,7 @@ import { Rich } from "@/lib/i18n/rich";
 export const metadata: Metadata = {
   title: "Tactics — Sportmetryx",
   description:
-    "Tactical intelligence in development: a 3D board with formation switcher, phase animations, game-systems library and coaching drills — the planning layer beside readiness.",
+    "American-football tactical intelligence in development: a 3D board with formation switcher, phase animations, game-systems library and coaching drills — the planning layer beside readiness.",
 };
 
 export default async function TacticsPage() {
@@ -22,7 +22,7 @@ export default async function TacticsPage() {
     <main className="min-h-dvh">
       <MarketingHeader />
 
-      {/* Hero — full-bleed basketball background video */}
+      {/* Hero — full-bleed sports footage */}
       <section className="relative isolate overflow-hidden pb-14 pt-14 md:pt-20">
         <div className="aurora" aria-hidden="true">
           <span className="aurora-a" />

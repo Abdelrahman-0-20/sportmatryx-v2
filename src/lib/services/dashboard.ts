@@ -14,6 +14,8 @@ export interface RosterRow {
   displayName: string;
   position: string;
   positionGroup: string;
+  /** Sport the athlete competes in (multi-sport roster filter). */
+  sport: string;
   teamId: string;
   teamName: string;
   score: number | null;
@@ -62,6 +64,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
       firstName: string;
       lastName: string;
       position: string;
+      sport: string;
       teamId: string;
       teamName: string;
       score: number | null;
@@ -79,6 +82,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
            a."firstName",
            a."lastName",
            a.position::text AS position,
+           a.sport,
            t.id AS "teamId",
            t.name AS "teamName",
            s.score,
@@ -120,6 +124,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
     displayName: `${r.lastName}, ${r.firstName.charAt(0)}.`,
     position: r.position,
     positionGroup: r.position,
+    sport: r.sport,
     teamId: r.teamId,
     teamName: r.teamName,
     score: r.score,

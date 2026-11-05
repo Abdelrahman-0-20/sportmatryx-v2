@@ -7,11 +7,11 @@ import { getDict } from "@/lib/i18n/server";
 export const metadata: Metadata = {
   title: "Solutions — Sportmetryx",
   description:
-    "Four solutions on one platform: readiness & performance, medical & rehab, coaching & development, and governed data products.",
+    "Three solutions on one platform: readiness & performance, coaching & development, and governed data products.",
 };
 
 /* Section anchors don't translate — content comes from dict. */
-const SOLUTION_IDS = ["readiness", "medical", "coaching", "data"];
+const SOLUTION_IDS = ["readiness", "coaching", "data"];
 
 export default async function SolutionsPage() {
   const t = (await getDict()).solutions;

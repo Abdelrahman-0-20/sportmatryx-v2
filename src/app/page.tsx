@@ -15,7 +15,7 @@ import { Rich } from "@/lib/i18n/rich";
  */
 
 const PROOF_VALUES = [8, 158747, 1431, 2];
-const SOL_IDS = ["readiness", "medical", "coaching", "data"];
+const SOL_IDS = ["readiness", "coaching", "data"];
 const GLOBE_RINGS = [0, 30, 60, 90, 120, 150];
 
 export default async function HomePage() {
@@ -102,7 +102,7 @@ export default async function HomePage() {
         <Reveal>
           <p className="eyebrow">{t.solutions.eyebrow}</p>
           <h2 className="h-sec mt-3">{t.solutions.h2}</h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {t.solutions.cards.map((card, i) => (
               <Link
                 key={card.title}

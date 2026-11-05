@@ -128,6 +128,7 @@ model Athlete {
   lastName             String
   teamId               String
   position             PositionType
+  sport                String                 @default("American football") // multi-sport label, matches the dataset's `sport` column
   rosterRole           String? // e.g., Starter, Practice Squad
   isActive             Boolean                @default(true)
   dateOfBirth          DateTime?
@@ -292,6 +293,7 @@ model TrainingSession {
   id             String          @id @default(cuid())
   athleteId      String
   sessionType    SessionType     @default(PRACTICE)
+  sport          String          @default("American football") // inherits the athlete's sport; lets the profile filter sessions by sport
   date           DateTime
   durationMinutes Int?
   intensity      String? // e.g., "Low", "Medium", "High"

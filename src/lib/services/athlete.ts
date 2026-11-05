@@ -21,6 +21,8 @@ export interface AthleteDetail {
     externalId: string | null;
     displayName: string;
     position: string;
+    /** Sport the athlete competes in (multi-sport roster). */
+    sport: string;
     rosterRole: string | null;
     isActive: boolean;
     teamName: string;
@@ -49,6 +51,7 @@ export interface AthleteDetail {
   sessions: {
     id: string;
     type: string;
+    sport: string;
     date: string;
     durationMinutes: number | null;
     intensity: string | null;
@@ -148,6 +151,7 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
       externalId: athlete.externalId,
       displayName: `${athlete.firstName} ${athlete.lastName}`,
       position: athlete.position,
+      sport: athlete.sport,
       rosterRole: athlete.rosterRole,
       isActive: athlete.isActive,
       teamName: athlete.team.name,
@@ -222,6 +226,7 @@ async function queryAthleteDetail(athleteId: string): Promise<AthleteDetail | nu
     sessions: sessions.map((s) => ({
       id: s.id,
       type: s.sessionType,
+      sport: s.sport,
       date: s.date.toISOString(),
       durationMinutes: s.durationMinutes,
       intensity: s.intensity,
