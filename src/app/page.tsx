@@ -12,6 +12,8 @@ import { ProductTour } from "@/components/ui/product-tour";
 import { SportsMarquee } from "@/components/ui/sports-marquee";
 import { TelemetryTicker } from "@/components/ui/telemetry-ticker";
 import { TiltCard } from "@/components/ui/tilt-card";
+import { DatasetSection } from "@/components/marketing/dataset-section";
+import { sportStats } from "@/lib/sport-stats";
 import { getDict } from "@/lib/i18n/server";
 import { Rich } from "@/lib/i18n/rich";
 
@@ -75,36 +77,7 @@ function datasetStats() {
   }
 }
 
-/** Aggregate the sessions dataset (final1.csv) for the sport selector. */
-function sportStats(sport?: string) {
-  try {
-    const table = parseCsv(
-      fs.readFileSync(path.join(process.cwd(), "public", "datasets", "final1.csv"), "utf8"),
-    );
-    const head = table[0]!.map((h, i) => [h, i] as const);
-    const col = (name: string) => head.find(([h]) => h === name)?.[1] ?? -1;
-    const cSport = col("sport"), cAth = col("ath_alias"),
-      cDur = col("duration_min"), cRpe = col("intensity_rpe_1_10");
-    const all = table.slice(1).filter((r) => r[cSport]);
-    const sports = [...new Set(all.map((r) => r[cSport]))].sort();
-    const current = sport && sports.includes(sport) ? sport : "";
-    const rows = current ? all.filter((r) => r[cSport] === current) : all;
-    const athletes = new Set(rows.map((r) => r[cAth]).filter(Boolean));
-    const minutes = rows.reduce((a, r) => a + (Number(r[cDur]) || 0), 0);
-    const rpes = rows.map((r) => Number(r[cRpe])).filter((n) => Number.isFinite(n) && n > 0);
-    const avgRpe = rpes.length ? (rpes.reduce((a, b) => a + b, 0) / rpes.length).toFixed(1) : "\u2014";
-    return { ok: true as const, sports, current, sessions: rows.length,
-      athletes: athletes.size, hours: Math.round(minutes / 60), avgRpe };
-  } catch {
-    return { ok: false as const, sports: [] as string[], current: "",
-      sessions: 0, athletes: 0, hours: 0, avgRpe: "\u2014" };
-  }
-}
-
 const stats = datasetStats();
-const BAND_COLORS: Record<string, string> = {
-  READY: "bg-ready", MONITOR: "bg-monitor", COMPROMISED: "bg-compromised", WITHHELD: "bg-withheld",
-};
 
 const PROOF_VALUES = [8, 158747, 1431, 2];
 const SOL_IDS = ["readiness", "medical", "coaching", "data"];
@@ -386,133 +359,12 @@ export default async function HomePage({
           </a>
         </div>
 
-        {/* Sessions by sport — real aggregation from the sessions dataset */}
-        <div className="mt-8 rounded-2xl border border-edge/70 bg-panel/70 p-5 md:p-6">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">
-              {t.sportPanel.title}
-            </div>
-            <div className="text-[11px] text-muted">{t.sportPanel.caption}</div>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Link
-              href="/"
-              className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                bySport.current === ""
-                  ? "border-accent bg-accent/15 text-accent"
-                  : "border-edge/80 text-muted hover:border-accent/40 hover:text-ink"
-              }`}
-            >
-              {t.sportPanel.all}
-            </Link>
-            {bySport.sports.map((sportName) => (
-              <Link
-                key={sportName}
-                href={`/?sport=${encodeURIComponent(sportName)}`}
-                className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                  bySport.current === sportName
-                    ? "border-accent bg-accent/15 text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
-                    : "border-edge/80 text-muted hover:border-accent/40 hover:text-ink"
-                }`}
-              >
-                {sportName}
-              </Link>
-            ))}
-          </div>
-          {bySport.ok ? (
-            <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
-              {(
-                [
-                  [t.sportPanel.sessions, String(bySport.sessions), true],
-                  [t.sportPanel.athletes, String(bySport.athletes), true],
-                  [t.sportPanel.hours, String(bySport.hours), true],
-                  [t.sportPanel.intensity, bySport.avgRpe, false],
-                ] as Array<[string, string, boolean]>
-              ).map(([label, value, countUp]) => (
-                <div key={label} className="rounded-xl border border-edge/60 bg-panel-2/70 p-4">
-                  <div className="stat-num">{countUp ? <CountUp value={Number(value)} /> : value}</div>
-                  <div className="mt-1 text-xs text-muted">{label}</div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-4 text-sm text-muted">{t.sportPanel.caption}</p>
-          )}
-        </div>
-
-        {stats.ok ? (
-          <Reveal delay={80}>
-            <>
-              <div className="mt-10 grid grid-cols-2 gap-0 border-y border-edge/70 md:grid-cols-4">
-                {t.data.stats.map((label, i) => {
-                  const value = [stats.rows, stats.athletes, stats.teams.length, 28][i]!;
-                  return (
-                    <div key={label} className={`stat-cell py-7 ${i > 0 ? "sm:pl-6 md:pl-8" : ""}`}>
-                      <div className="stat-num">
-                        <CountUp value={value} />
-                      </div>
-                      <div className="stat-label">{label}</div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="mt-8 rounded-2xl border border-edge/70 bg-panel/70 p-6">
-                <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                  {t.data.distTitle}
-                </div>
-                <div className="mt-4 h-3.5 w-full overflow-hidden rounded-full border border-edge/70 bg-panel-2">
-                  <div className="bar-grow flex h-full w-full">
-                    {Object.entries(stats.bands).map(([band, n]) => (
-                      <div key={band} className={BAND_COLORS[band] ?? "bg-edge"}
-                        style={{ width: `${(n / Math.max(1, stats.rows)) * 100}%` }} title={`${band}: ${n}`} />
-                    ))}
-                  </div>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
-                  {Object.entries(stats.bands).map(([band, n]) => (
-                    <span key={band}>
-                      <span className={`inline-block h-2 w-2 rounded-full ${BAND_COLORS[band] ?? "bg-edge"}`} /> {band}: {n}
-                    </span>
-                  ))}
-                  <span>
-                    {t.data.range}: {stats.range[0]} → {stats.range[1]}
-                  </span>
-                  <span>
-                    {t.data.teams}: {stats.teams.join(", ")}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-4 overflow-x-auto rounded-2xl border border-edge/70 bg-panel/70">
-                <table className="w-full min-w-[640px] text-left text-sm">
-                  <thead>
-                    <tr className="border-b border-edge/70 text-[11px] uppercase tracking-wider text-muted">
-                      {t.data.headers.map((h) => (
-                        <th key={h} className="px-4 py-3 font-semibold">{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stats.preview.map((r) => (
-                      <tr key={`${r.athlete}-${r.date}`} className="border-b border-edge/40 last:border-0">
-                        <td className="px-4 py-3 font-medium text-ink">{r.athlete}</td>
-                        <td className="px-4 py-3 text-muted">{r.date}</td>
-                        <td className="px-4 py-3 text-muted">{r.team}</td>
-                        <td className="px-4 py-3 text-muted">{r.position}</td>
-                        <td className="tabular px-4 py-3 text-ink">{r.score}</td>
-                        <td className="px-4 py-3">{r.band ? <Tag label={r.band} /> : <span className="text-muted">-</span>}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <p className="mt-3 text-xs text-muted">{t.data.note}</p>
-            </>
-          </Reveal>
-        ) : (
-          <p className="mt-6 text-sm text-compromised">Dataset file not found on the server.</p>
-        )}
+        <DatasetSection
+          labels={t.data}
+          sportLabels={t.sportPanel}
+          initial={bySport}
+          athleteDay={stats}
+        />
       </section>
 
       {/* Tactics teaser */}
