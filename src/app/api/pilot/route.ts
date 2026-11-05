@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { notifyOwner } from "@/lib/email";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const cap = (v: unknown, n: number) => String(v ?? "").trim().slice(0, n);
@@ -21,20 +22,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid email address." }, { status: 400 });
   }
 
+  const name = cap(body.name, 80) || null;
+  const org = cap(body.org, 120) || null;
+  const squadSize = cap(body.squadSize, 60) || null;
+  const seasonWindow = cap(body.seasonWindow, 60) || null;
+  const note = cap(body.note, 500) || null;
+
   try {
     const existing = await prisma.pilotWaitlist.findUnique({ where: { email } });
     if (existing) return NextResponse.json({ ok: true, duplicate: true });
 
     await prisma.pilotWaitlist.create({
-      data: {
-        email,
-        name: cap(body.name, 80) || null,
-        org: cap(body.org, 120) || null,
-        squadSize: cap(body.squadSize, 60) || null,
-        seasonWindow: cap(body.seasonWindow, 60) || null,
-        note: cap(body.note, 500) || null,
-      },
+      data: { email, name, org, squadSize, seasonWindow, note },
     });
+    await notifyOwner("New pilot waitlist signup", [
+      `Email: ${email}`,
+      `Name: ${name ?? "-"}`,
+      `Organization: ${org ?? "-"}`,
+      `Squad size: ${squadSize ?? "-"}`,
+      `Window: ${seasonWindow ?? "-"}`,
+      note ? `Note: ${note}` : "",
+      `Time: ${new Date().toISOString()}`,
+    ].filter(Boolean));
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("pilot waitlist insert failed", e);
