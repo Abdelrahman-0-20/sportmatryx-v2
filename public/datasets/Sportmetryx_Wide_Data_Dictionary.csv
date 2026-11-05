@@ -1,0 +1,107 @@
+column,group,description
+athlete_name,athlete,Athlete display name
+date,athlete,Athlete-day date (ISO)
+team,athlete,Team name
+position,athlete,Position group
+roster_role,roster,Squad role (starter / rotation / development)
+roster_status,roster,Roster status (active / inactive)
+roster_born,roster,Birth year
+roster_consent,roster,Roster-level consent state
+baseline_start,athlete,Baseline window start
+baseline_end,athlete,Baseline window end
+baseline_status,athlete,Baseline status
+baseline_version,athlete,Baseline version
+consent_status,consent,Consent state for this day
+consent_granted_at,consent,When consent was granted
+intervention_exception,intervention,Open intervention exception key
+intervention_priority,intervention,Intervention priority (CRITICAL / HIGH / MEDIUM)
+intervention_status,intervention,Intervention status
+intervention_window,intervention,Suggested intervention window
+intervention_recommendation,intervention,Recommended intervention action
+review_decision,review,Reviewer decision
+review_reviewer,review,Assigned reviewer
+review_notes,review,Review notes
+score,score,Readiness score 0-100 (empty when withheld)
+score_band,score,READY / MONITOR / COMPROMISED / WITHHELD
+score_confidence,score,Evidence-quality confidence 0-100 (not a probability)
+score_validity,score,VALID / LIMITED / WITHHELD / RETEST / INSUFFICIENT_BASELINE
+score_reason,score,Machine-readable reason for the validity state
+component_baseline_deviation_norm,component,baseline deviation: normalized 0-1 against the athlete's own baseline
+component_baseline_deviation_original,component,baseline deviation: original value with its unit
+component_baseline_deviation_unit,component,baseline deviation: unit of the original value
+component_baseline_deviation_contribution,component,baseline deviation: weighted contribution to the composite
+component_environment_travel_norm,component,environment travel: normalized 0-1 against the athlete's own baseline
+component_environment_travel_original,component,environment travel: original value with its unit
+component_environment_travel_unit,component,environment travel: unit of the original value
+component_environment_travel_contribution,component,environment travel: weighted contribution to the composite
+component_movement_explosive_norm,component,movement explosive: normalized 0-1 against the athlete's own baseline
+component_movement_explosive_original,component,movement explosive: original value with its unit
+component_movement_explosive_unit,component,movement explosive: unit of the original value
+component_movement_explosive_contribution,component,movement explosive: weighted contribution to the composite
+component_oxygen_function_norm,component,oxygen function: normalized 0-1 against the athlete's own baseline
+component_oxygen_function_original,component,oxygen function: original value with its unit
+component_oxygen_function_unit,component,oxygen function: unit of the original value
+component_oxygen_function_contribution,component,oxygen function: weighted contribution to the composite
+component_recovery_autonomic_norm,component,recovery autonomic: normalized 0-1 against the athlete's own baseline
+component_recovery_autonomic_original,component,recovery autonomic: original value with its unit
+component_recovery_autonomic_unit,component,recovery autonomic: unit of the original value
+component_recovery_autonomic_contribution,component,recovery autonomic: weighted contribution to the composite
+component_respiratory_efficiency_norm,component,respiratory efficiency: normalized 0-1 against the athlete's own baseline
+component_respiratory_efficiency_original,component,respiratory efficiency: original value with its unit
+component_respiratory_efficiency_unit,component,respiratory efficiency: unit of the original value
+component_respiratory_efficiency_contribution,component,respiratory efficiency: weighted contribution to the composite
+component_workload_response_norm,component,workload response: normalized 0-1 against the athlete's own baseline
+component_workload_response_original,component,workload response: original value with its unit
+component_workload_response_unit,component,workload response: unit of the original value
+component_workload_response_contribution,component,workload response: weighted contribution to the composite
+driver_positive,driver,Semicolon list of positive score drivers
+driver_positive_n,driver,Count of positive drivers
+driver_negative,driver,Semicolon list of negative score drivers
+driver_negative_n,driver,Count of negative drivers
+check_baseline_sufficiency,check,Validity gate: at least 8 valid observations inside the 28-day baseline window
+check_calibration_freshness,check,Validity gate: device calibration newer than 24h (critical after 48h)
+check_consent_state,check,Validity gate: athlete consent active for performance use
+check_load_spike,check,Validity gate: acute:chronic workload ratio below the 1.5 spike threshold
+check_sample_integrity,check,"Validity gate: at least 80% valid samples, signal >=0.7, >=20 min wear"
+check_timestamp_freshness,check,Validity gate: most recent observation within 36 hours of the score
+obs_accel_n_mean,observation,"Daily mean of Acceleration, normalized count"
+obs_accel_n_n,observation,"Count of valid observations for Acceleration, normalized count"
+obs_acwr_mean,observation,Daily mean of Acute:chronic workload ratio
+obs_acwr_n,observation,Count of valid observations for Acute:chronic workload ratio
+obs_alt_m_mean,observation,Daily mean of Altitude (m)
+obs_alt_m_n,observation,Count of valid observations for Altitude (m)
+obs_aqi_mean,observation,Daily mean of Air quality index
+obs_aqi_n,observation,Count of valid observations for Air quality index
+obs_heat_c_mean,observation,Daily mean of Heat (°C)
+obs_heat_c_n,observation,Count of valid observations for Heat (°C)
+obs_hrv_ms_mean,observation,Daily mean of Heart-rate variability (ms)
+obs_hrv_ms_n,observation,Count of valid observations for Heart-rate variability (ms)
+obs_jump_cm_mean,observation,Daily mean of Jump height (cm)
+obs_jump_cm_n,observation,Count of valid observations for Jump height (cm)
+obs_load_au_mean,observation,Daily mean of Session load (arbitrary units)
+obs_load_au_n,observation,Count of valid observations for Session load (arbitrary units)
+obs_resp_rate_mean,observation,Daily mean of Respiratory rate (breaths/min)
+obs_resp_rate_n,observation,Count of valid observations for Respiratory rate (breaths/min)
+obs_rhr_mean,observation,Daily mean of Resting heart rate (bpm)
+obs_rhr_n,observation,Count of valid observations for Resting heart rate (bpm)
+obs_sleep_h_mean,observation,Daily mean of Sleep (hours)
+obs_sleep_h_n,observation,Count of valid observations for Sleep (hours)
+obs_spo2_mean,observation,Daily mean of Blood oxygen saturation (%)
+obs_spo2_n,observation,Count of valid observations for Blood oxygen saturation (%)
+obs_tz_shift_h_mean,observation,Daily mean of Timezone shift (hours)
+obs_tz_shift_h_n,observation,Count of valid observations for Timezone shift (hours)
+obs_vent_eff_mean,observation,Daily mean of Ventilation efficiency (ratio)
+obs_vent_eff_n,observation,Count of valid observations for Ventilation efficiency (ratio)
+obs_vo2_proxy_mean,observation,Daily mean of VO2 proxy (ml/kg/min)
+obs_vo2_proxy_n,observation,Count of valid observations for VO2 proxy (ml/kg/min)
+session_n,session,Sessions on this athlete-day
+session_types,session,Session types (semicolon-separated)
+session_duration_total_min,session,Total session minutes
+session_intensity_avg,session,Average session intensity (RPE 1-10)
+session_venues,session,Venues (semicolon-separated)
+session_opponents,session,Opponents
+session_surface,session,Playing surface
+session_drill,session,Drill focus
+session_air_quality,session,Session air-quality note
+session_temp_c,session,Session temperature (°C)
+session_travel,session,Travel exposure note

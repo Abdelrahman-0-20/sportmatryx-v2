@@ -50,8 +50,8 @@ function datasetStats() {
     );
     const head = table[0]!.map((h, i) => [h, i] as const);
     const col = (name: string) => head.find(([h]) => h === name)?.[1] ?? -1;
-    const cAthlete = col("Athlete"), cDate = col("Date"), cTeam = col("Team"),
-      cPos = col("Position"), cScore = col("Score"), cBand = col("Score Band");
+    const cAthlete = col("athlete_name"), cDate = col("date"), cTeam = col("team"),
+      cPos = col("position"), cScore = col("score"), cBand = col("score_band");
     const rows = table.slice(1).filter((r) => r[cAthlete]);
     const athletes = new Set(rows.map((r) => r[cAthlete]));
     const teams = new Set(rows.map((r) => r[cTeam]));
@@ -325,6 +325,13 @@ export default async function HomePage() {
               {t.data.download2}
             </a>
           </div>
+          <a
+            href="/datasets/Sportmetryx_Wide_Data_Dictionary.csv"
+            download
+            className="w-full text-xs font-semibold text-accent underline-offset-2 hover:underline sm:w-auto"
+          >
+            {t.data.download3} →
+          </a>
         </div>
 
         {stats.ok ? (
