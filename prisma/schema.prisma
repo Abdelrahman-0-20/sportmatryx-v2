@@ -657,3 +657,13 @@ model PilotWaitlist {
 
   @@map("pilot_waitlist")
 }
+
+// Newsletter subscribers captured in the footer (marketing site).
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String?
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscribers")
+}
