@@ -114,6 +114,49 @@ export default async function ProofPage() {
         </Reveal>
       </section>
 
+      {/* Comparison matrix */}
+      <section className="mx-auto max-w-7xl px-6 pb-12 md:px-10" aria-label="Comparison">
+        <Reveal>
+          <h2 className="h-sec">{t.comparisonTitle}</h2>
+          <p className="mt-1 text-sm text-muted">{t.comparisonLede}</p>
+          <div className="mt-5 overflow-x-auto rounded-2xl border border-edge/70 bg-panel/70">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead>
+                <tr className="border-b border-edge/70 text-[11px] uppercase tracking-wider text-muted">
+                  <th className="px-4 py-3 font-semibold" />
+                  <th className="px-4 py-3 font-semibold">{t.colSheets}</th>
+                  <th className="px-4 py-3 font-semibold">{t.colLegacy}</th>
+                  <th className="px-4 py-3 font-semibold text-accent">{t.colUs}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {t.compRows.map((label, i) => {
+                  const row = [
+                    [t.no, t.limited, t.yes],
+                    [t.no, t.partial, t.yes],
+                    [t.no, t.partial, t.yes],
+                    [t.no, t.no, t.yes],
+                    [t.no, t.no, t.yes],
+                    [t.no, t.no, t.yes],
+                    [t.timeSheets, t.timeLegacy, t.timeUs],
+                  ][i]!;
+                  return (
+                    <tr key={label} className="border-b border-edge/40 last:border-0">
+                      <td className="px-4 py-3 font-medium text-ink">{label}</td>
+                      <td className="px-4 py-3 text-muted">{row[0]}</td>
+                      <td className="px-4 py-3 text-muted">{row[1]}</td>
+                      <td className="bg-accent/5 px-4 py-3">
+                        <span className="font-semibold text-accent">{row[2]}</span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Reveal>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-6 pb-14 md:px-10">
         <Reveal>

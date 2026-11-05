@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { PilotForm } from "@/components/marketing/pilot-form";
+import { prisma } from "@/lib/prisma";
+import { CountUp } from "@/components/ui/motion";
 import { Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
@@ -14,6 +16,8 @@ export const metadata: Metadata = {
 export default async function PilotPage() {
   const dict = await getDict();
   const t = dict.pilot;
+  /* Live social proof — real rows in pilot_waitlist (Neon); never blocks render. */
+  const waitlistCount = await prisma.pilotWaitlist.count().catch(() => 0);
 
   return (
     <main className="min-h-dvh">
@@ -25,6 +29,22 @@ export default async function PilotPage() {
           {t.h1a} <span className="text-accent">{t.h1b}</span>
         </h1>
         <p className="lede mt-5 max-w-2xl">{t.lede}</p>
+      </section>
+
+      {/* Live waitlist counter + cohort size — real database social proof */}
+      <section className="mt-8 border-y border-edge/70 bg-panel-2/50" aria-label="Waitlist status">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 px-6 sm:grid-cols-2 md:px-10">
+          <div className="stat-cell py-6 md:py-7">
+            <div className="stat-num">
+              <CountUp value={waitlistCount} />
+            </div>
+            <div className="stat-label">{t.counterLabel}</div>
+          </div>
+          <div className="stat-cell py-6 sm:pl-6 md:py-7 md:pl-8">
+            <div className="stat-num">6</div>
+            <div className="stat-label">{t.counterSeats}</div>
+          </div>
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="What the pilot includes">

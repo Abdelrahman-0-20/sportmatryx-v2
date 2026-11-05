@@ -14,6 +14,7 @@ const ROUTES: Array<[path: string, priority: number]> = [
   ["/pilot", 0.9],
   ["/changelog", 0.6],
   ["/login", 0.5],
+  ["/investors", 0.4],
   ["/privacy", 0.3],
   ["/terms", 0.3],
 ];

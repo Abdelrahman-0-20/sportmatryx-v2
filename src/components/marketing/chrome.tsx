@@ -118,6 +118,7 @@ export async function MarketingFooter() {
       links: [
         ["/proof", dict.nav.proof],
         ["/changelog", f.changelog],
+        ["/investors", dict.investors.eyebrow],
         ["/privacy", f.privacy],
         ["/terms", f.terms],
       ],
