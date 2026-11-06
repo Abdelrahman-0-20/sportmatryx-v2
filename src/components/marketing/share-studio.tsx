@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics/react";
 
 import { useEffect, useMemo, useState } from "react";
 import type { Dict } from "@/lib/i18n/dictionaries";
@@ -97,7 +98,12 @@ export function ShareCardStudio({ labels }: { labels: Labels }) {
             </div>
           </div>
 
-          <a href={cardUrl} download="sportmetryx-readiness-card.png" className="btn-primary w-full">
+          <a
+        href={cardUrl}
+        download="sportmetryx-readiness-card.png"
+        className="btn-primary w-full"
+        onClick={() => track("share_card_download")}
+      >
             {labels.download}
           </a>
           {/* Printed once — not repeated under the preview. */}

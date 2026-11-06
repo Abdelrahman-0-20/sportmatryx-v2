@@ -11,7 +11,6 @@ import {
   type MarketProductImage,
 } from "@/lib/services/marketplace";
 import { AddToCartButton } from "@/components/marketplace/add-to-cart-button";
-import { DemoTruthBanner } from "@/components/marketplace/demo-truth";
 import { PriceBlock } from "@/components/marketplace/price";
 
 export const dynamic = "force-dynamic";
@@ -132,7 +131,6 @@ export default async function MarketplaceProductPage({
         <span className="min-w-0 text-muted">{product.name}</span>
       </nav>
 
-      <DemoTruthBanner className="mb-4" />
 
       <div className="grid gap-4 lg:grid-cols-3">
         <div className="flex min-w-0 flex-col gap-4 lg:col-span-2">

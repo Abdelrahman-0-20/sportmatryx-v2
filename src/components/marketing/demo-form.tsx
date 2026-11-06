@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics/react";
 
 import { useState, type FormEvent } from "react";
 import type { Dict } from "@/lib/i18n/dictionaries";
@@ -88,6 +89,7 @@ export function DemoForm({ labels }: { labels: Dict["demo"]["form"] }) {
       `Name: ${name}\nOrganization: ${org}\nRole: ${role}\nEmail: ${email}\n\n${message}`,
     );
     setMailHref(`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`);
+    track("demo_request");
     setSent(true);
   }
 

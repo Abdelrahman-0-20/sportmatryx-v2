@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics/react";
 
 import { useState, type FormEvent } from "react";
 import type { Dict } from "@/lib/i18n/dictionaries";
@@ -41,6 +42,7 @@ export function PilotForm({ labels }: { labels: Dict["pilot"]["form"] }) {
       if (!res.ok || !body.ok) {
         throw new Error(body.error ?? "Something went wrong.");
       }
+      track("pilot_signup");
       setStatus("done");
     } catch (err) {
       setStatus("error");

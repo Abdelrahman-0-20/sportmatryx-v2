@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics/react";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -65,6 +66,7 @@ export function DatasetSection({
 
   const pick = async (sport: string | null) => {
     const next = sport ?? "";
+    track("sport_filter", { sport: next || "all" });
     if (busy) return;
     setBusy(true);
     try {

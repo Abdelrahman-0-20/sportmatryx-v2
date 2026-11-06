@@ -1,4 +1,5 @@
 "use client";
+import { track } from "@vercel/analytics/react";
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -31,6 +32,7 @@ export function LanguageSwitcher({ locale, label }: { locale: Locale; label: str
   }, [open]);
 
   const pick = (code: Locale) => {
+    track("language_switch", { lang: code });
     document.cookie = `${LANG_COOKIE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
     document.documentElement.lang = code;
     setOpen(false);

@@ -1,7 +1,6 @@
 import { AppShell } from "@/components/ui/app-shell";
 import { PageHero } from "@/components/ui/page-hero";
 import { MarketplaceListing } from "@/components/marketplace/listing";
-import { DemoTruthBanner } from "@/components/marketplace/demo-truth";
 import { isGuest, requireReadForGuest } from "@/lib/offline";
 import { listProducts, type MarketProduct } from "@/lib/services/marketplace";
 
@@ -44,7 +43,6 @@ export default async function MarketplacePage() {
         </p>
       </PageHero>
 
-      <DemoTruthBanner className="mb-6" />
 
       <MarketplaceListing products={products} guest={guest} />
     </AppShell>

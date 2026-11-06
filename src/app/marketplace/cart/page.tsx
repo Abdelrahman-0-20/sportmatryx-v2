@@ -3,7 +3,6 @@ import { AppShell } from "@/components/ui/app-shell";
 import { Card, CardLabel, LinkButton } from "@/components/ui/primitives";
 import { CheckoutIsland } from "@/components/marketplace/checkout-island";
 import { CartLines } from "@/components/marketplace/cart-lines";
-import { DemoTruthBanner } from "@/components/marketplace/demo-truth";
 import { Price } from "@/components/marketplace/price";
 import { requireCapability } from "@/lib/auth/rbac";
 import { listProducts, finalizeCart, type CartItem, type MarketProduct } from "@/lib/services/marketplace";
@@ -90,7 +89,6 @@ export default async function CartPage({
         </Card>
       ) : null}
 
-      <DemoTruthBanner className="mb-4" />
 
       <p className="mb-4 text-sm text-muted">
         Review your demo purchase package(s) below.
