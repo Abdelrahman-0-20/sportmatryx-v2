@@ -8,6 +8,7 @@ import { CountUp, Reveal } from "@/components/ui/motion";
 import type { SportStats } from "@/lib/sport-stats";
 
 type Labels = {
+  statLabels: string[];
   afOnly: string;
   note: string;
   distTitle: string;
@@ -151,10 +152,15 @@ export function DatasetSection({
             <div className="mt-10 grid grid-cols-2 gap-0 border-y border-edge/70 md:grid-cols-4">
               {(
                 [
-                  ["Athlete-day rows", athleteDay.rows],
-                  ["Athletes", athleteDay.athletes],
-                  ["Teams", athleteDay.teams.length],
-                  ["Days covered", 28],
+                  [labels.statLabels[0] ?? "Athlete-day rows", athleteDay.rows],
+                  [labels.statLabels[1] ?? "Athletes", athleteDay.athletes],
+                  [labels.statLabels[2] ?? "Teams", athleteDay.teams.length],
+                  [
+                    labels.statLabels[3] ?? "Days covered",
+                    Math.round(
+                      (Date.parse(athleteDay.range[1]) - Date.parse(athleteDay.range[0])) / 86400000,
+                    ) + 1,
+                  ],
                 ] as Array<[string, number]>
               ).map(([label, value], i) => (
                 <div key={label} className={`stat-cell py-7 ${i > 0 ? "sm:pl-6 md:pl-8" : ""}`}>

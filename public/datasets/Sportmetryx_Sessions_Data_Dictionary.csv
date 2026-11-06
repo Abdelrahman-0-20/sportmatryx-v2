@@ -1,0 +1,72 @@
+column,group,description
+session_id,session,Session identifier
+athlete_id,session,Athlete identifier
+sport,session,Sport of the session (one of the eight dataset sports)
+level,session,Competitive level
+session_type,session,"Session type (practice, match, recovery ...)"
+start_ts_utc,session,Session start (UTC)
+end_ts_utc,session,Session end (UTC)
+start_local_hour,session,Local start hour
+duration_min,session,Duration (minutes)
+intensity_rpe_1_10,session,"Session intensity, RPE 1-10"
+distance_km,session,Distance covered (km)
+hr_avg_bpm,session,Average heart rate (bpm)
+hr_max_bpm,session,Maximum heart rate (bpm)
+mean_resp_rate_bpm,session,Mean respiratory rate (breaths/min)
+metabolic_site,session,Metabolic measurement site
+metabolic_included,session,Whether metabolic data is included
+indoor,session,Indoor vs outdoor session
+is_synthetic,session,Provenance flag (demo dataset)
+ath_alias,ath,Athlete display name
+ath_sport,ath,Athlete's primary sport
+ath_level,ath,Athlete competitive level
+ath_age,ath,Age
+ath_sex,ath,Sex
+ath_height_cm,ath,Height (cm)
+ath_weight_kg,ath,Weight (kg)
+ath_body_fat_pct,ath,Body fat percentage
+ath_primary_position,ath,Primary position
+ath_team_id,ath,Team
+ath_home_city,ath,Home city
+ath_training_age_years,ath,Years of structured training
+ath_devices_used,ath,Devices the athlete wears
+ath_resting_hr_bpm,ath,Resting heart rate (bpm)
+ath_vo2max_estimated_ml_kg_min,ath,Estimated VO2max (ml/kg/min)
+ath_fitness_level_0_1,ath,"Fitness level, normalized 0-1"
+ath_trend_slope_pct_per_month,ath,Fitness trend slope (% per month)
+ath_metabolic_included,ath,Athlete has metabolic measurements
+ath_is_synthetic,ath,Provenance flag (demo dataset)
+env_location_proxy_city,env,Location proxy city
+env_temperature_c,env,Temperature (°C)
+env_humidity_pct,env,Humidity (%)
+env_wind_speed_m_s,env,Wind speed (m/s)
+env_air_quality_index,env,Air quality index
+env_altitude_m,env,Altitude (m)
+env_heat_index_c,env,Heat index (°C)
+env_generation_method,env,How the environment row was derived
+dev_observations_n,dev,Device observations for this session
+dev_device_ids,dev,Devices contributing data
+dev_battery_pct_mean,dev,Mean device battery (%)
+dev_signal_quality_mean,dev,Mean signal quality (0-1)
+dev_signal_dropout_pct,dev,Signal dropout (%)
+dev_ACCEL_MAG_n,dev,AG_n of acceleration magnitude across the session
+dev_ACCEL_MAG_mean,dev,mean of ACCEL_MAG_ across the session
+dev_ACCEL_MAG_min,dev,min of acceleration magnitude across the session
+dev_ACCEL_MAG_max,dev,max of acceleration magnitude across the session
+dev_GPS_SPEED_n,dev,ED_n of GPS speed across the session
+dev_GPS_SPEED_mean,dev,mean of GPS_SPEED_ across the session
+dev_GPS_SPEED_min,dev,min of GPS speed across the session
+dev_GPS_SPEED_max,dev,max of GPS speed across the session
+dev_HR_n,dev,HR_n of heart rate across the session
+dev_HR_mean,dev,mean of HR_ across the session
+dev_HR_min,dev,min of heart rate across the session
+dev_HR_max,dev,max of heart rate across the session
+dev_RESP_RATE_n,dev,TE_n of respiratory rate across the session
+dev_RESP_RATE_mean,dev,mean of RESP_RATE_ across the session
+dev_RESP_RATE_min,dev,min of respiratory rate across the session
+dev_RESP_RATE_max,dev,max of respiratory rate across the session
+dev_SPO2_n,dev,O2_n of blood oxygen across the session
+dev_SPO2_mean,dev,mean of SPO2_ across the session
+dev_SPO2_min,dev,min of blood oxygen across the session
+dev_SPO2_max,dev,max of blood oxygen across the session
+date_iso,session,"Session date, derived from start_ts_utc"

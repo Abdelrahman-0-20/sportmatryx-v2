@@ -181,10 +181,12 @@ export const pt: Dict = {
     data: {
       eyebrow: "Os dados",
       h2: "Explore o conjunto de dados da demo",
-      lede: "Os dados por trás de cada pontuação — 50 atletas, médias diárias de sensores, carga, ambiente, consentimento, linhas de base e pontuações.",
+      lede: "Dois datasets atrás da plataforma: dias-atleta pontuados de uma coorte de futebol americano, e sessões unidas de oito esportes — com um dicionário de dados para cada coluna de ambos.",
       download: "Baixar dataset atleta-dia",
       download2: "Baixar dataset de sessões",
       download3: "Dicionário de dados (106 colunas)",
+      download4: "Dicionário de sessões (71 colunas)",
+      statLabels: ["Linhas atleta-dia", "Atletas", "Times", "Dias cobiertos"],
       afOnly: "Pontuações, bandas e prévia pertencem ao dataset atleta-dia — uma coorte de futebol americano. Selecione American football acima para explorá-lo.",
       stats: ["Linhas atleta-dia", "Atletas", "Times", "Dias cobertos"],
       distTitle: "Distribuição de prontidão (dias pontuados)",

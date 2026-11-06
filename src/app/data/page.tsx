@@ -80,13 +80,22 @@ export default async function DataPage({
             {t.data.download2}
           </a>
         </div>
-        <a
-          href="/datasets/Sportmetryx_Wide_Data_Dictionary.csv"
-          download
-          className="mt-4 inline-block text-xs font-semibold text-accent underline-offset-2 hover:underline"
-        >
-          {t.data.download3} →
-        </a>
+        <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+          <a
+            href="/datasets/Sportmetryx_Wide_Data_Dictionary.csv"
+            download
+            className="text-xs font-semibold text-accent underline-offset-2 hover:underline"
+          >
+            {t.data.download3} →
+          </a>
+          <a
+            href="/datasets/Sportmetryx_Sessions_Data_Dictionary.csv"
+            download
+            className="text-xs font-semibold text-accent underline-offset-2 hover:underline"
+          >
+            {t.data.download4} →
+          </a>
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-16 pt-6 md:px-10" aria-label="Dataset explorer">

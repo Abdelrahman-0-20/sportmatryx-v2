@@ -179,10 +179,12 @@ export const en = {
     data: {
       eyebrow: "The data",
       h2: "Explore the demo dataset",
-      lede: "The data behind every score — 50 athletes, day-level sensor means, workload, environment, consent, baselines and scores.",
+      lede: "Two datasets behind the platform: scored athlete-days from an American football cohort, and joined sessions across eight sports — with a data dictionary for every column of each.",
       download: "Download athlete-day dataset",
       download2: "Download sessions dataset",
       download3: "Data dictionary (106 columns)",
+      download4: "Sessions data dictionary (71 columns)",
+      statLabels: ["Athlete-day rows", "Athletes", "Teams", "Days covered"],
       afOnly: "Scores, bands and the preview belong to the athlete-day dataset — an American football cohort. Select American football above to explore it.",
       stats: ["Athlete-day rows", "Athletes", "Teams", "Days covered"],
       distTitle: "Readiness distribution (scored days)",
