@@ -1,6 +1,7 @@
 import { AppShell } from "@/components/ui/app-shell";
 import { PageHero } from "@/components/ui/page-hero";
 import { MarketplaceListing } from "@/components/marketplace/listing";
+import { DemoTruthBanner } from "@/components/marketplace/demo-truth";
 import { isGuest, requireReadForGuest } from "@/lib/offline";
 import { listProducts, type MarketProduct } from "@/lib/services/marketplace";
 
@@ -39,9 +40,11 @@ export default async function MarketplacePage() {
           datasets — the revenue layer of the platform.
         </p>
         <p className="mt-2 text-xs font-semibold text-accent">
-          Secure checkout · consent-governed data · instant delivery
+          Consent-governed data · demo checkout · instant sample downloads
         </p>
       </PageHero>
+
+      <DemoTruthBanner className="mb-6" />
 
       <MarketplaceListing products={products} guest={guest} />
     </AppShell>

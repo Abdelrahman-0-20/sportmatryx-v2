@@ -57,12 +57,13 @@ export async function GET(request: Request) {
             >
               &gt;&gt;
             </div>
-            <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: 3, color: "#5fd0f0" }}>
+            <div style={{ display: "flex", fontSize: 26, fontWeight: 700, letterSpacing: 3, color: "#5fd0f0" }}>
               SPORTMETRYX
             </div>
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 20,
               fontWeight: 700,
               letterSpacing: 2,
@@ -80,13 +81,14 @@ export async function GET(request: Request) {
         {/* center */}
         <div style={{ display: "flex", alignItems: "flex-end", gap: 40 }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 40, color: "#a9bbd6" }}>{name}</div>
-            <div style={{ fontSize: 34, color: "#a9bbd6", marginTop: 10 }}>
+            <div style={{ display: "flex", fontSize: 40, color: "#a9bbd6" }}>{name}</div>
+            <div style={{ display: "flex", fontSize: 34, color: "#a9bbd6", marginTop: 10 }}>
               Squad readiness
             </div>
           </div>
           <div
             style={{
+              display: "flex",
               fontSize: 190,
               fontWeight: 700,
               lineHeight: 0.9,
@@ -109,8 +111,8 @@ export async function GET(request: Request) {
             }}
           />
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#a9bbd6" }}>
-            <div>Validity-gated · explainable · consent-governed</div>
-            <div style={{ color: "#e8f0f9", fontWeight: 700 }}>sportmatryx-v2.vercel.app</div>
+            <div style={{ display: "flex" }}>Validity-gated · explainable · consent-governed</div>
+            <div style={{ display: "flex", color: "#e8f0f9", fontWeight: 700 }}>sportmatryx-v2.vercel.app</div>
           </div>
         </div>
       </div>

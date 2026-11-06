@@ -43,6 +43,7 @@ export default async function TeamCommandPage() {
 
   return (
     <AppShell crumb="/team-command" title="Team Command">
+      <SectionTabs />
       <p className="mb-4 text-sm text-muted">
         {teamName ?? "All teams"} · reporting period: last 14 days · {overview.roster.length} athletes on roster
       </p>

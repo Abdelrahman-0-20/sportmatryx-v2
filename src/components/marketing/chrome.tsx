@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Reveal } from "@/components/ui/motion";
 import { BackToTop } from "@/components/marketing/back-to-top";
 import { LanguageSwitcher } from "@/components/marketing/language-switcher";
 import { getDict, getLocale } from "@/lib/i18n/server";
+import { DrawerNav } from "@/components/ui/drawer-nav";
+import { MarketingNav } from "@/components/marketing/nav-links";
 
 /**
  * Shared marketing chrome — sticky glass header (with language switcher) and
@@ -24,31 +25,24 @@ export async function MarketingHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-edge/70 bg-canvas/80 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5 md:px-10">
-        <Link href="/" className="display-heading text-xl tracking-tight">
-          <span className="text-accent">Sportmetryx</span>
-        </Link>
-        <nav className="hidden items-center gap-7 text-sm md:flex" aria-label="Primary">
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="font-medium text-muted transition-colors hover:text-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div className="flex items-center gap-2">
+          <Link href="/" className="display-heading text-xl tracking-tight">
+            <span className="text-accent">Sportmetryx</span>
+          </Link>
+          <DrawerNav items={nav} label="Menu" cta={{ href: "/login", label: dict.header.signIn }} align="left" />
+        </div>
+        <MarketingNav items={nav} label="Primary" />
         <div className="flex items-center gap-3 text-sm">
           <LanguageSwitcher locale={locale} label={dict.lang.label} />
           <Link
             href="/roster"
-            className="hidden font-medium text-muted transition-colors hover:text-ink lg:block"
+            className="hidden rounded-md px-1 py-2 font-medium text-muted transition-colors hover:text-ink lg:block"
           >
             {dict.header.athletes}
           </Link>
           <Link
             href="/login"
-            className="hidden font-medium text-muted transition-colors hover:text-ink sm:block"
+            className="hidden rounded-md px-1 py-2 font-medium text-muted transition-colors hover:text-ink sm:block"
           >
             {dict.header.signIn}
           </Link>
@@ -135,7 +129,7 @@ export async function MarketingFooter() {
       <div className="bg-panel-2/40">
         {/* Brand + conversion CTAs */}
         <div className="mx-auto max-w-7xl px-6 pt-12 md:px-10">
-          <Reveal>
+          <div>
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div className="flex items-start gap-4">
                 <FooterMark />
@@ -155,14 +149,13 @@ export async function MarketingFooter() {
                 </Link>
               </div>
             </div>
-          </Reveal>
+          </div>
         </div>
 
-        {/* Link columns — staggered scroll-in: product → actions → trust */}
+        {/* Link columns */}
         <div className="mx-auto grid max-w-7xl gap-8 px-6 py-11 sm:grid-cols-3 md:px-10">
-          {columns.map((col, i) => (
-            <Reveal key={col.title} delay={i * 90}>
-              <div>
+          {columns.map((col) => (
+            <div key={col.title}>
                 <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                   {col.title}
                 </div>
@@ -175,8 +168,7 @@ export async function MarketingFooter() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </Reveal>
+            </div>
           ))}
         </div>
 

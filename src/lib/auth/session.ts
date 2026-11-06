@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { generateToken } from "./password";
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 /**
  * DB-backed session auth.
@@ -40,6 +40,28 @@ function verifySigned(value: string): string | null {
   return timingSafeEqual(expected, given) ? id : null;
 }
 
+/**
+ * Should the session cookie be marked Secure?
+ *
+ * `NODE_ENV === "production"` is the wrong test: a production build served
+ * over plain HTTP on a LAN host (http://10.0.2.15:3000) makes browsers REJECT
+ * the cookie, so sign-in returns ok but the session never persists — the user
+ * bounces back to /login on the next navigation. Ask the connection instead:
+ * TLS-terminated deployments (Vercel) send `x-forwarded-proto: https` and keep
+ * Secure on; plain-HTTP dev/LAN origins drop it and actually work.
+ */
+async function shouldUseSecureCookie(): Promise<boolean> {
+  try {
+    const h = await headers();
+    const proto = (h.get("x-forwarded-proto") ?? "").split(",")[0]!.trim().toLowerCase();
+    if (proto) return proto === "https";
+    // Vercel always sets the header above; keep Secure as a belt-and-braces.
+    return process.env.VERCEL === "1";
+  } catch {
+    return false;
+  }
+}
+
 export async function createSession(userId: string): Promise<void> {
   const sessionId = generateToken(24);
   const expires = new Date(Date.now() + SESSION_TTL_DAYS * 24 * 3600 * 1000);
@@ -48,7 +70,7 @@ export async function createSession(userId: string): Promise<void> {
   store.set(SESSION_COOKIE, `${sessionId}.${signSessionId(sessionId)}`, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: await shouldUseSecureCookie(),
     path: "/",
     expires,
   });

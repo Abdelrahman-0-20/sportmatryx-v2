@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { isGuest, GUEST_USER } from "@/lib/offline";
 import { SignOutButton } from "@/components/ui/sign-out";
+import { DrawerNav } from "@/components/ui/drawer-nav";
 
 const NAV: { section: string; items: { href: string; label: string }[] }[] = [
   {
@@ -20,6 +21,9 @@ const NAV: { section: string; items: { href: string; label: string }[] }[] = [
     ],
   },
 ];
+
+// Flat view of the grouped nav for the mobile drawer.
+const DRAWER_ITEMS = NAV.flatMap((g) => g.items);
 
 export async function AppShell({
   children,
@@ -129,6 +133,7 @@ function Header({ crumb, guest, cartItems }: { crumb: string; guest?: boolean; c
         <Link href="/overview" className="display-heading text-lg md:hidden">
           <span className="text-accent">Sportmetryx</span>
         </Link>
+        <DrawerNav items={DRAWER_ITEMS} label="Menu" align="left" />
         <span className="hidden font-mono text-xs text-muted md:block">{crumb}</span>
       </div>
       <div className="flex items-center gap-3">

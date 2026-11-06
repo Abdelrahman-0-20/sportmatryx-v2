@@ -48,6 +48,7 @@ export default async function GameReadinessPage() {
 
   return (
     <AppShell crumb="/game-readiness" title="Game Readiness">
+      <SectionTabs />
       <p className="mb-4 text-sm text-muted">
         Readiness snapshot for game-day decisions. Most recent game:{" "}
         {latestGame

@@ -139,5 +139,30 @@ export function errorToResponse(e: unknown): { status: number; body: { error: st
   if (err.status === 404) {
     return { status: 404, body: { error: err.message, code: "NOT_FOUND" } };
   }
+  const message = err.message ?? "";
+  // Prisma "table/column does not exist" (P2021/P2022) means pending migrations,
+  // not a transient failure — say so, with the fix, instead of "Internal error."
+  if (err.code === "P2021" || err.code === "P2022" || /does not exist/i.test(message)) {
+    return {
+      status: 500,
+      body: {
+        error: "Database schema is out of date — apply pending migrations with `pnpm db:deploy`, then reload.",
+        code: "SCHEMA_OUTDATED",
+      },
+    };
+  }
+  // Unreachable database / missing connection string.
+  if (
+    err.code === "P1001" ||
+    /Can't reach database server|ECONNREFUSED|Environment variable not found: DATABASE_URL/i.test(message)
+  ) {
+    return {
+      status: 503,
+      body: {
+        error: "The database is not reachable. Check DATABASE_URL (and that the local database is running) and retry.",
+        code: "DB_UNREACHABLE",
+      },
+    };
+  }
   return { status: 500, body: { error: "Internal error.", code: "INTERNAL" } };
 }

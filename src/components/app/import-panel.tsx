@@ -67,7 +67,7 @@ export function ImportPanel() {
   }
 
   return (
-    <div>
+    <div aria-busy={busy}>
       <div className="flex flex-wrap items-center gap-3">
         <label className="min-h-[36px] cursor-pointer rounded-md bg-accent px-3 py-2 text-sm font-bold text-canvas hover:bg-cyan-300">
           {busy ? "Importing…" : "Choose CSV / Excel files"}
@@ -95,7 +95,21 @@ export function ImportPanel() {
         <span className="text-xs text-muted">CSV or Excel (.xlsx/.xls) · multiple files · per file max 2 MB · 5000 rows · validated against the frozen metric catalog.</span>
       </div>
 
+      {busy ? (
+        <p role="status" className="mt-3 rounded-md border border-edge bg-panel-2 px-3 py-2 text-sm text-muted">
+          Importing… validating rows against the metric catalog. This can take a moment for a 5,000-row file.
+        </p>
+      ) : null}
+
       {error ? <p role="alert" className="mt-3 text-sm text-compromised">{error}</p> : null}
+
+      {!busy && summaries.length > 0 && !error ? (
+        <p role="status" className="mt-3 text-sm text-ready">
+          ✓ {summaries.length} file{summaries.length === 1 ? "" : "s"} imported ·{" "}
+          {summaries.reduce((n, s) => n + s.processedRows, 0).toLocaleString("en-US")} rows accepted ·{" "}
+          {summaries.reduce((n, s) => n + s.errorRows, 0).toLocaleString("en-US")} rejected.
+        </p>
+      ) : null}
 
       {summaries.map((summary) => (
         <div key={summary.jobId} className="mt-4 rounded-md border border-edge bg-panel-2 p-3">
@@ -103,7 +117,7 @@ export function ImportPanel() {
             <span className={`font-bold ${summary.status === "COMPLETED" ? "text-ready" : summary.status === "FAILED" ? "text-critical" : "text-monitor"}`}>
               {summary.status.replace(/_/g, " ")}
             </span>{" "}
-            — {summary.fileName}: {summary.processedRows}/{summary.totalRows} rows imported, {summary.errorRows} rejected.
+            — {summary.fileName}: {summary.processedRows.toLocaleString("en-US")}/{summary.totalRows.toLocaleString("en-US")} rows imported, {summary.errorRows.toLocaleString("en-US")} rejected.
           </p>
           {summary.errors.length > 0 ? (
             <details className="mt-2">

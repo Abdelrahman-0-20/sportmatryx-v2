@@ -2,12 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
 import { SectionTabs } from "@/components/ui/section-tabs";
-import {Card,  Tag } from "@/components/ui/primitives";
-import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
+import { Card, Tag } from "@/components/ui/primitives";
+import { EmptyState, Footnote, TableScroll, TD, TH, count } from "@/components/app/ops-kit";
+import { errorToResponse, UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
+
+const SESSION_WINDOW_MS = 24 * 3600 * 1000;
 
 /**
  * Practice Command — session workload view: recent practices, load summaries,
@@ -32,76 +35,105 @@ export default async function PracticeCommandPage() {
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/practice-command" title="Practice Command">
-  <SectionTabs />
+        <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );
   }
 
-  // Session-level load: max LOAD_AU observation on the session date.
-  const loadByDate = new Map<string, number | null>();
-  for (const s of rows) {
-    const obs = await prisma.observation.findFirst({
-      where: { athleteId: s.athleteId, type: "LOAD_AU", timestamp: { gte: s.date, lt: new Date(s.date.getTime() + 24 * 3600 * 1000) }, isValid: true },
-      select: { value: true },
+  // Session-level load: max LOAD_AU observation in each session's 24h window.
+  // One batched query for the whole table (was one findFirst per row).
+  const loadBySession = new Map<string, number | null>();
+  for (const s of rows) loadBySession.set(s.id, null);
+  const athleteIds = [...new Set(rows.map((s) => s.athleteId))];
+  if (athleteIds.length > 0 && rows.length > 0) {
+    const starts = rows.map((s) => new Date(s.date).getTime());
+    const observations = await prisma.observation.findMany({
+      where: {
+        athleteId: { in: athleteIds },
+        type: "LOAD_AU",
+        isValid: true,
+        timestamp: { gte: new Date(Math.min(...starts)), lt: new Date(Math.max(...starts) + SESSION_WINDOW_MS) },
+      },
+      select: { athleteId: true, timestamp: true, value: true },
     });
-    loadByDate.set(s.id, obs ? obs.value : null);
+    for (const o of observations) {
+      const t = o.timestamp.getTime();
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].athleteId !== o.athleteId) continue;
+        const start = starts[i];
+        if (t < start || t >= start + SESSION_WINDOW_MS) continue;
+        const current = loadBySession.get(rows[i].id);
+        if (current === null || current === undefined || o.value > current) {
+          loadBySession.set(rows[i].id, o.value);
+        }
+      }
+    }
   }
 
   return (
     <AppShell crumb="/practice-command" title="Practice Command">
+      <SectionTabs />
       <p className="mb-4 text-sm text-muted">
         External workload and drill context per session. Missing load is shown as missing — never zero.
       </p>
-      <Card className="overflow-x-auto" ariaLabel="Practice sessions">
+      <Card ariaLabel="Practice sessions">
         {rows.length === 0 ? (
-          <p className="rounded-md border border-dashed border-edge p-6 text-center text-sm text-muted">
-            No practice sessions recorded.
-          </p>
+          <EmptyState message="No practice sessions recorded." />
         ) : (
-          <table className="w-full min-w-[820px] text-sm">
-            <thead>
-              <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-                <th className="pb-2 pr-3">Date</th>
-                <th className="pb-2 pr-3">Athlete</th>
-                <th className="pb-2 pr-3">Type</th>
-                <th className="pb-2 pr-3">Drill</th>
-                <th className="pb-2 pr-3">Duration</th>
-                <th className="pb-2 pr-3">Load (AU)</th>
-                <th className="pb-2 pr-3">Context</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice(0, 20).map((s) => (
-                <tr key={s.id} className="border-b border-edge/50">
-                  <td className="tabular py-2 pr-3 text-muted">{new Date(s.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</td>
-                  <td className="py-2 pr-3">
-                    <Link href={`/player/${s.athleteId}`} className="hover:text-accent">
-                      {s.athlete.lastName}, {s.athlete.firstName.charAt(0)}.
-                    </Link>
-                  </td>
-                  <td className="py-2 pr-3"><Tag label={s.sessionType} /></td>
-                  <td className="py-2 pr-3 text-muted">
-                    {s.footballContexts[0]?.drill ?? "—"}
-                    {s.footballContexts[0]?.repetition ? ` ×${s.footballContexts[0].repetition}` : ""}
-                  </td>
-                  <td className="tabular py-2 pr-3 text-muted">{s.durationMinutes ?? "—"} min</td>
-                  <td className="tabular py-2 pr-3">{loadByDate.get(s.id) ?? <span className="text-muted">—</span>}</td>
-                  <td className="py-2 pr-3 text-xs text-muted">
-                    {s.footballContexts[0]?.isIndoor ? "Indoor" : "Outdoor"}
-                    {s.footballContexts[0]?.temperature !== null && s.footballContexts[0]?.temperature !== undefined ? ` · ${s.footballContexts[0].temperature}°C` : ""}
-                    {s.footballContexts[0]?.airQualityIndex ? ` · AQI ${s.footballContexts[0].airQualityIndex}` : ""}
-                  </td>
+          <>
+            <p className="mb-3 text-xs text-muted">
+              Showing the {count(rows.length)} most recent session{rows.length === 1 ? "" : "s"} — everything fetched.
+            </p>
+            <TableScroll minWidth="min-w-[760px]">
+              <thead>
+                <tr className="border-b border-edge text-[11px] uppercase tracking-wider text-muted">
+                  <th className={TH}>Date</th>
+                  <th className={TH}>Athlete</th>
+                  <th className={TH}>Type</th>
+                  <th className={TH}>Drill</th>
+                  <th className={TH}>Duration</th>
+                  <th className={TH}>Load (AU)</th>
+                  <th className={TH}>Context</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {rows.map((s) => (
+                  <tr key={s.id} className="border-b border-edge/50">
+                    <td className={`${TD} tabular text-muted`}>
+                      {new Date(s.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                    </td>
+                    <td className={TD}>
+                      <Link href={`/player/${s.athleteId}`} className="hover:text-accent">
+                        {s.athlete.lastName}, {s.athlete.firstName.charAt(0)}.
+                      </Link>
+                    </td>
+                    <td className={TD}><Tag label={s.sessionType} /></td>
+                    <td className={`${TD} text-muted`}>
+                      {s.footballContexts[0]?.drill ?? "—"}
+                      {s.footballContexts[0]?.repetition ? ` ×${s.footballContexts[0].repetition}` : ""}
+                    </td>
+                    <td className={`${TD} tabular text-muted`}>
+                      {s.durationMinutes !== null && s.durationMinutes !== undefined ? `${s.durationMinutes} min` : "—"}
+                    </td>
+                    <td className={`${TD} tabular`}>
+                      {loadBySession.get(s.id) ?? <span className="text-muted">—</span>}
+                    </td>
+                    <td className={`${TD} text-xs text-muted`}>
+                      {s.footballContexts[0]?.isIndoor ? "Indoor" : "Outdoor"}
+                      {s.footballContexts[0]?.temperature !== null && s.footballContexts[0]?.temperature !== undefined ? ` · ${s.footballContexts[0].temperature}°C` : ""}
+                      {s.footballContexts[0]?.airQualityIndex ? ` · AQI ${s.footballContexts[0].airQualityIndex}` : ""}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableScroll>
+          </>
         )}
       </Card>
-      <p className="mt-3 text-xs text-muted">
+      <Footnote>
         Acute:chronic workload ratios are a configurable research feature — not injury predictors (spec §12).
-      </p>
+      </Footnote>
     </AppShell>
   );
 }
-

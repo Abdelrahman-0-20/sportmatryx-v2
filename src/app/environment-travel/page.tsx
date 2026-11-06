@@ -2,8 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
 import { SectionTabs } from "@/components/ui/section-tabs";
-import {Card,  CardLabel, Sparkline } from "@/components/ui/primitives";
-import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
+import { Card, CardLabel, Sparkline } from "@/components/ui/primitives";
+import { EmptyState, Footnote, StatGrid, TableScroll, TD, TH, count } from "@/components/app/ops-kit";
+import { errorToResponse, UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
 import { prisma } from "@/lib/prisma";
 import { daysAgoIso } from "@/lib/clock";
@@ -81,64 +82,100 @@ export default async function EnvironmentTravelPage() {
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/environment-travel" title="Environment & Travel">
-  <SectionTabs />
+        <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );
   }
 
-  rows = rows.sort((a, b) => (b.travelDays ?? 99) - (a.travelDays ?? 99)).slice(0, 20);
+  // Honest table: athletes only appear when they carry something worth
+  // reading. If nobody has heat/AQI samples, a wall of dash rows would
+  // contradict the summary cards — so the table becomes one empty state.
+  const hasExposure = (r: Row) => r.heat.some((v) => v !== null) || r.aqi.some((v) => v !== null);
+  const hasTravel = (r: Row) => r.travelDays !== null || r.lastTravel !== null;
+  const exposed = rows.some(hasExposure)
+    ? rows.filter((r) => hasExposure(r) || hasTravel(r)).sort((a, b) => (b.travelDays ?? 99) - (a.travelDays ?? 99)).slice(0, 20)
+    : [];
 
   return (
     <AppShell crumb="/environment-travel" title="Environment & Travel">
+      <SectionTabs />
       {envSummary ? (
-        <div className="mb-4 grid gap-4 md:grid-cols-3">
+        <StatGrid>
           <Card>
-            <div className="hero-number text-4xl text-monitor">{envSummary.heatDays}</div>
+            <div className="hero-number text-4xl text-monitor">{count(envSummary.heatDays)}</div>
             <CardLabel>Heat ≥30°C observations (14d)</CardLabel>
           </Card>
           <Card>
-            <div className="hero-number text-4xl text-monitor">{envSummary.highAqiDays}</div>
+            <div className="hero-number text-4xl text-monitor">{count(envSummary.highAqiDays)}</div>
             <CardLabel>AQI ≥100 observations (14d)</CardLabel>
           </Card>
           <Card>
-            <div className="hero-number text-4xl">{envSummary.travelEvents}</div>
+            <div className="hero-number text-4xl">{count(envSummary.travelEvents)}</div>
             <CardLabel>Travel events (14d)</CardLabel>
           </Card>
-        </div>
+        </StatGrid>
       ) : null}
 
-      <Card className="overflow-x-auto" ariaLabel="Environment and travel by athlete">
-        <table className="w-full min-w-[760px] text-sm">
-          <thead>
-            <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-              <th className="pb-2 pr-3">Athlete</th>
-              <th className="pb-2 pr-3">Heat 14d</th>
-              <th className="pb-2 pr-3">AQI 14d</th>
-              <th className="pb-2 pr-3">Last travel</th>
-              <th className="pb-2 pr-3">Days since travel</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.athleteId} className="border-b border-edge/50">
-                <td className="py-2 pr-3">
-                  <Link href={`/player/${r.athleteId}`} className="hover:text-accent">{r.name}</Link>
-                </td>
-                <td className="py-2 pr-3"><Sparkline points={r.heat} /></td>
-                <td className="py-2 pr-3"><Sparkline points={r.aqi} /></td>
-                <td className="py-2 pr-3 text-muted">{r.lastTravel ? new Date(r.lastTravel).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</td>
-                <td className="tabular py-2 pr-3">{r.travelDays ?? <span className="text-muted">—</span>}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Card ariaLabel="Environment and travel by athlete">
+        {exposed.length === 0 ? (
+          <EmptyState
+            message="No exposure data captured for this team yet."
+            hint="No heat or AQI samples in the rolling 14-day window — travel events are summarised in the cards above."
+          />
+        ) : (
+          <>
+            <p className="mb-3 text-xs text-muted">
+              {count(exposed.length)} athlete{exposed.length === 1 ? "" : "s"} with exposure or travel data · rolling 14 days.
+            </p>
+            <TableScroll minWidth="min-w-[600px]">
+              <thead>
+                <tr className="border-b border-edge text-[11px] uppercase tracking-wider text-muted">
+                  <th className={TH}>Athlete</th>
+                  <th className={TH}>Last travel</th>
+                  <th className={TH}>Days since travel</th>
+                  <th className={TH}>Heat 14d</th>
+                  <th className={TH}>AQI 14d</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exposed.map((r) => (
+                  <tr key={r.athleteId} className="border-b border-edge/50">
+                    <td className={TD}>
+                      <Link href={`/player/${r.athleteId}`} className="hover:text-accent">{r.name}</Link>
+                    </td>
+                    <td className={`${TD} text-muted`}>
+                      {r.lastTravel
+                        ? new Date(r.lastTravel).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                        : "—"}
+                    </td>
+                    <td className={`${TD} tabular`}>{r.travelDays ?? <span className="text-muted">—</span>}</td>
+                    <td className={TD}>
+                      {r.heat.some((v) => v !== null) ? (
+                        <Sparkline points={r.heat} />
+                      ) : (
+                        <span className="text-xs text-muted" title="No heat samples in the last 14 days">—</span>
+                      )}
+                    </td>
+                    <td className={TD}>
+                      {r.aqi.some((v) => v !== null) ? (
+                        <Sparkline points={r.aqi} />
+                      ) : (
+                        <span className="text-xs text-muted" title="No AQI samples in the last 14 days">—</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableScroll>
+          </>
+        )}
       </Card>
-      <p className="mt-3 text-xs text-muted">
+
+      <Footnote>
         Exposure context shows observed conditions with documented provenance — no unsupported
         causal effects are asserted (spec §15). External feeds are not live; adapters are future work.
-      </p>
+      </Footnote>
     </AppShell>
   );
 }
-

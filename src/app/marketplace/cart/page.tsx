@@ -1,13 +1,17 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
 import { Card, CardLabel, LinkButton } from "@/components/ui/primitives";
 import { CheckoutIsland } from "@/components/marketplace/checkout-island";
 import { CartLines } from "@/components/marketplace/cart-lines";
+import { DemoTruthBanner } from "@/components/marketplace/demo-truth";
+import { Price } from "@/components/marketplace/price";
 import { requireCapability } from "@/lib/auth/rbac";
 import { listProducts, finalizeCart, type CartItem, type MarketProduct } from "@/lib/services/marketplace";
 
 export const dynamic = "force-dynamic";
+
+/** Server cart line + the display fields the client dialog writes to the cookie. */
+type DisplayCartItem = CartItem & { tag?: string; sourceLabel?: string };
 
 export default async function CartPage({
   searchParams,
@@ -59,18 +63,22 @@ export default async function CartPage({
 
   // Re-price cart lines from the current catalog so the displayed total
   // always matches what demo checkout will charge (the cookie cart may hold
-  // stale prices from before pricing existed).
-  const pricedItems: CartItem[] = items.map((i) => {
+  // stale prices from before pricing existed). Carry the catalog's tag and
+  // provenance so lines render with the same chips as the cart dialog.
+  const pricedItems: DisplayCartItem[] = items.map((i) => {
     const product = catalog.find((p) => p.id === i.productId);
-    return product ? { ...i, name: product.name, priceCents: product.priceCents } : i;
+    return product
+      ? { ...i, name: product.name, priceCents: product.priceCents, tag: product.tag, sourceLabel: product.sourceLabel }
+      : i;
   });
   const { items: valid, totalCents } = finalizeCart(pricedItems);
-  const totalPrice = totalCents / 100;
+  // finalizeCart spreads each line, so the display fields survive at runtime.
+  const displayItems = valid as DisplayCartItem[];
 
   return (
     <AppShell crumb="/marketplace/cart" title="Cart">
       {completedPurchase ? (
-        <Card className="card-lift border border-ready/40" ariaLabel="Demo purchase complete">
+        <Card className="card-lift mb-4 border border-ready/40" ariaLabel="Demo purchase complete">
           <CardLabel>Demo purchase completed</CardLabel>
           <p className="text-sm text-ready">
             Demo order <span className="font-mono">{completedPurchase}</span> completed.
@@ -82,56 +90,77 @@ export default async function CartPage({
         </Card>
       ) : null}
 
+      <DemoTruthBanner className="mb-4" />
+
       <p className="mb-4 text-sm text-muted">
         Review your demo purchase package(s) below.
       </p>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          {valid.length === 0 ? (
-            <Card ariaLabel="Cart is empty">
-              <CardLabel>Cart</CardLabel>
-              <p className="text-sm text-muted">Your cart is empty.</p>
-              <LinkButton href="/marketplace" className="mt-2">
-                Browse marketplace
+      {displayItems.length === 0 ? (
+        /* Empty cart: one honest empty state, and NO checkout form that
+           looks ready to submit. */
+        <Card ariaLabel="Cart is empty">
+          <p className="text-sm text-muted">Your cart is empty.</p>
+          <p className="mt-1 text-sm text-muted">
+            Add a data package from the marketplace to review it here before checking out.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <LinkButton href="/marketplace">Browse marketplace</LinkButton>
+            {!checkoutEnabled ? (
+              <LinkButton href="/login" variant="ghost">
+                Sign in
               </LinkButton>
-            </Card>
-          ) : (
+            ) : null}
+          </div>
+          {!checkoutEnabled ? (
+            <p className="mt-3 text-xs text-muted">
+              Sign in with a role that includes export capability to complete a demo purchase.
+            </p>
+          ) : null}
+        </Card>
+      ) : (
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="min-w-0 lg:col-span-2">
             <Card ariaLabel="Cart items">
-              <CardLabel>Cart</CardLabel>
-              <CartLines items={valid} />
-              <div className="mt-3 border-t border-edge pt-3 flex items-center justify-between">
-                <span className="text-sm text-muted">{valid.length} item{valid.length === 1 ? "" : "s"}</span>
-                <span className="tabular font-semibold">
-                  {totalPrice === 0 ? "Demo total: $0.00" : `Demo total: $${totalPrice.toFixed(2)}`}
+              <CardLabel>Cart items</CardLabel>
+              <CartLines items={displayItems} />
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-edge pt-3">
+                <span className="text-sm text-muted">
+                  {valid.length} item{valid.length === 1 ? "" : "s"}
+                </span>
+                <span className="flex items-baseline gap-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+                    Demo total
+                  </span>
+                  <Price cents={totalCents} size="md" />
                 </span>
               </div>
             </Card>
-          )}
-        </div>
+          </div>
 
-        <div className="lg:col-span-1">
-          {checkoutEnabled ? (
-            <Card>
-              <CardLabel>Checkout</CardLabel>
-              <CheckoutIsland items={valid} totalCents={totalCents} />
-              <LinkButton href="/marketplace" variant="ghost" className="mt-3 w-full">
-                Continue browsing
-              </LinkButton>
-            </Card>
-          ) : (
-            <Card>
-              <CardLabel>Checkout</CardLabel>
-              <p className="text-sm text-muted">
-                Sign in with a role that includes export capability to complete a demo purchase.
-              </p>
-              <LinkButton href="/login" className="mt-2 w-full">
-                Sign in
-              </LinkButton>
-            </Card>
-          )}
+          <div className="min-w-0 lg:col-span-1">
+            {checkoutEnabled ? (
+              <Card>
+                <CardLabel>Checkout</CardLabel>
+                <CheckoutIsland items={displayItems} totalCents={totalCents} />
+                <LinkButton href="/marketplace" variant="ghost" className="mt-3 w-full">
+                  Continue browsing
+                </LinkButton>
+              </Card>
+            ) : (
+              <Card>
+                <CardLabel>Checkout</CardLabel>
+                <p className="text-sm text-muted">
+                  Sign in with a role that includes export capability to complete a demo purchase.
+                </p>
+                <LinkButton href="/login" className="mt-2 w-full">
+                  Sign in
+                </LinkButton>
+              </Card>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </AppShell>
   );
 }

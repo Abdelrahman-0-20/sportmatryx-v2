@@ -9,7 +9,7 @@ const LINES = [
 ];
 
 /**
- * BootScreen — a one-second "system boot" overlay shown on the first visit of
+ * BootScreen — a sub-second "system boot" overlay shown on the first visit of
  * a browser session. Sets `smx_booted` in sessionStorage so it never repeats,
  * and skips entirely when the visitor prefers reduced motion.
  */
@@ -40,8 +40,8 @@ export function BootScreen() {
       } catch {
         /* storage blocked — boot will replay next visit */
       }
-    }, 1900);
-    const remove = window.setTimeout(() => setPhase("hidden"), 2500);
+    }, 900);
+    const remove = window.setTimeout(() => setPhase("hidden"), 1400);
     return () => {
       window.cancelAnimationFrame(show);
       window.clearTimeout(exit);
@@ -52,7 +52,7 @@ export function BootScreen() {
   if (phase === "hidden") return null;
 
   return (
-    <div className={`boot-overlay ${phase === "done" ? "is-done" : ""}`} aria-hidden="true">
+    <div className={`boot-overlay ${phase === "done" ? "is-done" : ""}`} aria-hidden="true" style={{ pointerEvents: "none" }}>
       <div className="boot-card">
         <div className="display-heading text-xl">
           <span className="text-accent">Sportmetryx</span>

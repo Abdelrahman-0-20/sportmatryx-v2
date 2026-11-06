@@ -1,6 +1,7 @@
 "use client";
 
 import { Tag, Button, LinkButton } from "@/components/ui/primitives";
+import { Price } from "@/components/marketplace/price";
 import type { MarketProduct } from "@/lib/services/marketplace";
 
 /**
@@ -54,10 +55,7 @@ export function FeaturedSpotlight({
 
         <div className="flex shrink-0 flex-col items-start gap-2 md:items-end">
           <div className="text-right">
-            <div className="hero-number tabular text-4xl text-accent md:text-5xl">
-              ${(product.priceCents / 100).toFixed(2)}
-              <span className="ml-1 text-xs font-semibold text-muted">USD</span>
-            </div>
+            <Price cents={product.priceCents} currency={product.currency} size="lg" />
             <div className="mt-0.5 text-[11px] text-muted">
               {product.rowsEstimate !== null ? `${product.rowsEstimate} rows` : "Rows n/a"}
             </div>

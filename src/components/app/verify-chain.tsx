@@ -15,13 +15,14 @@ export function VerifyChainButton() {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2" aria-busy={busy}>
       <button
         type="button"
         disabled={busy}
         onClick={async () => {
           setBusy(true);
           setError(null);
+          setResult(null);
           const res = await fetch("/api/audit/verify");
           setBusy(false);
           if (!res.ok) {
@@ -35,14 +36,19 @@ export function VerifyChainButton() {
       >
         {busy ? "Verifying…" : "Verify chain"}
       </button>
-      {error ? <p role="alert" className="text-sm text-compromised">{error}</p> : null}
-      {result ? (
-        <p className={`text-sm ${result.ok ? "text-ready" : "text-critical"}`} role="status">
-          {result.ok
-            ? `✓ Hash chain verified — ${result.checked} records, every link intact.`
-            : `✕ Chain broken at record ${result.firstBrokenSeq}. ${result.detail ?? ""}`}
-        </p>
-      ) : null}
+      <div aria-live="polite">
+        {error ? <p role="alert" className="text-sm text-compromised">{error}</p> : null}
+        {result ? (
+          <p className={`text-sm ${result.ok ? "text-ready" : "text-critical"}`} role="status">
+            {result.ok
+              ? `✓ Hash chain verified — ${result.checked} records, every link intact.`
+              : `✕ Chain broken at record ${result.firstBrokenSeq}. ${result.detail ?? ""}`}
+          </p>
+        ) : null}
+        {!error && !result && !busy ? (
+          <p className="text-xs text-muted">Re-checks every audit record’s hash link end to end.</p>
+        ) : null}
+      </div>
     </div>
   );
 }

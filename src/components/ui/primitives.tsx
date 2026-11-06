@@ -17,7 +17,7 @@ export function Card({
   return (
     <section
       aria-label={ariaLabel}
-      className={`rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/70 p-4 shadow-[0_24px_60px_-45px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(232,240,249,0.04)] ${
+      className={`min-w-0 rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/70 p-4 shadow-[0_24px_60px_-45px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(232,240,249,0.04)] ${
         variant === "elevated" ? "shadow-[var(--shadow-float)]" : ""
       } ${className}`}
     >

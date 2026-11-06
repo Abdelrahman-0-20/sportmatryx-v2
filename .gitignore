@@ -41,6 +41,11 @@ tsconfig.tsbuildinfo
 # local-only assets — never push
 .pylibs/
 Prompts+Docs/
+# local screenshot harness + downloaded browser binaries
+.shots/
 # raw device observations stay local (21.5MB); curated samples + outputs ARE tracked
 combine_final1/src/device_observations_linked_multisport.csv
 combine_final1/src/Sportmetryx_Athletes_Sessions_Joined.csv
+
+# local raw copy — duplicate of combine_final1 (never push)
+dataset v and p/

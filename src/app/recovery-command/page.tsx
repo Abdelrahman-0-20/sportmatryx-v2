@@ -2,8 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
 import { SectionTabs } from "@/components/ui/section-tabs";
-import {Card,  Sparkline, Tag } from "@/components/ui/primitives";
-import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
+import { Card, Sparkline, Tag } from "@/components/ui/primitives";
+import { EmptyState, Footnote, TableScroll, TD, TH, count } from "@/components/app/ops-kit";
+import { errorToResponse, UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
 import { prisma } from "@/lib/prisma";
 
@@ -67,7 +68,7 @@ export default async function RecoveryCommandPage() {
     const mapped = errorToResponse(e);
     return (
       <AppShell crumb="/recovery-command" title="Recovery Command">
-  <SectionTabs />
+        <SectionTabs />
         <p className="text-sm text-compromised">{mapped.body.error}</p>
       </AppShell>
     );
@@ -77,41 +78,59 @@ export default async function RecoveryCommandPage() {
 
   return (
     <AppShell crumb="/recovery-command" title="Recovery Command">
+      <SectionTabs />
       <p className="mb-4 text-sm text-muted">
         14-day HRV, resting heart rate and sleep trajectories per athlete. Gaps = missing/invalid data.
       </p>
       <Card ariaLabel="Recovery table">
-        <table className="w-full min-w-[860px] text-sm">
-          <thead>
-            <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
-              <th className="pb-2 pr-3">Athlete</th>
-              <th className="pb-2 pr-3">HRV 14d</th>
-              <th className="pb-2 pr-3">Resting HR 14d</th>
-              <th className="pb-2 pr-3">Sleep 14d</th>
-              <th className="pb-2 pr-3">Retest queue</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.athleteId} className="border-b border-edge/50">
-                <td className="py-2 pr-3">
-                  <Link href={`/player/${r.athleteId}`} className="hover:text-accent">{r.name}</Link>
-                </td>
-                <td className="py-2 pr-3"><Sparkline points={r.hrv} /></td>
-                <td className="py-2 pr-3"><Sparkline points={r.rhr} /></td>
-                <td className="py-2 pr-3"><Sparkline points={r.sleep} /></td>
-                <td className="py-2 pr-3">
-                  {r.retests > 0 ? <Tag label="RETEST" /> : <span className="text-xs text-muted">None</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {rows.length === 0 ? (
+          <EmptyState
+            message="No active athletes to show."
+            hint="Recovery trajectories appear once athletes have HRV, resting HR or sleep samples."
+          />
+        ) : (
+          <>
+            <p className="mb-3 text-xs text-muted">
+              Showing {count(rows.length)} athlete{rows.length === 1 ? "" : "s"}, ranked by retest queue.
+            </p>
+            <TableScroll minWidth="min-w-[640px]">
+              <thead>
+                <tr className="border-b border-edge text-[11px] uppercase tracking-wider text-muted">
+                  <th className={TH}>Athlete</th>
+                  <th className={TH}>HRV 14d</th>
+                  <th className={TH}>Resting HR 14d</th>
+                  <th className={TH}>Sleep 14d</th>
+                  <th className={TH}>Retest queue</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((r) => (
+                  <tr key={r.athleteId} className="border-b border-edge/50">
+                    <td className={TD}>
+                      <Link href={`/player/${r.athleteId}`} className="hover:text-accent">{r.name}</Link>
+                    </td>
+                    <td className={TD}><Sparkline points={r.hrv} /></td>
+                    <td className={TD}><Sparkline points={r.rhr} /></td>
+                    <td className={TD}><Sparkline points={r.sleep} /></td>
+                    <td className={TD}>
+                      {r.retests > 0 ? (
+                        <span title={`${r.retests} open retest item${r.retests === 1 ? "" : "s"}`}>
+                          <Tag label="RETEST" />
+                        </span>
+                      ) : (
+                        <span className="text-xs text-muted">None</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableScroll>
+          </>
+        )}
       </Card>
-      <p className="mt-3 text-xs text-muted">
+      <Footnote>
         Recovery observations support review workflows; they never auto-clear an athlete for play (spec §12).
-      </p>
+      </Footnote>
     </AppShell>
   );
 }
-

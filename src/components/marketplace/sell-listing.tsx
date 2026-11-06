@@ -219,7 +219,7 @@ export function SellListing() {
 
             <p className="text-xs text-muted">
               Never enter real personal or health data. Sample records only. Checkout is a
-              secure flow — no payment details are required.
+              demo flow — no payment details are required.
             </p>
           </div>
         </Card>

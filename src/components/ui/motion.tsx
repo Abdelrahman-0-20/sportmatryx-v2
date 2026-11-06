@@ -71,7 +71,9 @@ export function CountUp({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
-  const [display, setDisplay] = useState(0);
+  // Start at the final value so the server renders a real number: without JS
+  // (or before the observer fires) stats must never read "0".
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     const el = ref.current;

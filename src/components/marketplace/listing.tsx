@@ -10,6 +10,7 @@ import {
   MarketplaceProvider,
   useMarketplace,
   filteredProducts,
+  EMPTY_FILTERS,
   type MarketplaceFilters,
 } from "@/components/marketplace/marketplace-state";
 import type { MarketProduct, CartItem } from "@/lib/services/marketplace";
@@ -29,10 +30,10 @@ const AVAILABLE_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
-  { value: "name", label: "Name" },
-  { value: "score", label: "Price (high to low)" },
+  { value: "name", label: "Name (A–Z)" },
+  { value: "price-desc", label: "Price: high to low" },
   { value: "tag", label: "Tag" },
-  { value: "price", label: "Price (low to high)" },
+  { value: "price-asc", label: "Price: low to high" },
 ];
 
 export function MarketplaceListing({
@@ -64,9 +65,8 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
   );
   const pillStyle = (active: boolean) =>
     active
-      ? "rounded-full border border-accent bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent"
-      : "rounded-full border border-edge/80 bg-panel-2/60 px-3.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink";
-  const featured = products.find((p) => p.featured) ?? null;
+      ? "shrink-0 rounded-full border border-accent bg-accent/15 px-3.5 py-1.5 text-xs font-semibold text-accent"
+      : "shrink-0 rounded-full border border-edge/80 bg-panel-2/60 px-3.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink";
   // Cart ↔ cookie sync: the full cart page (/marketplace/cart) and the header
   // count read the smx_marketplace_cart cookie via /api/marketplace/cart-state.
   // Hydrate the dialog from it on mount and persist every change back so
@@ -116,6 +116,25 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
     ? sectioned.filter((p) => p.sport === undefined || p.sport === sportSel)
     : sectioned;
 
+  // The spotlight is scoped to what the buyer can actually see: it disappears
+  // with "No products match your filters" and never leaks into Market goods.
+  const featured = filtered.find((p) => p.featured) ?? null;
+
+  // ONE Clear control: resets every piece of filter state — query, tag,
+  // availability, sort, sport and section — back to the default view.
+  function clearAll() {
+    setFilters({ ...EMPTY_FILTERS });
+    setSportSel(null);
+    setSection("data");
+  }
+
+  const hasActiveFilters =
+    filters.query.trim() !== "" ||
+    filters.tag !== null ||
+    filters.available !== null ||
+    sportSel !== null ||
+    section !== "data";
+
   function addToCart(product: MarketProduct) {
     setItems((prev) => {
       const existing = prev.find((i) => i.productId === product.id);
@@ -140,17 +159,16 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
   }
 
   const totalItems = items.reduce((a, i) => a + i.quantity, 0);
-  const totalCents = items.reduce((a, i) => a + i.priceCents * i.quantity, 0);
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={() => setView("buy")}
           className={view === "buy"
-            ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
-            : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
+            ? "shrink-0 whitespace-nowrap rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+            : "shrink-0 whitespace-nowrap rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
           aria-pressed={view === "buy"}
         >
           Buy data
@@ -159,14 +177,14 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
           type="button"
           onClick={() => setView("sell")}
           className={view === "sell"
-            ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
-            : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
+            ? "shrink-0 whitespace-nowrap rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+            : "shrink-0 whitespace-nowrap rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
           aria-pressed={view === "sell"}
         >
           Sell / list
         </button>
 
-        <div className="ml-auto flex items-center gap-2" role="tablist" aria-label="Marketplace section">
+        <div className="ml-auto flex flex-wrap items-center gap-2" role="tablist" aria-label="Marketplace section">
           {([["data", "Data"], ["goods", "Market goods"]] as const).map(([value, label]) => (
             <button
               key={value}
@@ -175,8 +193,8 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
               aria-selected={section === value}
               onClick={() => setSection(value)}
               className={section === value
-                ? "rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
-                : "rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
+                ? "shrink-0 whitespace-nowrap rounded-full border border-accent bg-accent/15 px-4 py-1.5 text-xs font-semibold text-accent shadow-[0_0_18px_-6px_rgba(95,208,240,0.55)]"
+                : "shrink-0 whitespace-nowrap rounded-full border border-edge/80 bg-panel-2/60 px-4 py-1.5 text-xs font-semibold text-muted transition-colors hover:border-accent/40 hover:text-ink"}
             >
               {label}
             </button>
@@ -188,8 +206,14 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
         guest ? <SignInToSell onBack={() => setView("buy")} /> : <SellListing />
       ) : (
         <>
-      <div className="mb-4 flex flex-wrap items-center gap-2" role="group" aria-label="Filter by sport">
-        <span className="mr-1 text-[11px] font-bold uppercase tracking-wider text-muted">Sport</span>
+      {/* Sport pills scroll horizontally on phones so the row never eats
+          three lines of vertical space. */}
+      <div
+        className="mb-4 flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0"
+        role="group"
+        aria-label="Filter by sport"
+      >
+        <span className="mr-1 shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">Sport</span>
         <button type="button" onClick={() => setSportSel(null)} aria-pressed={sportSel === null} className={pillStyle(sportSel === null)}>
           All sports
         </button>
@@ -200,96 +224,117 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
         ))}
       </div>
 
-      <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-edge/70 bg-panel/60 px-4 py-3">
-        <div className="relative flex-1 min-w-[200px] max-w-xs">
-          <input
-            type="search"
-            value={filters.query}
-            onChange={(e) => setFilters({ ...filters, query: e.target.value })}
-            placeholder="Search products, datasets, source…"
-            className="w-full rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 pl-9 text-sm placeholder:text-muted focus:border-accent"
-            aria-label="Search marketplace products"
-          />
-          <svg
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none"
-            width="14"
-            height="14"
-            viewBox="0 0 14 14"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M5 3.5l4 4M10 3.5l-3 3M2 3.5h10M2 3.5c0 2.5 2 4.5 4.5 4.5S11 6 11 3.5S9 1.5 6.5 1.5S2 1 2 3.5z" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-        </div>
-
-        <select
-          value={filters.tag ?? ""}
-          onChange={(e) => setFilters({ ...filters, tag: e.target.value || null })}
-          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
-          aria-label="Filter by tag"
-        >
-          {TAG_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-
-        <select
-          value={filters.available ? (filters.available === true ? "true" : "false") : ""}
-          onChange={(e) => {
-            const v = e.target.value;
-            setFilters({
-              ...filters,
-              available: v === "true" ? true : v === "false" ? false : null,
-            });
-          }}
-          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
-          aria-label="Filter by availability"
-        >
-          {AVAILABLE_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-
-        <select
-          value={filters.sort}
-          onChange={(e) => setFilters({ ...filters, sort: e.target.value as MarketplaceFilters["sort"] })}
-          className="rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
-          aria-label="Sort products"
-        >
-          {SORT_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-
-        <div className="flex items-center gap-2 text-sm text-muted">
-          <span className="tabular">{filtered.length}</span>
-          <span className="opacity-60">/ {products.length}</span>
-        </div>
-
+      {/* Toolbar: one search row (search + Clear + cart) and one horizontally
+          scrollable selects row on mobile — every control stays reachable. */}
+      <div className="mb-5 flex flex-col gap-2 rounded-2xl border border-edge/70 bg-panel/60 px-3 py-3 md:flex-row md:flex-wrap md:items-center md:gap-3 md:px-4">
         <div className="flex items-center gap-2">
-          {totalItems > 0 && (
-            <span className="rounded-full border border-edge bg-panel-2 px-2 py-0.5 text-xs tabular text-muted">
-              Cart: {totalItems} item{totalItems === 1 ? "" : "s"}
-            </span>
-          )}
+          <div className="relative min-w-0 flex-1 md:max-w-[280px] md:flex-none">
+            <input
+              type="search"
+              value={filters.query}
+              onChange={(e) => setFilters({ ...filters, query: e.target.value })}
+              placeholder="Search products…"
+              className="w-full min-w-0 rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 pl-9 text-sm placeholder:text-muted focus:border-accent"
+              aria-label="Search marketplace products"
+            />
+            {/* Proper magnifier — the old path was a malformed funnel/blob. */}
+            <svg
+              className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="6" cy="6" r="4.3" stroke="currentColor" strokeWidth="1.4" />
+              <path d="M9.3 9.3L12.6 12.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              onClick={clearAll}
+              className="shrink-0 whitespace-nowrap rounded-lg border border-edge/80 bg-panel-2/60 px-2.5 py-2 text-[11px] font-semibold text-ink transition-colors hover:border-accent/45 hover:text-accent"
+            >
+              Clear
+            </button>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => setCartOpen((v) => !v)}
+            className="ml-auto shrink-0 whitespace-nowrap rounded-lg bg-gradient-to-br from-accent to-[#4dd7f5] px-3 py-2 text-xs font-bold text-canvas shadow-[0_8px_22px_-10px_rgba(95,208,240,0.55)] hover:brightness-105 md:ml-0"
+          >
+            {cartOpen ? "Close cart" : "Open cart"}
+          </button>
         </div>
 
-        <div className="flex-1" />
+        <div className="-mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-1 md:mx-0 md:flex-1 md:flex-wrap md:overflow-visible md:pb-0">
+          <select
+            value={filters.tag ?? ""}
+            onChange={(e) => setFilters({ ...filters, tag: e.target.value || null })}
+            className="shrink-0 rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
+            aria-label="Filter by tag"
+          >
+            {TAG_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
 
-        <button
-          type="button"
-          onClick={() => setCartOpen((v) => !v)}
-          className="rounded-lg bg-gradient-to-br from-accent to-[#4dd7f5] px-4 py-2 text-xs font-bold text-canvas shadow-[0_8px_22px_-10px_rgba(95,208,240,0.55)] hover:brightness-105"
-        >
-          {cartOpen ? "Close cart" : "Open cart"}
-        </button>
+          <select
+            value={filters.available ? (filters.available === true ? "true" : "false") : ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              setFilters({
+                ...filters,
+                available: v === "true" ? true : v === "false" ? false : null,
+              });
+            }}
+            className="shrink-0 rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
+            aria-label="Filter by availability"
+          >
+            {AVAILABLE_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          <select
+            value={filters.sort}
+            onChange={(e) => setFilters({ ...filters, sort: e.target.value as MarketplaceFilters["sort"] })}
+            className="shrink-0 rounded-lg border border-edge/70 bg-panel-2/80 px-3 py-2 text-sm focus:border-accent"
+            aria-label="Sort products"
+          >
+            {SORT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          <div className="ml-auto flex shrink-0 items-center gap-2 text-sm text-muted">
+            <span className="whitespace-nowrap tabular">{filtered.length}</span>
+            <span className="whitespace-nowrap opacity-60">/ {products.length}</span>
+            {totalItems > 0 && (
+              <span className="whitespace-nowrap rounded-full border border-edge bg-panel-2 px-2 py-0.5 text-xs tabular text-muted">
+                Cart: {totalItems} item{totalItems === 1 ? "" : "s"}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {filters.query && (
+      {filters.query ? (
         <div className="mb-3 text-xs text-muted">
-          Showing results for “{filters.query}”. Clear to see all products.
+          Showing results for “{filters.query}”.{" "}
+          <button
+            type="button"
+            onClick={clearAll}
+            className="font-semibold text-accent underline-offset-2 hover:underline"
+          >
+            Clear
+          </button>{" "}
+          to see all products.
         </div>
-      )}
+      ) : null}
 
       {featured ? (
         <FeaturedSpotlight product={featured} onAddToCart={addToCart} />
@@ -300,7 +345,7 @@ function MarketplaceListInner({ products, guest }: { products: MarketProduct[]; 
           <p className="text-sm text-muted">No products match your filters.</p>
           <button
             type="button"
-            onClick={() => setFilters({ query: "", tag: null, available: null, dataType: null, sort: "name" })}
+            onClick={clearAll}
             className="mt-3 rounded-md border border-edge bg-panel-2 px-3 py-2 text-xs font-semibold text-ink hover:border-accent hover:text-accent"
           >
             Clear filters

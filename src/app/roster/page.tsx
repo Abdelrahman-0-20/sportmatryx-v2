@@ -68,6 +68,7 @@ export default async function RosterPage({
 
   return (
     <AppShell crumb="/roster" title="Athletes">
+      <SectionTabs />
       {/* Professional intro — cinematic video banner */}
       <PageHero clip={3} className="mb-4">
         <p className="max-w-3xl text-sm leading-relaxed text-ink">

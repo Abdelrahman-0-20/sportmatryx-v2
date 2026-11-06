@@ -1,10 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/primitives";
 import { samplePreviewCsv, samplePreviewFileName, samplePreviewNote } from "@/lib/marketplace/sample-previews";
 import type { MarketProduct } from "@/lib/services/marketplace";
 
+/**
+ * Sample CSV preview download — demoted from a third card CTA to a compact
+ * meta link; the explanatory note lives on its `title` tooltip instead of
+ * eating a line of card copy.
+ */
 export function DownloadSamplePreview({ product }: { product: MarketProduct }) {
+  const note = samplePreviewNote(product);
+
   function download() {
     const csv = samplePreviewCsv(product);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -17,11 +23,14 @@ export function DownloadSamplePreview({ product }: { product: MarketProduct }) {
   }
 
   return (
-    <div className="mt-3 flex items-center gap-2">
-      <Button variant="ghost" onClick={download} className="w-fit text-xs">
-        Download sample preview
-      </Button>
-      <span className="text-[11px] text-muted">{samplePreviewNote(product)}</span>
-    </div>
+    <button
+      type="button"
+      onClick={download}
+      title={note}
+      aria-label={`Download sample preview. ${note}`}
+      className="shrink-0 whitespace-nowrap text-[11px] font-semibold text-accent underline-offset-2 hover:underline"
+    >
+      Download sample preview
+    </button>
   );
 }

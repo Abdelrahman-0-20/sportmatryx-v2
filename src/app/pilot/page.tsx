@@ -3,8 +3,7 @@ import Link from "next/link";
 import { MarketingFooter, MarketingHeader } from "@/components/marketing/chrome";
 import { PilotForm } from "@/components/marketing/pilot-form";
 import { prisma } from "@/lib/prisma";
-import { CountUp } from "@/components/ui/motion";
-import { Reveal } from "@/components/ui/motion";
+import { CountUp, Reveal } from "@/components/ui/motion";
 import { getDict } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
@@ -18,6 +17,7 @@ export default async function PilotPage() {
   const t = dict.pilot;
   /* Live social proof — real rows in pilot_waitlist (Neon); never blocks render. */
   const waitlistCount = await prisma.pilotWaitlist.count().catch(() => 0);
+  const noEntriesYet = waitlistCount === 0;
 
   return (
     <main className="min-h-dvh">
@@ -31,8 +31,9 @@ export default async function PilotPage() {
         <p className="lede mt-5 max-w-2xl">{t.lede}</p>
       </section>
 
-      {/* Live waitlist counter + cohort size — real database social proof (hidden at zero) */}
-      {waitlistCount > 0 ? (
+      {/* Live waitlist counter + cohort size. The band never disappears: at zero
+          it states the honest number and points at the form instead of hiding
+          the (only) social proof on the page. */}
       <section className="mt-8 border-y border-edge/70 bg-panel-2/50" aria-label="Waitlist status">
         <div className="mx-auto grid max-w-7xl grid-cols-1 px-6 sm:grid-cols-2 md:px-10">
           <div className="stat-cell py-6 md:py-7">
@@ -40,6 +41,14 @@ export default async function PilotPage() {
               <CountUp value={waitlistCount} />
             </div>
             <div className="stat-label">{t.counterLabel}</div>
+            {noEntriesYet ? (
+              <a
+                href="#waitlist"
+                className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-accent underline-offset-2 hover:underline"
+              >
+                {t.waitlistTitle} <span aria-hidden="true">→</span>
+              </a>
+            ) : null}
           </div>
           <div className="stat-cell py-6 sm:pl-6 md:py-7 md:pl-8">
             <div className="stat-num">6</div>
@@ -47,13 +56,12 @@ export default async function PilotPage() {
           </div>
         </div>
       </section>
-      ) : null}
 
       <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="What the pilot includes">
         <Reveal>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {t.includes.map((item, i) => (
-              <div key={item.title} className="surface rounded-2xl p-6">
+              <div key={item.title} className="surface h-full rounded-2xl p-6">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -68,7 +76,7 @@ export default async function PilotPage() {
       <section className="mx-auto max-w-7xl px-6 pb-4 md:px-10" aria-label="Who fits the pilot">
         <Reveal>
           <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-            <div className="surface rounded-2xl p-7">
+            <div className="surface h-full rounded-2xl p-7">
               <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                 {t.whoTitle}
               </div>
@@ -80,7 +88,7 @@ export default async function PilotPage() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-5 text-xs text-muted">
+              <p className="mt-5 text-xs leading-relaxed text-muted">
                 {t.frameworkLead}{" "}
                 <Link href="/proof" className="text-accent underline-offset-2 hover:underline">
                   {t.frameworkLink}
@@ -89,7 +97,8 @@ export default async function PilotPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-accent/40 bg-[linear-gradient(135deg,rgba(34,211,238,0.10),rgba(157,120,245,0.08))] p-7">
+            {/* One card system across the page: same surface, same radius. */}
+            <div className="surface h-full rounded-2xl p-7">
               <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
                 {t.costTitle}
               </div>
@@ -98,37 +107,38 @@ export default async function PilotPage() {
               <p className="mt-4 rounded-lg border border-ready/40 bg-ready/10 px-3 py-2.5 text-xs font-semibold text-ready">
                 {t.termsLine}
               </p>
-              <p className="mt-4 text-xs text-muted">
-                {t.costTail}{" "}
-                <Link href="/guest" className="text-accent underline-offset-2 hover:underline">
-                  {t.costGuest}
-                </Link>
-                .
-              </p>
+              {/* Guest mode promoted from buried inline copy to a real action. */}
+              <p className="mt-5 text-xs text-muted">{t.costTail}</p>
+              <Link href="/guest" className="btn-ghost mt-2 first-letter:uppercase">
+                {t.costGuest}
+              </Link>
             </div>
           </div>
         </Reveal>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10 md:px-10" aria-label="Join the waitlist">
-        <Reveal>
-          <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-            <div>
-              <h2 className="h-sec">{t.waitlistTitle}</h2>
-              <p className="lede mt-3">{t.waitlistLede}</p>
-              <ul className="mt-5 space-y-2 text-sm text-muted">
-                {t.bullets.map((line) => (
-                  <li key={line} className="flex gap-2.5">
-                    <span className="text-accent">✓</span> {line}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="surface p-6">
-              <PilotForm labels={t.form} />
-            </div>
+      {/* Primary conversion — renders eagerly, never behind Reveal. */}
+      <section
+        id="waitlist"
+        className="mx-auto max-w-7xl scroll-mt-24 px-6 py-10 md:px-10"
+        aria-label="Join the waitlist"
+      >
+        <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <h2 className="h-sec">{t.waitlistTitle}</h2>
+            <p className="lede mt-3">{t.waitlistLede}</p>
+            <ul className="mt-5 space-y-2 text-sm text-muted">
+              {t.bullets.map((line) => (
+                <li key={line} className="flex gap-2.5">
+                  <span className="text-accent">✓</span> {line}
+                </li>
+              ))}
+            </ul>
           </div>
-        </Reveal>
+          <div className="surface rounded-2xl p-6">
+            <PilotForm labels={t.form} />
+          </div>
+        </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-6 pb-16 md:px-10">

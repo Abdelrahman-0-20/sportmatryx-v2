@@ -37,6 +37,15 @@ html {
   font-family: var(--font-body);
 }
 
+/* Grid/flex children default to `min-width: auto`, which lets wide content
+ * (tables, charts, long labels) blow the layout out on narrow screens.
+ * Every direct child may shrink; wide content then scrolls inside its own
+ * overflow container instead of widening the page. */
+.grid > *,
+.flex > * {
+  min-width: 0;
+}
+
 body {
   min-height: 100dvh;
   margin: 0;
@@ -597,6 +606,16 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
   transform: translateY(-1px);
 }
 
+/* Compact button variant — the one canonical small size, so pages stop
+ * reaching for `px-4! py-2! text-xs!` overrides. Pairs with .btn-primary
+ * or .btn-ghost. */
+.btn-sm {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  border-radius: 8px;
+}
+
 /* Eyebrow label with leading rule. */
 .eyebrow {
   display: inline-flex;
@@ -826,6 +845,8 @@ tbody.row-stagger tr:nth-child(n+6) { animation-delay: 0.17s; }
 .f-link {
   position: relative;
   display: inline-block;
+  /* Touch target: inline text links are ~16px tall, below the 24px minimum. */
+  padding-block: 4px;
   transition: color 0.2s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .f-link::after {

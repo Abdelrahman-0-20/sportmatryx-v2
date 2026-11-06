@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Button, LinkButton } from "@/components/ui/primitives";
-import { Tag } from "@/components/ui/primitives";
+import { CartLineItem } from "@/components/marketplace/cart-line-item";
+import { Price } from "@/components/marketplace/price";
 
 export type CartItem = {
   productId: string;
@@ -54,20 +55,12 @@ export function MarketplaceCart({
   const totalItems = items.reduce((a, i) => a + i.quantity, 0);
   const totalCents = items.reduce((a, i) => a + i.priceCents * i.quantity, 0);
 
-  function lineTotalCents(item: CartItem) {
-    return item.priceCents * item.quantity;
-  }
-
-  function formatCents(cents: number) {
-    return cents === 0 ? "$0.00" : `$${(cents / 100).toFixed(2)}`;
-  }
-
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 rounded-md border border-edge bg-panel-2 px-2 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
+        className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-edge bg-panel-2 px-2 py-1.5 text-xs font-semibold text-ink transition-colors hover:border-accent hover:text-accent"
         aria-label="Open cart"
       >
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -79,13 +72,16 @@ export function MarketplaceCart({
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center pt-10 p-4 bg-canvas/70"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-canvas/70 p-4 pt-10"
           role="dialog"
           aria-modal="true"
           aria-label="Cart"
           onClick={() => setOpen(false)}
         >
-          <div className="w-full max-w-lg rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/80 p-5 shadow-[var(--shadow-float)]" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="w-full max-w-lg rounded-2xl border border-edge/70 bg-gradient-to-b from-panel to-panel-2/80 p-5 shadow-[var(--shadow-float)]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between border-b border-edge pb-3">
               <div className="flex items-center gap-2">
                 <h2 className="display-heading text-lg">Cart</h2>
@@ -112,49 +108,30 @@ export function MarketplaceCart({
             ) : (
               <ul className="flex flex-col gap-2">
                 {items.map((i) => (
-                  <li key={i.productId} className="flex items-start justify-between gap-3 border border-edge/60 rounded-md bg-panel-2 p-3">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        {i.tag ? <Tag label={i.tag} /> : null}
-                        <span className="truncate text-sm font-semibold">{i.name}</span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted truncate">
-                        {i.sourceLabel ? `${i.sourceLabel} · ` : ""}
-                        {i.priceCents === 0 ? "Demo — no charge" : `$${(i.priceCents / 100).toFixed(2)} each`}
-                      </p>
-                      <div className="mt-1.5 flex items-center gap-2">
-                        <button type="button" disabled={i.quantity <= 1} onClick={() => setQuantity(i.productId, i.quantity - 1)} className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2 disabled:opacity-50" aria-label={`Decrease quantity of ${i.name}`}>−</button>
-                        <span className="tabular text-sm font-semibold w-5 text-center">{i.quantity}</span>
-                        <button type="button" onClick={() => setQuantity(i.productId, i.quantity + 1)} className="rounded-lg border border-edge/70 bg-panel-2/60 px-2 py-1 text-xs font-semibold hover:border-accent/40 hover:bg-panel-2" aria-label={`Increase quantity of ${i.name}`}>+</button>
-                        <button type="button" onClick={() => remove(i.productId)} className="ml-auto text-xs text-compromised hover:underline" aria-label={`Remove ${i.name}`}>Remove</button>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1 tabular text-sm font-semibold">
-                      {i.priceCents === 0 ? (
-                        <span className="text-ready">$0.00</span>
-                      ) : (
-                        <>
-                          <span className="text-muted">${(i.priceCents / 100).toFixed(2)}</span>
-                          <span className="text-muted">×</span>
-                          <span className="tabular">{i.quantity}</span>
-                          <span className="text-muted">=</span>
-                          <span className="tabular">{formatCents(lineTotalCents(i))}</span>
-                        </>
-                      )}
-                    </div>
-                  </li>
+                  <CartLineItem
+                    key={i.productId}
+                    item={i}
+                    onQuantityChange={setQuantity}
+                    onRemove={remove}
+                  />
                 ))}
               </ul>
             )}
 
-            <div className="mt-4 flex items-center justify-between border-t border-edge pt-3">
-              <div className="text-sm">
-                <span className="text-muted">{totalItems} item{totalItems === 1 ? "" : "s"}</span>
-                <span className="ml-2 tabular">{formatCents(totalCents)}</span>
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-edge pt-3">
+              <div className="flex items-baseline gap-2">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+                  Demo total
+                </span>
+                <Price cents={totalCents} size="sm" />
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={clear} className="px-3 text-xs">Clear</Button>
-                <LinkButton href="/marketplace/cart" className="px-3 text-xs">View full cart</LinkButton>
+                <Button variant="ghost" onClick={clear} disabled={items.length === 0} className="px-3 text-xs">
+                  Clear
+                </Button>
+                <LinkButton href="/marketplace/cart" className="px-3 text-xs">
+                  View full cart
+                </LinkButton>
               </div>
             </div>
 

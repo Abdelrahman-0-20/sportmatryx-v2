@@ -8,7 +8,7 @@ export function HighlightText({ text, query }: { text: string; query: string }) 
     <>
       {parts.map((part, i) =>
         part.kind === "match" ? (
-          <span key={i} className="rounded-sm bg-accent/20 text-canvas font-semibold">
+          <span key={i} className="rounded-sm bg-accent/30 px-0.5 font-semibold text-ink">
             {part.text}
           </span>
         ) : (
