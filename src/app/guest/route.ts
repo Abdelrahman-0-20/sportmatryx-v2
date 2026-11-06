@@ -13,5 +13,5 @@ import { GUEST_COOKIE } from "@/lib/offline";
 export async function GET() {
   const store = await cookies();
   store.set(GUEST_COOKIE, "1", { httpOnly: true, sameSite: "lax", path: "/" });
-  redirect("/team-command");
+  redirect("/overview");
 }

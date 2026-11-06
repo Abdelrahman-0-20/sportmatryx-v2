@@ -6,7 +6,7 @@ import { useState } from "react";
 export function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") ?? "/team-command";
+  const next = params.get("next") ?? "/overview";
   const [email, setEmail] = useState("performance@demo.sportmetryx.dev");
   const [password, setPassword] = useState("Demo-SMX-2024!");
   const [error, setError] = useState<string | null>(null);

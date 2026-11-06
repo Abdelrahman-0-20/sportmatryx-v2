@@ -8,8 +8,9 @@ const NAV: { section: string; items: { href: string; label: string }[] }[] = [
   {
     section: "Start",
     items: [
-      { href: "/", label: "Home" },
+      { href: "/overview", label: "Overview" },
       { href: "/roster", label: "Athletes" },
+      { href: "/", label: "Home" },
     ],
   },
   {
@@ -58,7 +59,7 @@ async function Sidebar({ guest }: { guest?: boolean }) {
   const user = guest ? GUEST_USER : await getCurrentUser();
   return (
     <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-edge bg-panel-2 px-3 py-4 md:flex">
-      <Link href="/" className="mb-6 block px-2">
+      <Link href="/overview" className="mb-6 block px-2">
         <span className="display-heading text-xl">
           <span className="text-accent">Sportmetryx</span>
         </span>
@@ -88,6 +89,21 @@ async function Sidebar({ guest }: { guest?: boolean }) {
           </div>
         ))}
       </nav>
+      {/* In-app upgrade card — same offer as /pilot, no invented pricing */}
+      <Link
+        href="/pilot"
+        className="mb-4 block rounded-xl border border-accent/30 bg-accent/5 p-3 transition-colors hover:border-accent/60"
+      >
+        <div className="text-[11px] font-bold uppercase tracking-widest text-accent">
+          Turn data into opportunity
+        </div>
+        <div className="mt-1 text-xs leading-relaxed text-muted">
+          Smarter scouting, greater outcomes — start the free 8-week pilot.
+        </div>
+        <span className="mt-2 inline-block rounded-md bg-accent px-2.5 py-1 text-[11px] font-bold text-canvas">
+          Start the pilot →
+        </span>
+      </Link>
       {user ? (
         <div className="border-t border-edge px-2 pt-3 text-xs">
           <div className="truncate text-muted" title={user.email ?? ""}>
@@ -110,7 +126,7 @@ function Header({ crumb, guest, cartItems }: { crumb: string; guest?: boolean; c
   return (
     <header className="sticky top-0 z-10 flex items-center justify-between border-b border-edge bg-panel/90 px-4 py-2 backdrop-blur md:px-8">
       <div className="flex items-center gap-3">
-        <Link href="/" className="display-heading text-lg md:hidden">
+        <Link href="/overview" className="display-heading text-lg md:hidden">
           <span className="text-accent">Sportmetryx</span>
         </Link>
         <span className="hidden font-mono text-xs text-muted md:block">{crumb}</span>

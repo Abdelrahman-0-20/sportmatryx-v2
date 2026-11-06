@@ -16,6 +16,8 @@ export interface RosterRow {
   positionGroup: string;
   /** Sport the athlete competes in (multi-sport roster filter). */
   sport: string;
+  /** Age in whole years, null when no date of birth is on file. */
+  age: number | null;
   teamId: string;
   teamName: string;
   score: number | null;
@@ -65,6 +67,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
       lastName: string;
       position: string;
       sport: string;
+      dateOfBirth: Date | null;
       teamId: string;
       teamName: string;
       score: number | null;
@@ -83,6 +86,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
            a."lastName",
            a.position::text AS position,
            a.sport,
+           a."dateOfBirth",
            t.id AS "teamId",
            t.name AS "teamName",
            s.score,
@@ -125,6 +129,7 @@ async function queryRosterRows(teamId?: string): Promise<RosterRow[]> {
     position: r.position,
     positionGroup: r.position,
     sport: r.sport,
+    age: r.dateOfBirth ? Math.floor((Date.now() - r.dateOfBirth.getTime()) / (365.25 * 24 * 3600 * 1000)) : null,
     teamId: r.teamId,
     teamName: r.teamName,
     score: r.score,

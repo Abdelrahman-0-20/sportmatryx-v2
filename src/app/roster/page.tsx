@@ -3,14 +3,14 @@ import { redirect } from "next/navigation";
 import { AppShell } from "@/components/ui/app-shell";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionTabs } from "@/components/ui/section-tabs";
-import {Card,  Tag, Sparkline, ConfidenceRing, WithheldStamp } from "@/components/ui/primitives";
+import {Card,  Tag, Sparkline, ConfidenceRing, WithheldStamp, DataVerified } from "@/components/ui/primitives";
 import {Avatar,  AvatarFallback } from "@/components/ui/avatar";
 import { initialsOf } from "@/lib/utils";
 import {Tooltip,  TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import {errorToResponse,  UnauthorizedError } from "@/lib/auth/rbac";
 import { requireReadForGuest } from "@/lib/offline";
 import {getRosterRows,  type RosterRow } from "@/lib/services/dashboard";
-import { orderSports } from "@/lib/sports";
+import { orderSports, sportIcon } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
 
@@ -161,13 +161,13 @@ export default async function RosterPage({
             <thead>
               <tr className="border-b border-edge text-left text-[11px] uppercase tracking-wider text-muted">
                 <th className="pb-2 pr-3">Athlete</th>
-                <th className="pb-2 pr-3">ID</th>
                 <th className="pb-2 pr-3">Position</th>
                 <th className="pb-2 pr-3">Sport</th>
                 <th className="pb-2 pr-3">Readiness</th>
                 <th className="pb-2 pr-3">Band</th>
                 <th className="pb-2 pr-3">Confidence</th>
                 <th className="pb-2 pr-3">14-day trend</th>
+                <th className="pb-2 pr-3">Data</th>
                 <th className="pb-2 pr-3">Exceptions</th>
               </tr>
             </thead>
@@ -185,14 +185,22 @@ export default async function RosterPage({
                         <Avatar>
                           <AvatarFallback>{initialsOf(r.displayName)}</AvatarFallback>
                         </Avatar>
-                        <Link href={`/player/${r.athleteId}`} className="text-ink hover:text-accent">
-                          {r.displayName}
-                        </Link>
+                        <div className="min-w-0">
+                          <Link href={`/player/${r.athleteId}`} className="block text-ink hover:text-accent">
+                            {r.displayName}
+                          </Link>
+                          <span className="block text-[11px] font-normal text-muted">
+                            {r.externalId ?? "—"}
+                            {r.age !== null ? ` · ${r.age} yrs` : ""}
+                          </span>
+                        </div>
                       </div>
                     </td>
-                    <td className="tabular py-2.5 pr-3 text-muted">{r.externalId ?? "—"}</td>
                     <td className="py-2.5 pr-3 text-muted">{r.position}</td>
-                    <td className="py-2.5 pr-3 text-muted">{r.sport}</td>
+                    <td className="py-2.5 pr-3 text-muted">
+                      <span aria-hidden="true" className="mr-1.5">{sportIcon(r.sport)}</span>
+                      {r.sport}
+                    </td>
                     <td className="hero-number py-2.5 pr-3 text-xl">
                       {withheld || r.score === null ? "—" : r.score.toFixed(1)}
                     </td>
@@ -227,6 +235,9 @@ export default async function RosterPage({
                       <SparklinePoints athleteId={r.athleteId} />
                     </td>
                     <td className="py-2.5 pr-3">
+                      <DataVerified validity={r.validity} />
+                    </td>
+                    <td className="py-2.5 pr-3">
                       {r.openExceptions > 0 ? (
                         <span className={`text-xs font-semibold ${r.maxSeverity === "CRITICAL" ? "text-critical" : "text-monitor"}`}>
                           {r.openExceptions} exception{r.openExceptions === 1 ? "" : "s"}
@@ -241,6 +252,12 @@ export default async function RosterPage({
             </tbody>
           </table>
         )}
+        {filtered.length > 0 ? (
+          <p className="mt-3 text-[11px] text-muted">
+            Showing 1–{filtered.length} of {rows.length} athletes
+            {sport !== "" ? ` · ${sport}` : ""}
+          </p>
+        ) : null}
       </Card>
     </AppShell>
   );

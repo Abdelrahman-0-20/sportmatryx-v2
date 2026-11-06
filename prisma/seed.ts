@@ -255,8 +255,11 @@ const USERS_SPEC: { email: string; name: string; role: "ADMIN" | "PERFORMANCE" |
   { email: "athlete@demo.sportmetryx.dev", name: "Demo Athlete (DEV ONLY)", role: "ATHLETE" },
 ];
 
-const HISTORY_DAYS = 28;
-const SCORE_DAYS = 14;
+// How far back the demo history reaches: observations are generated for the
+// whole window and the scoring engine runs over it, so the /overview trends
+// chart has real 1M / 3M / 6M ranges to plot instead of empty toggles.
+const HISTORY_DAYS = 180;
+const SCORE_DAYS = 180;
 const seedSummary = { teams: 0, athletes: 0, scores: 0, withheld: 0 };
 
 async function main() {
@@ -534,9 +537,9 @@ function replayGeneration(
     const rnd = mulberry32(seedFromString(spec.externalId));
     const days: { daysAgo: number; obs: ObsDraft[] }[] = [];
     const totalDays = spec.archetype === "LOW_BASELINE" ? 5 : HISTORY_DAYS;
-    // Bias profile: the first half of the window is neutral history that
-    // establishes the baseline; the scoring window ramps per archetype so
-    // READY athletes trend up, suppressed-recovery athletes trend down.
+    // Bias profile: everything older than the 14-day scoring ramp is neutral
+    // history that establishes the baseline; the ramp itself makes READY
+    // athletes trend up and suppressed-recovery athletes trend down.
     const biasFor = (d: number): number => {
       if (d >= 14 || spec.archetype === "LOW_BASELINE") return 0;
       const ramp = 1 - d / 14; // 1 today → ~0 fourteen days ago
@@ -719,7 +722,7 @@ async function seedPhase2(refs?: Phase1Refs): Promise<void> {
   }
   console.log(`Created ${baselineRows.length} athlete baselines.`);
 
-  // ---- Scores: run the REAL engine over the last 14 days (batched) ----
+  // ---- Scores: run the REAL engine over the whole history window (batched) ----
   const scoreRows: Prisma.PerformanceScoreUncheckedCreateInput[] = [];
   const compRows: Prisma.ScoreComponentUncheckedCreateInput[] = [];
   const driverRows: Prisma.ScoreDriverUncheckedCreateInput[] = [];

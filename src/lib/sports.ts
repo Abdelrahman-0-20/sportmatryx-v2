@@ -28,3 +28,20 @@ export function orderSports(sports: Iterable<string>): string[] {
     return a.localeCompare(b);
   });
 }
+
+/** Icon per sport — used in roster rows, scouting tables and the top bar. */
+export const SPORT_ICONS: Record<string, string> = {
+  "American football": "🏈",
+  soccer: "⚽",
+  rugby: "🏉",
+  basketball: "🏀",
+  baseball: "⚾",
+  volleyball: "🏐",
+  cycling: "🚴",
+  "track and field": "🏃",
+};
+
+/** Icon for a sport, falling back to a neutral medal for unknown sports. */
+export function sportIcon(sport: string): string {
+  return SPORT_ICONS[sport] ?? "🏅";
+}

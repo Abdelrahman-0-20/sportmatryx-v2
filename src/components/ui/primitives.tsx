@@ -134,6 +134,30 @@ export function WithheldStamp({ code }: { code?: string | null }) {
   );
 }
 
+/**
+ * Data-verified badge — derived from the score's validity status, never
+ * decorative: a row is only "Verified" when its latest score actually passed
+ * the validity gates (VALID or LIMITED). Anything else is honestly "Pending".
+ */
+export function DataVerified({ validity }: { validity: string }) {
+  const verified = validity === "VALID" || validity === "LIMITED";
+  return verified ? (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-ready/40 bg-ready/10 px-2 py-0.5 text-[11px] font-semibold text-ready"
+      title={`Latest score validity: ${validity}`}
+    >
+      <span aria-hidden="true">✓</span> Verified
+    </span>
+  ) : (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-monitor/40 bg-monitor/10 px-2 py-0.5 text-[11px] font-semibold text-monitor"
+      title={`Latest score validity: ${validity} — data not yet verified`}
+    >
+      <span aria-hidden="true">◔</span> Pending
+    </span>
+  );
+}
+
 /** Confidence ring (cyan ≥90, amber 70–89, red <70). Text alongside color. */
 export function ConfidenceRing({ value }: { value: number }) {
   const pct = Math.max(0, Math.min(100, Math.round(value)));

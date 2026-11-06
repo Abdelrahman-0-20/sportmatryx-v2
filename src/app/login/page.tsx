@@ -7,7 +7,7 @@ export default async function LoginPage() {
   // Forward only genuinely valid sessions; stale cookies land on the form
   // (never a redirect loop — the proxy does not bounce here).
   const user = await getCurrentUser();
-  if (user) redirect("/team-command");
+  if (user) redirect("/overview");
 
   return (
     <main className="flex min-h-dvh items-center justify-center px-4">
